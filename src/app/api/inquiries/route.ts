@@ -32,18 +32,20 @@ export async function POST(request: Request) {
     
     await collection.insertOne(newInquiry);
     
-    // Trigger asynchronous email autoresponder (does not block DB save response)
-    sendAutoresponderEmail({
-      to: newInquiry.email,
-      subject: 'Inquiry Confirmation',
-      name: newInquiry.name,
-      phone: newInquiry.phone,
-      email: newInquiry.email,
-      requirements: newInquiry.requirements,
-      inquiryType: newInquiry.inquiryType
-    }).catch((emailErr) => {
-      console.error('Asynchronous Autoresponder Email failed:', emailErr);
-    });
+    // Trigger email autoresponder (await ensures serverless functions on Vercel do not terminate before completion)
+    try {
+      await sendAutoresponderEmail({
+        to: newInquiry.email,
+        subject: 'Inquiry Confirmation',
+        name: newInquiry.name,
+        phone: newInquiry.phone,
+        email: newInquiry.email,
+        requirements: newInquiry.requirements,
+        inquiryType: newInquiry.inquiryType
+      });
+    } catch (emailErr) {
+      console.error('Autoresponder Email failed:', emailErr);
+    }
     
     const updatedList = await collection.find({}).sort({ timestamp: -1 }).toArray();
     return NextResponse.json(updatedList);
