@@ -41,8 +41,7 @@ export default function Navbar({ onScrollToSection = () => {} }: NavbarProps) {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const storedTheme = localStorage.getItem('dreamsland_theme');
-      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (storedTheme === 'dark' || (!storedTheme && systemPrefersDark)) {
+      if (storedTheme === 'dark') {
         setTheme('dark');
         document.documentElement.classList.add('dark');
       } else {
