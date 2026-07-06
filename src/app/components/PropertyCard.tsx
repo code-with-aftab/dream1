@@ -21,10 +21,10 @@ export default function PropertyCard({ property, onSelect }: PropertyCardProps) 
   return (
     <div
       onClick={() => onSelect(property)}
-      className="group hover-zoom-container bg-white border border-stone-200/60 rounded-lg overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 cursor-pointer flex flex-col h-full"
+      className="group hover-zoom-container bg-white dark:bg-stone-900 border border-stone-200/60 dark:border-stone-850/80 rounded-lg overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 cursor-pointer flex flex-col h-full"
     >
       {/* Property Image with Zoom Effect */}
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-stone-100">
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-stone-100 dark:bg-stone-950">
         <Image
           src={property.image}
           alt={property.title}
@@ -34,7 +34,7 @@ export default function PropertyCard({ property, onSelect }: PropertyCardProps) 
         />
         {/* Type Badge */}
         <div className="absolute top-2 left-2 sm:top-4 sm:left-4 z-10">
-          <span className="bg-white/90 backdrop-blur-sm text-stone-900 text-[8px] sm:text-[9px] uppercase font-bold tracking-widest px-2 py-0.5 sm:py-1 rounded-sm border border-stone-200/50">
+          <span className="bg-white/90 dark:bg-stone-950/90 backdrop-blur-sm text-stone-900 dark:text-stone-100 text-[8px] sm:text-[9px] uppercase font-bold tracking-widest px-2 py-0.5 sm:py-1 rounded-sm border border-stone-200/50 dark:border-stone-850/50">
             {property.type}
           </span>
         </div>
@@ -53,7 +53,7 @@ export default function PropertyCard({ property, onSelect }: PropertyCardProps) 
       <div className="p-3 sm:p-6 flex flex-col flex-1 justify-between">
         <div>
           {/* Header uppercase layout from design */}
-          <h3 className="text-[10px] sm:text-xs tracking-[0.1em] sm:tracking-[0.15em] font-bold text-stone-800 uppercase mb-0.5 sm:mb-1 line-clamp-1">
+          <h3 className="text-[10px] sm:text-xs tracking-[0.1em] sm:tracking-[0.15em] font-bold text-stone-800 dark:text-stone-200 uppercase mb-0.5 sm:mb-1 line-clamp-1">
             {property.title}, {property.location}
           </h3>
           
@@ -63,13 +63,13 @@ export default function PropertyCard({ property, onSelect }: PropertyCardProps) 
           </p>
 
           {/* Short description preview - hidden on mobile for grid spacing */}
-          <p className="hidden sm:block text-xs font-light text-stone-500 line-clamp-2 mb-6">
+          <p className="hidden sm:block text-xs font-light text-stone-500 dark:text-stone-400 line-clamp-2 mb-6">
             {property.description}
           </p>
         </div>
 
         {/* Stats footer (Size, Road Width, Rate) */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-t border-stone-100 pt-2 sm:pt-4 text-stone-600 gap-1.5 sm:gap-0">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-t border-stone-100 dark:border-stone-800 pt-2 sm:pt-4 text-stone-600 dark:text-stone-400 gap-1.5 sm:gap-0">
           <div className="flex items-center space-x-1 sm:space-x-1.5" title="Plot Area">
             <svg className="w-3.5 h-3.5 text-stone-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5" />

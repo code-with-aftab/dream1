@@ -2,10 +2,12 @@
 
 import { useState } from 'react';
 import { Mail, Phone, MapPin, Clock, Send, CheckCircle2 } from 'lucide-react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { addInquiry } from '../utils/db';
 
 interface ContactFormProps {
   id?: string;
@@ -22,19 +24,36 @@ export default function ContactForm({ id = 'contact-section', onSuccess }: Conta
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (name && email) {
-      setSubmitted(true);
-      if (onSuccess) onSuccess();
+      addInquiry({ name, email, phone, requirements }).then(() => {
+        setSubmitted(true);
+        if (onSuccess) onSuccess();
+      });
     }
   };
 
   return (
-    <section className="py-24 bg-stone-50 border-t border-stone-200/60" id={id}>
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+    <section className="py-24 border-t border-stone-200/60 relative overflow-hidden bg-stone-50 dark:bg-stone-950 transition-colors duration-300" id={id}>
+      
+      {/* Real Estate Background Sketch Image */}
+      <div className="absolute inset-0 z-0 opacity-[0.09] dark:opacity-[0.035] pointer-events-none select-none dark:invert dark:brightness-125 transition-opacity duration-300">
+        <Image
+          src="/images/contact_bg.png"
+          alt="Real Estate Architectural Background"
+          fill
+          className="object-cover object-center"
+          priority
+        />
+      </div>
+
+      {/* Soft gradient edge overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-stone-50/90 dark:from-stone-950/90 via-transparent to-stone-50/90 dark:to-stone-950/90 z-1 pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           
           {/* Left Column: Get in Touch Card */}
           <div className="lg:col-span-5 w-full flex flex-col justify-between reveal-left">
-            <div className="border border-stone-200/80 rounded-lg p-8 bg-white shadow-sm flex flex-col h-full justify-between">
+            <div className="border border-stone-200/80 dark:border-stone-850 rounded-lg p-8 bg-white/70 dark:bg-stone-900/80 backdrop-blur-md shadow-sm flex flex-col h-full justify-between transition-colors">
               <div>
                 <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-gold-500 mb-2 block">
                   Office Info
@@ -113,18 +132,26 @@ export default function ContactForm({ id = 'contact-section', onSuccess }: Conta
 
           {/* Right Column: Contact Us Form */}
           <div className="lg:col-span-7 w-full reveal-right">
-            <div className="border border-stone-200/80 rounded-lg p-8 md:p-10 bg-white shadow-sm h-full">
+            <div className="border border-stone-200/80 dark:border-stone-850 rounded-lg p-8 md:p-10 bg-white/70 dark:bg-stone-900/80 backdrop-blur-md shadow-sm h-full transition-colors">
               
               {submitted ? (
                 <div className="py-16 text-center animate-fade-in flex flex-col justify-center items-center h-full">
-                  <div className="w-16 h-16 rounded-full bg-gold-50 border border-gold-200/30 flex items-center justify-center text-gold-600 mb-6">
-                    <CheckCircle2 className="w-8 h-8" />
+                  <div className="relative w-36 h-12 mb-6">
+                    <Image
+                      src="/logo.png"
+                      alt="Dreamland Associates Logo"
+                      fill
+                      className="object-contain dark:invert"
+                    />
                   </div>
-                  <h3 className="font-serif text-3xl text-stone-900 mb-4 tracking-wide font-normal">
-                    Requirements Received
+                  <div className="w-12 h-12 rounded-full bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40 flex items-center justify-center text-emerald-600 dark:text-emerald-500 mb-4 animate-bounce">
+                    <CheckCircle2 className="w-6 h-6" />
+                  </div>
+                  <h3 className="font-serif text-2xl text-stone-900 dark:text-white mb-3 tracking-wide font-normal">
+                    Thank You for Your Query!
                   </h3>
-                  <p className="text-sm font-light text-stone-500 max-w-md leading-relaxed mb-8">
-                    Your luxury property requirements have been registered. A private office client advisor will review your specifications and supply a matching off-market collection.
+                  <p className="text-xs font-light text-stone-500 dark:text-stone-400 max-w-sm leading-relaxed mb-6">
+                    Your consult request has been registered under <strong>dreamlandassociate7@gmail.com</strong>. A private office client advisor will connect with you via Phone or WhatsApp shortly.
                   </p>
                   <Button
                     variant="ghost"

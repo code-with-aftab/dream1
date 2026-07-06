@@ -8,6 +8,10 @@ const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 export const metadata: Metadata = {
   title: "Dreamland Associates | Discover Your Extraordinary Home",
   description: "Dreamland Associates is a premier luxury real estate agency helping you discover your extraordinary home. Browse our curated listings of exclusive villas, penthouses, and mansions.",
+  icons: {
+    icon: '/logo.png',
+    apple: '/logo.png',
+  },
 };
 
 export default function RootLayout({
@@ -16,8 +20,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("h-full scroll-smooth", "font-sans", geist.variable)}>
-      <body className="min-h-full flex flex-col bg-white text-stone-900 antialiased">
+    <html lang="en" className={cn("h-full scroll-smooth", "font-sans", geist.variable)} suppressHydrationWarning>
+      <body className="min-h-full flex flex-col bg-white text-stone-900 dark:bg-stone-950 dark:text-stone-100 antialiased transition-colors duration-300" suppressHydrationWarning>
         {children}
       </body>
     </html>

@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Sun, Moon, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Sheet, SheetTrigger, SheetContent, SheetClose } from '@/components/ui/sheet';
 import { useRouter, usePathname } from 'next/navigation';
 
 // Direct SVG implementation of Instagram icon to avoid resolution errors
@@ -33,46 +34,101 @@ export default function Navbar({ onScrollToSection = () => {} }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [visible, setVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [mounted, setMounted] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [mobileInventoryOpen, setMobileInventoryOpen] = useState(false);
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedTheme = localStorage.getItem('dreamsland_theme');
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (storedTheme === 'dark' || (!storedTheme && systemPrefersDark)) {
+        setTheme('dark');
+        document.documentElement.classList.add('dark');
+      } else {
+        setTheme('light');
+        document.documentElement.classList.remove('dark');
+      }
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    if (theme === 'light') {
+      setTheme('dark');
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('dreamsland_theme', 'dark');
+    } else {
+      setTheme('light');
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('dreamsland_theme', 'light');
+    }
+  };
+
+  useEffect(() => {
+    // Trigger entry animation after mount
+    const t = setTimeout(() => setMounted(true), 50);
+    return () => clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    let lastScroll = 0;
+    let ticking = false;
+
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      // 1. Scrolled state check
-      if (currentScrollY > 20) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScroll = window.scrollY;
+          
+          setScrolled(currentScroll > 20);
 
-      // 2. Hide/show logic for mobile scroll direction
-      if (window.innerWidth < 1024) {
-        if (currentScrollY > lastScrollY && currentScrollY > 60) {
-          setVisible(false); // Scrolling down -> hide navbar
-        } else {
-          setVisible(true); // Scrolling up -> show navbar
-        }
-      } else {
-        setVisible(true); // Desktop is always visible
-      }
+          if (window.innerWidth < 1024) {
+            const diff = currentScroll - lastScroll;
+            // Buffer to prevent flickering
+            if (currentScroll > 120 && diff > 15) {
+              setVisible(false);
+            } else if (diff < -10 || currentScroll < 50) {
+              setVisible(true);
+            }
+          } else {
+            setVisible(true);
+          }
 
-      setLastScrollY(currentScrollY);
+          lastScroll = currentScroll;
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
   const router = useRouter();
   const pathname = usePathname();
 
   const handleNavLinkClick = (sectionId: string) => {
     setMobileMenuOpen(false);
+    if (sectionId === 'about-us-section') {
+      router.push('/about');
+      return;
+    }
+    if (sectionId === 'blog-section') {
+      router.push('/blog');
+      return;
+    }
+    if (sectionId === 'contact-section') {
+      router.push('/contact');
+      return;
+    }
     if (sectionId === 'our-team-section') {
       router.push('/team');
       return;
     }
-    
+    if (sectionId === 'admin') {
+      router.push('/admin');
+      return;
+    }
     if (pathname !== '/') {
       router.push(`/#${sectionId}`);
     } else {
@@ -83,167 +139,392 @@ export default function Navbar({ onScrollToSection = () => {} }: NavbarProps) {
   const navItems = [
     { label: 'Home', sectionId: 'hero-section' },
     { label: 'Services', sectionId: 'services-section' },
+    { label: 'Inventory', hasDropdown: true },
     { label: 'About', sectionId: 'about-us-section' },
+    { label: 'Gallery', sectionId: 'gallery-section' },
+    { label: 'Blog', sectionId: 'blog-section' },
     { label: 'Our Team', sectionId: 'our-team-section' },
     { label: 'Contact Us', sectionId: 'contact-section' },
   ];
 
-  const isDarkNavbar = pathname === '/' && !scrolled;
-
   return (
     <>
+      <style>{`
+        /* ── Navbar entry animation ── */
+        @keyframes navSlideIn {
+          from { opacity: 0; transform: translateY(-22px) scaleX(0.96); }
+          to   { opacity: 1; transform: translateY(0)     scaleX(1);    }
+        }
+        .nav-enter {
+          animation: navSlideIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* ── Nav link letter-spacing hover ── */
+        .nav-link-item {
+          position: relative;
+          letter-spacing: 0.12em;
+          transition: letter-spacing 0.35s cubic-bezier(0.16,1,0.3,1),
+                      color 0.25s ease;
+        }
+        .nav-link-item:hover {
+          letter-spacing: 0.18em;
+        }
+
+        /* ── Underline wipe animation ── */
+        .nav-underline {
+          position: absolute;
+          bottom: -2px;
+          left: 50%;
+          width: 0;
+          height: 1.5px;
+          background: linear-gradient(90deg, #887361, #b6a798);
+          transition: width 0.35s cubic-bezier(0.16,1,0.3,1),
+                      left   0.35s cubic-bezier(0.16,1,0.3,1);
+          border-radius: 2px;
+        }
+        .nav-link-item:hover .nav-underline {
+          width: 100%;
+          left: 0;
+        }
+
+        /* ── Shimmer CTA button ── */
+        @keyframes shimmer {
+          0%   { transform: translateX(-100%) skewX(-15deg); }
+          100% { transform: translateX(250%)  skewX(-15deg); }
+        }
+        .btn-shimmer {
+          position: relative;
+          overflow: hidden;
+        }
+        .btn-shimmer::after {
+          content: '';
+          position: absolute;
+          top: 0; left: 0;
+          width: 40%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+          transform: translateX(-100%) skewX(-15deg);
+        }
+        .btn-shimmer:hover::after {
+          animation: shimmer 0.7s ease forwards;
+        }
+
+        /* ── Staggered link fade-in ── */
+        @keyframes linkFadeIn {
+          from { opacity: 0; transform: translateY(-8px); }
+          to   { opacity: 1; transform: translateY(0);    }
+        }
+        .nav-link-stagger {
+          opacity: 0;
+          animation: linkFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* ── Mobile menu item slide ── */
+        @keyframes mobileItemIn {
+          from { opacity: 0; transform: translateX(24px); }
+          to   { opacity: 1; transform: translateX(0);    }
+        }
+        .mobile-link-stagger {
+          opacity: 0;
+          animation: mobileItemIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* ── Logo hover float ── */
+        .logo-wrap {
+          transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1),
+                      filter 0.3s ease;
+        }
+        .logo-wrap:hover {
+          transform: translateY(-2px) scale(1.04);
+          filter: drop-shadow(0 4px 10px rgba(136,115,97,0.18));
+        }
+
+        /* ── Dot indicator on active link ── */
+        .nav-dot {
+          position: absolute;
+          bottom: -6px;
+          left: 50%;
+          transform: translateX(-50%) scale(0);
+          width: 4px; height: 4px;
+          border-radius: 50%;
+          background: #887361;
+          transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .nav-link-item:hover .nav-dot {
+          transform: translateX(-50%) scale(1);
+        }
+      `}</style>
+
       <nav
-        className={`fixed z-50 transition-all duration-500 px-6 py-4 
-          top-0 left-0 w-full rounded-none border-b border-x-0 border-t-0 
-          lg:top-4 lg:left-1/2 lg:-translate-x-1/2 lg:w-[92%] lg:md:w-[88%] lg:max-w-7xl lg:rounded-full lg:border lg:py-0 lg:px-10
-          ${visible ? 'translate-y-0' : '-translate-y-full'} lg:translate-y-0
+        className={`
+          fixed top-0 left-0 w-full z-50 transition-all duration-300 backdrop-blur-md px-6 lg:px-12
+          ${visible ? 'translate-y-0' : '-translate-y-full'}
+          ${mounted ? 'opacity-100' : 'opacity-0'}
           ${
-            isDarkNavbar
-              ? 'bg-stone-950/40 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.05)] border-white/10 lg:py-3.5'
-              : 'bg-white/95 backdrop-blur-md shadow-md border-stone-200/80 lg:py-2.5'
+            scrolled
+              ? 'bg-white/90 dark:bg-stone-950/90 border-b border-stone-200/80 dark:border-stone-850/80 py-3 shadow-[0_4px_20px_rgba(0,0,0,0.03)]'
+              : 'bg-white/70 dark:bg-stone-950/70 border-b border-transparent py-4 lg:py-5 shadow-none'
           }
         `}
       >
         <div className="w-full flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center group">
-            <div className="relative w-32 lg:w-36 h-10 lg:h-12 shrink-0 flex items-center justify-center transition-all duration-300">
+
+          {/* ── Logo ── */}
+          <Link href="/" className="flex items-center logo-wrap">
+            <div className="relative w-32 lg:w-36 h-10 lg:h-12 shrink-0 flex items-center justify-center">
               <Image
                 src="/logo.png"
                 alt="Dreamland Associates Logo"
                 fill
-                className="object-contain"
+                className="object-contain dark:invert dark:opacity-90"
                 priority
               />
             </div>
           </Link>
 
-          {/* Center / Right Links */}
-          <div className="hidden lg:flex items-center lg:space-x-6 xl:space-x-8">
-            {navItems.map((item) => (
-              <button
-                key={item.label}
-                onClick={() => handleNavLinkClick(item.sectionId)}
-                className={`relative text-[10px] xl:text-xs uppercase tracking-widest font-bold transition-all duration-300 cursor-pointer py-1.5 group-link ${
-                  isDarkNavbar
-                    ? 'text-stone-100 hover:text-gold-400'
-                    : 'text-stone-850 hover:text-gold-600'
-                }`}
-              >
-                <span>{item.label}</span>
-                {/* Premium underline slide effect */}
-                <span className={`absolute bottom-0 left-0 w-0 h-[1.5px] transition-all duration-300 group-hover:w-full ${
-                  isDarkNavbar ? 'bg-gold-400' : 'bg-gold-500'
-                }`} />
-              </button>
-            ))}
-          </div>
-
-          {/* Instagram Icon / Action Item on Far Right */}
-          <div className="hidden lg:flex items-center space-x-3 xl:space-x-5">
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`p-1 hover:scale-110 transition-all duration-300 ${
-                isDarkNavbar ? 'text-stone-200 hover:text-gold-400' : 'text-stone-650 hover:text-gold-500'
-              }`}
-              aria-label="Instagram Link"
-            >
-              <InstagramIcon className="w-4 h-4 xl:w-5 xl:h-5" />
-            </a>
-            <Button
-              onClick={() => handleNavLinkClick('contact-section')}
-              className={`text-[9px] xl:text-xs font-bold uppercase tracking-widest px-5 xl:px-6 h-9 xl:h-10 rounded-full cursor-pointer shadow-sm transition-all duration-300 hover:-translate-y-0.5 ${
-                isDarkNavbar
-                  ? 'bg-white text-stone-950 hover:bg-gold-500 hover:text-white shadow-[0_4px_15px_rgba(255,255,255,0.1)] border border-white/20'
-                  : 'bg-stone-900 hover:bg-gold-600 text-white shadow-sm'
-              }`}
-            >
-              Consult Desk
-            </Button>
-          </div>
-
-          {/* Mobile Menu Burger Trigger */}
-          <div className="lg:hidden flex items-center">
-            <button
-              onClick={() => setMobileMenuOpen(true)}
-              className={`transition-colors cursor-pointer ${
-                isDarkNavbar ? 'text-white hover:text-gold-400' : 'text-stone-850 hover:text-gold-500'
-              }`}
-            >
-              <Menu className="w-6 h-6" />
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Mobile Menu Overlay - Sibling of nav to avoid translate-x transform clipping */}
-      <div
-        className={`fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${
-          mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
-        onClick={() => setMobileMenuOpen(false)}
-      >
-        <div
-          className={`fixed top-0 right-0 w-80 h-screen bg-white shadow-2xl p-8 flex flex-col justify-between transition-transform duration-300 z-[110] ${
-            mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-          }`}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="flex flex-col space-y-8">
-            <div className="flex items-center justify-between border-b border-neutral-100 pb-4">
-              <div className="relative w-28 h-10 shrink-0 flex items-center justify-center">
-                <Image
-                  src="/logo.png"
-                  alt="Dreamland Associates Logo"
-                  fill
-                  className="object-contain"
-                  priority
-                />
-              </div>
-              <button
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-stone-400 hover:text-stone-700"
-              >
-                <X className="w-5 h-5" />
-              </button>
+          {/* ── Desktop Links & Actions (Right aligned) ── */}
+          <div className="hidden lg:flex items-center space-x-6 xl:space-x-8">
+            {/* Desktop Links */}
+            <div className="flex items-center lg:space-x-7 xl:space-x-9">
+              {navItems.map((item, i) => {
+                if (item.hasDropdown) {
+                  return (
+                    <div key={item.label} className="relative group inline-block py-1.5">
+                      <button
+                        style={{ animationDelay: mounted ? `${120 + i * 70}ms` : '0ms' }}
+                        className="nav-link-item nav-link-stagger text-[10px] xl:text-[11px] uppercase font-sans font-semibold cursor-pointer flex items-center space-x-1 text-stone-700 hover:text-gold-600 dark:text-stone-300 dark:hover:text-gold-450"
+                      >
+                        <span className="font-sans font-semibold">{item.label}</span>
+                        <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180" />
+                        <span className="nav-underline" />
+                        <span className="nav-dot" />
+                      </button>
+                      
+                      {/* Dropdown Options */}
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1.5 w-40 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-850 rounded-lg shadow-xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 text-left">
+                        {['Plots', 'Houses', 'Flats', 'Resales'].map((sub) => (
+                          <Link
+                            key={sub}
+                            href={`/inventory?cat=${sub}`}
+                            className="block px-4 py-2.5 text-[9px] uppercase font-sans font-bold tracking-widest text-stone-600 dark:text-stone-300 hover:bg-gold-50 dark:hover:bg-stone-850 hover:text-gold-600 dark:hover:text-gold-450 transition-colors"
+                          >
+                            {sub}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                }
+                return (
+                  <button
+                    key={item.label}
+                    onClick={() => handleNavLinkClick(item.sectionId || '')}
+                    style={{ animationDelay: mounted ? `${120 + i * 70}ms` : '0ms' }}
+                    className="nav-link-item nav-link-stagger text-[10px] xl:text-[11px] uppercase font-sans font-semibold cursor-pointer py-1.5 text-stone-700 hover:text-gold-600 dark:text-stone-300 dark:hover:text-gold-450"
+                  >
+                    <span className="font-sans font-semibold">
+                      {item.label}
+                    </span>
+                    <span className="nav-underline" />
+                    <span className="nav-dot" />
+                  </button>
+                );
+              })}
             </div>
 
-            <div className="flex flex-col space-y-5">
-              {navItems.map((item) => (
-                <button
-                  key={item.label}
-                  onClick={() => handleNavLinkClick(item.sectionId)}
-                  className="text-left text-sm font-semibold uppercase tracking-widest text-stone-700 hover:text-gold-500 py-1 transition-all duration-200"
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-          </div>
+            {/* Divider */}
+            <span className="w-px h-4 bg-stone-200 dark:bg-stone-800" />
 
-          <div className="space-y-4">
-            <div className="flex items-center justify-center space-x-3 py-3 border-t border-b border-stone-100">
-              <span className="text-xs text-stone-400 font-medium">Follow us on Instagram</span>
+            {/* Desktop Actions */}
+            <div
+              className="flex items-center space-x-4 xl:space-x-5"
+              style={{
+                opacity: mounted ? 1 : 0,
+                transform: mounted ? 'translateY(0)' : 'translateY(-10px)',
+                transition: 'opacity 0.6s 0.5s ease, transform 0.6s 0.5s ease',
+              }}
+            >
+              {/* Theme Toggle Button */}
+              <button
+                onClick={toggleTheme}
+                className="p-1.5 text-stone-500 hover:text-gold-500 hover:scale-110 transition-all duration-300 rounded-full hover:bg-gold-50 dark:hover:bg-stone-900 dark:text-stone-400 dark:hover:text-gold-400 cursor-pointer"
+                aria-label="Toggle Theme"
+              >
+                {theme === 'dark' ? <Sun className="w-4 h-4 xl:w-[18px] xl:h-[18px]" /> : <Moon className="w-4 h-4 xl:w-[18px] xl:h-[18px]" />}
+              </button>
+
               <a
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-1.5 text-stone-600 hover:text-gold-500 hover:bg-stone-50 rounded-full transition-all duration-300"
+                className="p-1.5 text-stone-500 hover:text-gold-500 hover:scale-110 hover:rotate-6 transition-all duration-300 rounded-full hover:bg-gold-50 dark:hover:bg-stone-900 dark:text-stone-400 dark:hover:text-gold-400"
+                aria-label="Instagram Link"
               >
-                <InstagramIcon className="w-5 h-5" />
+                <InstagramIcon className="w-4 h-4 xl:w-[18px] xl:h-[18px]" />
               </a>
+
+              {/* Divider */}
+              <span className="w-px h-4 bg-stone-200 dark:bg-stone-800" />
+
+              <Button
+                onClick={() => {
+                  window.dispatchEvent(new CustomEvent('open-sell-modal'));
+                }}
+                className="hidden xl:inline-flex text-[9px] xl:text-[11px] font-sans font-semibold uppercase tracking-[0.14em] px-4 xl:px-5 h-9 xl:h-10 rounded-full border border-gold-500 hover:bg-gold-500 hover:text-stone-950 text-gold-500 bg-transparent cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg dark:hover:text-stone-950"
+              >
+                Sell Property
+              </Button>
+
+              <Button
+                onClick={() => handleNavLinkClick('contact-section')}
+                className="btn-shimmer text-[9px] xl:text-[11px] font-sans font-semibold uppercase tracking-[0.14em] px-5 xl:px-7 h-9 xl:h-10 rounded-full cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg bg-stone-900 hover:bg-gold-600 text-white border-0 dark:bg-white dark:text-stone-950 dark:hover:bg-gold-600 dark:hover:text-white"
+              >
+                Consult Desk
+              </Button>
             </div>
-            <Button
-              onClick={() => handleNavLinkClick('contact-section')}
-              className="w-full py-4 text-xs font-bold uppercase tracking-wider text-white bg-gold-500 hover:bg-gold-600 rounded-sm shadow-md transition-all duration-300"
+          </div>
+
+          {/* ── Mobile Burger with shadcn Sheet ── */}
+          <div className="lg:hidden flex items-center space-x-3">
+            <button
+              onClick={toggleTheme}
+              className="p-2 text-stone-600 hover:text-gold-500 transition-all rounded-full hover:bg-gold-50 dark:text-stone-400 dark:hover:bg-stone-900 cursor-pointer"
+              aria-label="Toggle Theme"
             >
-              Get in Touch
-            </Button>
+              {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
+            
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger
+                className="transition-all duration-200 cursor-pointer text-stone-800 hover:text-gold-500 hover:scale-110 p-1 dark:text-stone-250 bg-transparent border-none focus:outline-none"
+                aria-label="Open Menu"
+              >
+                <Menu className="w-6 h-6" />
+              </SheetTrigger>
+              <SheetContent>
+                {/* Top section */}
+                <div className="flex flex-col">
+                  {/* Header */}
+                  <div className="flex items-center justify-between px-8 pt-8 pb-6 border-b border-stone-100 dark:border-stone-850">
+                    <div className="relative w-28 h-10 shrink-0">
+                      <Image
+                        src="/logo.png"
+                        alt="Dreamland Associates Logo"
+                        fill
+                        className="object-contain dark:invert dark:opacity-90"
+                        priority
+                      />
+                    </div>
+                    <SheetClose
+                      className="text-stone-400 hover:text-stone-700 hover:rotate-90 transition-all duration-300 p-1 dark:text-stone-500 dark:hover:text-stone-300 cursor-pointer bg-transparent border-none focus:outline-none"
+                      aria-label="Close Menu"
+                    >
+                      <X className="w-5 h-5" />
+                    </SheetClose>
+                  </div>
+
+                  {/* Nav Items */}
+                  <div className="flex flex-col px-8 pt-8 space-y-1">
+                    {navItems.map((item, i) => {
+                      if (item.hasDropdown) {
+                        return (
+                          <div key={item.label} className="flex flex-col border-b border-stone-50 dark:border-stone-900/60">
+                            <button
+                              onClick={() => setMobileInventoryOpen(!mobileInventoryOpen)}
+                              className="mobile-link-stagger text-left group flex items-center justify-between py-3 cursor-pointer"
+                              style={{
+                                animationDelay: mobileMenuOpen ? `${80 + i * 60}ms` : '0ms',
+                              }}
+                            >
+                              <div className="flex items-center gap-3">
+                                <span className="w-1.5 h-1.5 rounded-full bg-gold-300 group-hover:bg-gold-500 group-hover:scale-150 transition-all duration-300 shrink-0" />
+                                <span className="text-sm font-sans font-semibold uppercase tracking-[0.14em] text-stone-600 dark:text-stone-300 group-hover:text-gold-600 dark:group-hover:text-gold-450 group-hover:translate-x-1 transition-all duration-300">
+                                  {item.label}
+                                </span>
+                              </div>
+                              <ChevronDown className={`w-4 h-4 text-stone-400 transition-transform duration-300 ${mobileInventoryOpen ? 'rotate-180' : ''}`} />
+                            </button>
+                            
+                            {mobileInventoryOpen && (
+                              <div className="pl-6 flex flex-col space-y-1.5 pb-3 pt-1 bg-stone-50/50 dark:bg-stone-900/30 rounded-lg mt-0.5 border border-stone-100/50 dark:border-stone-850/30">
+                                {['Plots', 'Houses', 'Flats', 'Resales'].map((sub) => (
+                                  <Link
+                                    key={sub}
+                                    href={`/inventory?cat=${sub}`}
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="block py-2 text-xs font-sans font-bold uppercase tracking-wider text-stone-500 hover:text-gold-600 dark:text-stone-400 dark:hover:text-gold-450"
+                                  >
+                                    {sub}
+                                  </Link>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      }
+                      return (
+                        <button
+                          key={item.label}
+                          onClick={() => {
+                            handleNavLinkClick(item.sectionId || '');
+                            setMobileMenuOpen(false);
+                          }}
+                          className="mobile-link-stagger text-left group flex items-center gap-3 py-3 border-b border-stone-50 dark:border-stone-900/60 cursor-pointer"
+                          style={{
+                            animationDelay: mobileMenuOpen ? `${80 + i * 60}ms` : '0ms',
+                          }}
+                        >
+                          {/* Animated dot */}
+                          <span className="w-1.5 h-1.5 rounded-full bg-gold-300 group-hover:bg-gold-500 group-hover:scale-150 transition-all duration-300 shrink-0" />
+                          <span className="text-sm font-sans font-semibold uppercase tracking-[0.14em] text-stone-600 dark:text-stone-300 group-hover:text-gold-600 dark:group-hover:text-gold-450 group-hover:translate-x-1 transition-all duration-300">
+                            {item.label}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Bottom section */}
+                <div className="px-8 pb-10 space-y-4">
+                  <div className="flex items-center justify-center gap-3 py-3 border-t border-b border-stone-100 dark:border-stone-850">
+                    <span className="text-xs text-stone-400 font-sans font-semibold dark:text-stone-500">
+                      Follow us on Instagram
+                    </span>
+                    <a
+                      href="https://instagram.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1.5 text-stone-500 hover:text-gold-500 hover:bg-gold-50 rounded-full transition-all duration-300 dark:text-stone-400 dark:hover:text-gold-450 dark:hover:bg-stone-900"
+                    >
+                      <InstagramIcon className="w-4 h-4" />
+                    </a>
+                  </div>
+                   <Button
+                    onClick={() => {
+                      window.dispatchEvent(new CustomEvent('open-sell-modal'));
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full py-3.5 text-xs font-sans font-semibold uppercase tracking-[0.14em] text-gold-500 hover:bg-gold-500 hover:text-stone-955 border border-gold-500 rounded-full transition-all duration-300 bg-transparent dark:hover:text-stone-955 cursor-pointer flex items-center justify-center"
+                  >
+                    Sell Your Property
+                  </Button>
+
+                  <Button
+                    onClick={() => {
+                      handleNavLinkClick('contact-section');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="btn-shimmer w-full py-4 text-xs font-sans font-semibold uppercase tracking-[0.14em] text-white bg-stone-900 hover:bg-gold-600 rounded-full shadow-md transition-all duration-300 border-0 dark:bg-white dark:text-stone-955 dark:hover:bg-gold-600 dark:hover:text-white"
+                  >
+                    Get in Touch
+                  </Button>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
-      </div>
+      </nav>
     </>
   );
 }

@@ -1,13 +1,14 @@
 'use client';
 
 import Image from 'next/image';
-import { COLLECTIONS } from '../data';
+import { COLLECTIONS, Property } from '../data';
 
 interface CollectionsProps {
   onSelectCollection: (tag: string) => void;
+  properties?: Property[];
 }
 
-export default function Collections({ onSelectCollection }: CollectionsProps) {
+export default function Collections({ onSelectCollection, properties }: CollectionsProps) {
   const handleCollectionClick = (tag: string) => {
     onSelectCollection(tag);
     
@@ -19,10 +20,10 @@ export default function Collections({ onSelectCollection }: CollectionsProps) {
   };
 
   return (
-    <section className="py-24 bg-white" id="locations-section">
+    <section className="py-24 bg-white dark:bg-transparent transition-colors duration-300" id="locations-section">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         {/* Section Heading */}
-        <h2 className="font-serif text-3xl md:text-4xl text-stone-900 mb-8 font-normal tracking-wide reveal">
+        <h2 className="font-serif text-3xl md:text-4xl text-stone-900 dark:text-white mb-8 font-normal tracking-wide reveal">
           Curated Collections
         </h2>
 
@@ -32,7 +33,7 @@ export default function Collections({ onSelectCollection }: CollectionsProps) {
             <div
               key={col.id}
               onClick={() => handleCollectionClick(col.tag)}
-              className="group hover-zoom-container relative aspect-[4/3] rounded-lg overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500 border border-stone-200/40 reveal-scale"
+              className="group hover-zoom-container relative aspect-[4/3] rounded-lg overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500 border border-stone-200/40 dark:border-stone-850/40 reveal-scale"
               style={{ transitionDelay: `${idx * 150}ms` }}
             >
               {/* Image Background */}
@@ -50,7 +51,7 @@ export default function Collections({ onSelectCollection }: CollectionsProps) {
               {/* Info content overlay */}
               <div className="absolute bottom-0 left-0 p-6 z-10 w-full flex flex-col justify-end text-white">
                 <span className="text-[9px] uppercase tracking-[0.25em] font-bold text-gold-400 mb-1.5 opacity-90">
-                  {col.count} Properties
+                  {properties ? properties.filter(p => p.type === col.tag).length : col.count} Properties
                 </span>
                 <h3 className="font-serif text-xl md:text-2xl font-light text-white mb-2 leading-tight">
                   {col.title}

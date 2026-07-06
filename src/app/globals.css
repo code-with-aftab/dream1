@@ -30,6 +30,15 @@
   --color-charcoal-700: #4f4f4f;
   --color-charcoal-800: #1c1917; /* Base luxury charcoal */
   --color-charcoal-900: #0f0d0c;
+
+  --color-navy-950: #080f26; /* Dark navy blue background */
+  --color-navy-900: #0e1834; /* Dark navy blue cards */
+  --color-navy-850: #1c2d5a; /* Dark navy borders */
+
+  --color-stone-950: #121214; /* Map dark background override */
+  --color-stone-900: #1a1a1e; /* Map dark card background override */
+  --color-stone-850: #2a2a2e; /* Map dark border override */
+  --color-stone-800: #333338; /* Map dark highlight override */
 }
 
 body {
@@ -162,37 +171,37 @@ body {
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
+  --background: #121214;
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
+  --card: #1a1a1e;
   --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
+  --popover: #1a1a1e;
   --popover-foreground: oklch(0.985 0 0);
   --primary: oklch(0.922 0 0);
   --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
+  --secondary: #222226;
   --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
+  --muted: #222226;
   --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
+  --accent: #222226;
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --border: rgba(42, 42, 46, 0.4);
+  --input: rgba(42, 42, 46, 0.5);
+  --ring: #2a2a2e;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
+  --sidebar: #1a1a1e;
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent: #222226;
   --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar-border: rgba(42, 42, 46, 0.4);
+  --sidebar-ring: #2a2a2e;
 }
 
 @layer base {
@@ -215,6 +224,11 @@ body {
   border: 1px solid rgba(136, 115, 97, 0.15);
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.dark .magic-card {
+  background: #0e1834;
+  border-color: rgba(28, 45, 90, 0.4);
 }
 
 .magic-card::before {
@@ -420,4 +434,25 @@ body {
 .reveal-scale.reveal-active {
   opacity: 1;
   transform: scale(1);
+}
+
+/* Floating ambient blob animations */
+@keyframes float-slow {
+  0% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(25px, -35px) scale(1.08); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+@keyframes float-reverse {
+  0% { transform: translate(0px, 0px) scale(1.06); }
+  50% { transform: translate(-30px, 30px) scale(1); }
+  100% { transform: translate(0px, 0px) scale(1.06); }
+}
+
+.animate-float-1 {
+  animation: float-slow 16s ease-in-out infinite;
+}
+
+.animate-float-2 {
+  animation: float-reverse 20s ease-in-out infinite;
 }

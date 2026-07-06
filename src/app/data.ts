@@ -13,6 +13,8 @@ export interface Property {
   mutationStatus: string; // Registry & Mutation Status
   featured: boolean;
   status: 'Completed' | 'Ongoing'; // Status field for ongoing projects
+  category?: 'Plots' | 'Houses' | 'Flats' | 'Resales';
+  secondaryImages?: string[];
 }
 
 export interface Collection {

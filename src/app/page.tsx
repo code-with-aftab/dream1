@@ -8,7 +8,10 @@ import PropertyCard from './components/PropertyCard';
 import PropertyModal from './components/PropertyModal';
 import Collections from './components/Collections';
 import ContactForm from './components/ContactForm';
+import SellPropertyModal from './components/SellPropertyModal';
 import { PROPERTIES, Property } from './data';
+import { getProperties, getTeamMembers, TeamMember, getHeroBanners, HeroBanner } from './utils/db';
+import GallerySection from './components/GallerySection';
 import Image from 'next/image';
 import { Mail, Shield, Award, MapPin, Home as HomeIcon, Key, Building2, TrendingUp, Coins, Wrench, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -17,6 +20,27 @@ import Footer from './components/Footer';
 import Link from 'next/link';
 
 export default function Home() {
+  const [properties, setProperties] = useState<Property[]>(PROPERTIES);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [heroBanners, setHeroBanners] = useState<HeroBanner[]>([]);
+  const [isSellModalOpen, setIsSellModalOpen] = useState(false);
+
+  useEffect(() => {
+    getProperties().then(setProperties);
+    getTeamMembers().then(setTeamMembers);
+    getHeroBanners().then(setHeroBanners);
+  }, []);
+
+  useEffect(() => {
+    const handleOpenSellModal = () => {
+      setIsSellModalOpen(true);
+    };
+    window.addEventListener('open-sell-modal', handleOpenSellModal);
+    return () => {
+      window.removeEventListener('open-sell-modal', handleOpenSellModal);
+    };
+  }, []);
+
   // Filter state
   const [filters, setFilters] = useState({
     type: '',
@@ -32,6 +56,65 @@ export default function Home() {
 
   // Selected property for modal detail view
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+
+  // Dynamically resolve board members from the database with hardcoded fallback
+  const directors = useMemo(() => {
+    const defaultBoard = [
+      {
+        id: 'fallback-sumit',
+        name: 'Mr. Sumit Rajput',
+        role: 'CEO & Founder',
+        initials: 'SR',
+        desc: 'Visionary founder of Dreamland Associates. Directs development programs, zoning clearance checks, and private client brokerage advisory desks.',
+        phone: '8057932926',
+        email: 'dreamlandassociate7@gmail.com',
+        image: ''
+      },
+      {
+        id: 'fallback-nitin',
+        name: 'Mr. Nitin Katoch',
+        role: 'Director',
+        initials: 'NK',
+        desc: 'Oversees strategic portfolio growth, builder alliances, and coordinates direct investments along premium Dehradun bypass corridors.',
+        phone: '9927502248',
+        email: 'dreamlandassociate7@gmail.com',
+        image: ''
+      },
+      {
+        id: 'fallback-suhail',
+        name: 'Mr. Suhail',
+        role: 'Managing Director',
+        initials: 'S',
+        desc: 'Steers day-to-day desk operations, buyer title registries, bank loan integrations, and local land administration coordinates.',
+        phone: '7906953585',
+        email: 'dreamlandassociate7@gmail.com',
+        image: ''
+      }
+    ];
+
+    if (!teamMembers || teamMembers.length === 0) return defaultBoard;
+
+    const boardFromDb = teamMembers.filter(m => {
+      const roleLower = m.role.toLowerCase();
+      return roleLower.includes('ceo') || roleLower.includes('director') || roleLower.includes('founder');
+    });
+
+    if (boardFromDb.length === 0) return defaultBoard;
+
+    return boardFromDb.sort((a, b) => {
+      const aCEO = a.role.toLowerCase().includes('ceo') || a.role.toLowerCase().includes('founder');
+      const bCEO = b.role.toLowerCase().includes('ceo') || b.role.toLowerCase().includes('founder');
+      if (aCEO && !bCEO) return -1;
+      if (!aCEO && bCEO) return 1;
+      
+      const aMD = a.role.toLowerCase().includes('managing');
+      const bMD = b.role.toLowerCase().includes('managing');
+      if (aMD && !bMD) return 1;
+      if (!aMD && bMD) return -1;
+      
+      return 0;
+    }).slice(0, 3);
+  }, [teamMembers]);
 
   // Scroll reveal Observer Setup — re-runs on statusFilter change so newly rendered cards are observed
   useEffect(() => {
@@ -67,13 +150,22 @@ export default function Home() {
     }, 50);
 
     return () => clearTimeout(timer);
-  }, [statusFilter]);
+  }, [statusFilter, properties]);
 
-  // Smooth scroll handler for Navbar links
+  // Smooth scroll handler for Navbar links with offset to prevent header overlay
   const handleScrollToSection = (sectionId: string) => {
     const targetElement = document.getElementById(sectionId);
     if (targetElement) {
-      targetElement.scrollIntoView({ behavior: 'smooth' });
+      const offset = 85; // navbar height + buffer
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = targetElement.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
     }
   };
 
@@ -102,7 +194,7 @@ export default function Home() {
 
   // Filter listings based on active filters
   const filteredProperties = useMemo(() => {
-    return PROPERTIES.filter((property) => {
+    return properties.filter((property) => {
       // Filter by type
       if (filters.type && property.type !== filters.type) {
         return false;
@@ -130,7 +222,17 @@ export default function Home() {
       }
       return true;
     });
-  }, [filters, statusFilter]);
+  }, [filters, statusFilter, properties]);
+
+  // Helper to construct repeating items for seamless infinite marquee scroll
+  const getMarqueeItems = (arr: Property[]) => {
+    if (arr.length === 0) return [];
+    let repeated = [...arr];
+    while (repeated.length < 8) {
+      repeated = [...repeated, ...arr];
+    }
+    return repeated;
+  };
 
   const activeFiltersCount = Object.values(filters).filter(Boolean).length;
 
@@ -144,12 +246,26 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-white text-stone-800">
+    <div className="flex flex-col min-h-screen bg-white dark:bg-stone-950 text-stone-800 dark:text-stone-200 transition-colors duration-300 relative overflow-hidden">
+      <title>Dreamland Associates | Discover Legally Clear Gated Plots in Dehradun</title>
+      <meta name="description" content="Dreamland Associates is Dehradun's premier real estate consultancy offering legally verified gated residential plots and premium township land projects on Shimla Bypass Road." />
+      
+      {/* Dynamic Glowing Ambient Blobs for Dark Mode */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 select-none">
+        {/* Blob 1: Top Right */}
+        <div className="absolute top-[12%] right-[-10%] w-[500px] h-[500px] rounded-full bg-gradient-to-br from-gold-500/10 to-blue-500/10 blur-[130px] opacity-0 dark:opacity-40 transition-opacity duration-1000 animate-float-1" />
+        
+        {/* Blob 2: Middle Left */}
+        <div className="absolute top-[35%] left-[-15%] w-[600px] h-[600px] rounded-full bg-gradient-to-tr from-indigo-600/10 to-gold-600/10 blur-[150px] opacity-0 dark:opacity-30 transition-opacity duration-1000 animate-float-2" />
+        
+        {/* Blob 3: Bottom Right */}
+        <div className="absolute bottom-[20%] right-[-10%] w-[550px] h-[550px] rounded-full bg-gradient-to-bl from-gold-600/10 to-blue-600/10 blur-[130px] opacity-0 dark:opacity-35 transition-opacity duration-1000 animate-float-1" />
+      </div>
       {/* Navbar with smooth scroll triggers */}
       <Navbar onScrollToSection={handleScrollToSection} />
 
       {/* Hero Section */}
-      <Hero onExploreClick={() => handleScrollToSection('properties-section')} />
+      <Hero onExploreClick={() => handleScrollToSection('properties-section')} banners={heroBanners} />
 
       {/* Search Bar Overlay */}
       <SearchBar
@@ -160,14 +276,14 @@ export default function Home() {
       />
 
       {/* Featured Listings Section */}
-      <section className="pt-10 pb-20 max-w-7xl mx-auto px-6 lg:px-12 w-full" id="properties-section">
+      <section className="pt-10 pb-20 max-w-7xl mx-auto px-6 lg:px-12 w-full relative z-10" id="properties-section">
         {/* Header Block */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8">
           <div>
             <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-gold-500 mb-2 block">
               Our Portfolio
             </span>
-            <h2 className="font-serif text-3xl md:text-4xl text-stone-900 font-normal tracking-wide">
+            <h2 className="font-serif text-3xl md:text-4xl text-stone-900 dark:text-white font-normal tracking-wide">
               Featured Listings
             </h2>
           </div>
@@ -186,7 +302,7 @@ export default function Home() {
         </div>
 
         {/* Project Status Tabs */}
-        <div className="flex border-b border-stone-200 mb-8 max-w-md">
+        <div className="flex border-b border-stone-200 dark:border-stone-850 mb-8 max-w-md">
           {[
             { id: 'All', label: 'All Projects' },
             { id: 'Completed', label: 'Completed' },
@@ -195,33 +311,89 @@ export default function Home() {
             <button
               key={tab.id}
               onClick={() => setStatusFilter(tab.id as any)}
-              className={`flex-1 pb-3 text-xs uppercase font-bold tracking-wider text-center border-b-2 transition-all duration-300 cursor-pointer ${
-                statusFilter === tab.id
-                  ? 'border-gold-500 text-stone-900 font-bold'
-                  : 'border-transparent text-stone-400 hover:text-stone-600'
-              }`}
+              className={`flex-1 pb-3 text-xs uppercase font-bold tracking-wider text-center border-b-2 transition-all duration-300 cursor-pointer ${statusFilter === tab.id
+                  ? 'border-gold-500 text-stone-900 dark:text-white font-bold'
+                  : 'border-transparent text-stone-400 dark:text-stone-500 hover:text-stone-600 dark:hover:text-stone-300'
+                }`}
             >
               {tab.label}
             </button>
           ))}
         </div>
 
-        {/* Listings Grid */}
+        {/* Listings Marquee Ticker */}
         {filteredProperties.length > 0 ? (
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-            {filteredProperties.map((property, idx) => (
-              <div
-                key={property.id}
-                className="reveal"
-                style={{ transitionDelay: `${(idx % 3) * 120}ms` }}
-              >
-                <PropertyCard
-                  property={property}
-                  onSelect={setSelectedProperty}
-                />
+          (() => {
+            const row1 = filteredProperties.filter((_, idx) => idx % 2 === 0);
+            const row2 = filteredProperties.filter((_, idx) => idx % 2 !== 0);
+            const finalRow2 = row2.length > 0 ? row2 : row1;
+
+            return (
+              <div className="space-y-8 overflow-hidden marquee-container py-4 relative">
+                
+                {/* Custom Marquee CSS */}
+                <style>{`
+                  @keyframes marqueeLeft {
+                    0% { transform: translateX(0); }
+                    100% { transform: translateX(-33.33%); }
+                  }
+                  @keyframes marqueeRight {
+                    0% { transform: translateX(-33.33%); }
+                    100% { transform: translateX(0); }
+                  }
+                  .animate-marquee-l {
+                    display: flex;
+                    width: max-content;
+                    gap: 1.5rem;
+                    animation: marqueeLeft 35s linear infinite;
+                  }
+                  .animate-marquee-r {
+                    display: flex;
+                    width: max-content;
+                    gap: 1.5rem;
+                    animation: marqueeRight 35s linear infinite;
+                  }
+                  .marquee-container:hover .animate-marquee-l,
+                  .marquee-container:hover .animate-marquee-r {
+                    animation-play-state: paused;
+                  }
+                  .mask-gradient-x {
+                    mask-image: linear-gradient(to right, transparent, white 10%, white 90%, transparent);
+                    -webkit-mask-image: linear-gradient(to right, transparent, white 10%, white 90%, transparent);
+                  }
+                `}</style>
+
+                {/* Row 1: Moving Left */}
+                <div className="relative w-full overflow-hidden mask-gradient-x">
+                  <div className="animate-marquee-l">
+                    {getMarqueeItems(row1).map((property, idx) => (
+                      <div key={`${property.id}-r1-${idx}`} className="w-[280px] sm:w-[360px] shrink-0 select-none px-2">
+                        <PropertyCard
+                          property={property}
+                          onSelect={setSelectedProperty}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Row 2: Moving Right */}
+                <div className="relative w-full overflow-hidden mask-gradient-x">
+                  <div className="animate-marquee-r">
+                    {getMarqueeItems(finalRow2).map((property, idx) => (
+                      <div key={`${property.id}-r2-${idx}`} className="w-[280px] sm:w-[360px] shrink-0 select-none px-2">
+                        <PropertyCard
+                          property={property}
+                          onSelect={setSelectedProperty}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
               </div>
-            ))}
-          </div>
+            );
+          })()
         ) : (
           <div className="text-center py-20 border border-dashed border-stone-200 rounded-lg">
             <svg className="w-12 h-12 text-stone-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -242,18 +414,33 @@ export default function Home() {
       </section>
 
       {/* Curated Collections Section */}
-      <Collections onSelectCollection={handleSelectCollection} />
+      <Collections onSelectCollection={handleSelectCollection} properties={properties} />
 
       {/* Services Section */}
-      <section className="py-24 bg-stone-50 border-t border-stone-200/40" id="services-section">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+      <section className="py-24 border-t border-stone-200/40 dark:border-stone-850/40 relative overflow-hidden bg-stone-50 dark:bg-stone-950 transition-colors duration-300 z-10" id="services-section">
+        
+        {/* Real Estate Background Floor Plan Sketch Image */}
+        <div className="absolute inset-0 z-0 opacity-[0.09] dark:opacity-[0.035] pointer-events-none select-none dark:invert dark:brightness-125 transition-opacity duration-300">
+          <Image
+            src="/images/services_bg.png"
+            alt="Real Estate Floor Plan Background"
+            fill
+            className="object-cover object-center"
+            priority
+          />
+        </div>
+
+        {/* Soft gradient edge overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-stone-50/90 dark:from-stone-950/90 via-transparent to-stone-50/90 dark:to-stone-950/90 z-1 pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
           {/* Section Header based on mockup */}
           <div className="text-center mb-16 flex flex-col items-center">
-            <h2 className="font-sans text-3xl font-bold tracking-widest text-stone-900 uppercase">
+            <h2 className="font-sans text-3xl font-bold tracking-widest text-stone-900 dark:text-white uppercase">
               OUR SERVICES
             </h2>
             {/* Elegant horizontal underline divider */}
-            <div className="w-24 h-[3px] bg-stone-900 mt-4 rounded-full" />
+            <div className="w-24 h-[3px] bg-stone-900 dark:bg-stone-300 mt-4 rounded-full" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -302,24 +489,24 @@ export default function Home() {
                 <div
                   key={idx}
                   onMouseMove={handleMouseMove}
-                  className="magic-card group p-8 md:p-10 flex flex-col items-center text-center shadow-sm relative cursor-default select-none overflow-hidden reveal"
+                  className="magic-card group p-8 md:p-10 flex flex-col items-center text-center shadow-sm relative cursor-default select-none overflow-hidden bg-white/70 dark:bg-stone-900/80 backdrop-blur-md reveal"
                   style={{ transitionDelay: `${(idx % 3) * 120}ms` } as any}
                 >
                   {/* Spotlight shine layer */}
                   <div className="magic-card-shine" />
 
                   {/* Icon */}
-                  <div className="w-16 h-16 rounded-full bg-stone-50 border border-stone-150 flex items-center justify-center mb-6 transition-all duration-300 group-hover:scale-110 group-hover:border-gold-300 group-hover:bg-gold-50/20 relative z-10 shrink-0">
+                  <div className="w-16 h-16 rounded-full bg-stone-50 dark:bg-stone-900 border border-stone-150 dark:border-stone-800 flex items-center justify-center mb-6 transition-all duration-300 group-hover:scale-110 group-hover:border-gold-300 group-hover:bg-gold-50/20 dark:group-hover:bg-gold-950/20 relative z-10 shrink-0 [&_svg]:text-stone-900 dark:[&_svg]:text-stone-100 [&_svg]:group-hover:text-gold-650 dark:[&_svg]:group-hover:text-gold-400">
                     {service.icon}
                   </div>
 
                   {/* Title */}
-                  <h3 className="font-sans text-lg text-stone-900 font-bold mb-3 tracking-wide relative z-10">
+                  <h3 className="font-sans text-lg text-stone-900 dark:text-stone-100 font-bold mb-3 tracking-wide relative z-10">
                     {service.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-xs font-light text-stone-500 leading-relaxed max-w-sm relative z-10">
+                  <p className="text-xs font-light text-stone-500 dark:text-stone-400 leading-relaxed max-w-sm relative z-10">
                     {service.desc}
                   </p>
                 </div>
@@ -330,32 +517,32 @@ export default function Home() {
       </section>
 
       {/* About Us Section */}
-      <section className="py-24 bg-white border-t border-stone-200/40" id="about-us-section">
+      <section className="py-24 bg-white dark:bg-transparent border-t border-stone-200/40 dark:border-stone-850/40 transition-colors duration-300 relative z-10" id="about-us-section">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row items-center gap-16">
-          <div className="w-full md:w-1/2 relative aspect-square md:aspect-[4/3] rounded-lg overflow-hidden bg-stone-100 border border-stone-200/40 reveal-left">
+          <div className="w-full md:w-1/2 relative aspect-square md:aspect-[4/3] rounded-lg overflow-hidden bg-stone-100 dark:bg-stone-900 border border-stone-200/40 dark:border-stone-850/40 reveal-left">
             <Image
               src="/images/hero_villa.png"
               alt="Dreamland Associates Legacy"
               fill
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-stone-900/10" />
+            <div className="absolute inset-0 bg-stone-900/10 dark:bg-stone-900/30" />
           </div>
 
           <div className="w-full md:w-1/2 reveal-right">
             <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-gold-500 mb-3 block">
               Our Legacy
             </span>
-            <h2 className="font-serif text-4xl text-stone-900 font-normal tracking-wide mb-6">
+            <h2 className="font-serif text-4xl text-stone-900 dark:text-white font-normal tracking-wide mb-6">
               A home is more than a place. It is a legacy.
             </h2>
-            <p className="text-xs font-light text-stone-500 leading-relaxed mb-6">
+            <p className="text-xs font-light text-stone-500 dark:text-stone-400 leading-relaxed mb-6">
               At Dream Land Associates, we handle the curation and transaction of prime residential assets worldwide. With private client advisors in major global hubs, we connect elite properties with global citizens.
             </p>
-            <p className="text-xs font-light text-stone-500 leading-relaxed mb-8">
+            <p className="text-xs font-light text-stone-500 dark:text-stone-400 leading-relaxed mb-8">
               We leverage exclusive global networks and deep data analytics to discover architectural masterpieces that match the vision of our clients.
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-4 border-t border-stone-100">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-4 border-t border-stone-100 dark:border-stone-850">
               <div>
                 <span className="block font-serif text-3xl text-gold-600 font-medium">10k+</span>
                 <span className="text-[9px] uppercase tracking-wider font-bold text-stone-400 mt-1.5 block">
@@ -383,75 +570,124 @@ export default function Home() {
                 </span>
               </div>
             </div>
+            
+            <div className="pt-8">
+              <Link href="/about">
+                <button className="border border-gold-500 text-gold-500 hover:bg-gold-500 hover:text-stone-950 bg-transparent rounded-sm text-[10px] uppercase font-bold tracking-widest px-6 py-3 cursor-pointer transition-all duration-300">
+                  Read Corporate Story & Location Map
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Founders & Board Directors Section */}
-      <section className="py-24 bg-stone-50 border-t border-stone-200/40" id="our-team-section">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+      <section className="py-24 bg-gradient-to-b from-stone-50 via-stone-100/60 to-stone-50 dark:from-stone-950 dark:via-stone-900/30 dark:to-stone-950 border-t border-b border-stone-200/50 dark:border-stone-850/60 transition-colors duration-300 relative overflow-hidden z-10" id="our-team-section">
+        {/* Dynamic Background Blueprint Grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#88736108_1px,transparent_1px),linear-gradient(to_bottom,#88736108_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none opacity-60 dark:opacity-30 z-0" />
+        
+        {/* Background Image Layer */}
+        <div className="absolute inset-0 z-0 opacity-[0.08] dark:opacity-[0.03] pointer-events-none mix-blend-overlay">
+          <Image
+            src="/images/team_bg.png"
+            alt="Office background"
+            fill
+            sizes="100vw"
+            className="object-cover object-center"
+          />
+        </div>
+        
+        {/* Glowing Ambient Color Orbs */}
+        <div className="absolute top-10 left-[10%] w-[450px] h-[450px] rounded-full bg-gradient-to-br from-gold-500/10 via-transparent to-transparent blur-[120px] pointer-events-none z-0 dark:from-gold-600/5 animate-pulse duration-[6000ms]" />
+        <div className="absolute bottom-10 right-[10%] w-[450px] h-[450px] rounded-full bg-gradient-to-br from-blue-500/5 via-transparent to-transparent blur-[120px] pointer-events-none z-0 dark:from-blue-600/3 animate-pulse duration-[8000ms]" />
+
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-gold-500 mb-3 block">
               Company Board
             </span>
-            <h2 className="font-serif text-3xl md:text-4xl text-stone-900 font-normal tracking-wide">
+            <h2 className="font-serif text-3xl md:text-4xl text-stone-900 dark:text-white font-normal tracking-wide">
               Founders & Board Directors
             </h2>
-            <p className="text-sm font-light text-stone-500 leading-relaxed mt-4">
+            <p className="text-sm font-light text-stone-500 dark:text-stone-400 leading-relaxed mt-4">
               Our founding directors steer the vision, acquisitions, and operations of Dreamland Associates, assuring absolute legal security and premium development standards.
             </p>
           </div>
 
           {/* 3-Column Grid for Board Directors */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                name: 'Mr. Sumit Lodhi',
-                role: 'CEO & Founder',
-                initials: 'SL',
-                desc: 'Visionary founder of Dreamland Associates. Directs development programs, zoning clearance checks, and private client brokerage advisory desks.',
-              },
-              {
-                name: 'Mr. Nitin Katoch',
-                role: 'Director',
-                initials: 'NK',
-                desc: 'Oversees strategic portfolio growth, builder alliances, and coordinates direct investments along premium Dehradun bypass corridors.',
-              },
-              {
-                name: 'Mr. Suhail',
-                role: 'Managing Director',
-                initials: 'S',
-                desc: 'Steers day-to-day desk operations, buyer title registries, bank loan integrations, and local land administration coordinates.',
-              },
-            ].map((member, idx) => (
+            {directors.map((member, idx) => (
               <div
                 key={member.name}
-                className="bg-white border border-stone-200/60 rounded-lg p-8 shadow-sm flex flex-col justify-between items-center text-center hover:shadow-md transition-shadow duration-300 reveal"
+                className="group relative bg-white dark:bg-stone-900 border border-stone-200/50 dark:border-stone-800/80 rounded-2xl p-8 shadow-md flex flex-col justify-between items-center text-center hover:shadow-xl hover:border-gold-500/30 transition-all duration-500 hover:-translate-y-1.5 overflow-hidden reveal"
                 style={{ transitionDelay: `${idx * 150}ms` }}
               >
-                <div className="w-full flex flex-col items-center">
-                  {/* Larger Centered Initial Frame */}
-                  <div className="w-24 h-24 rounded-full border-2 border-gold-400/80 bg-gold-50/30 flex items-center justify-center text-gold-600 font-serif text-2xl font-bold mb-6 select-none shadow-[0_4px_15px_rgba(136,115,97,0.12)]">
-                    {member.initials}
-                  </div>
-                  <h4 className="font-serif text-xl text-stone-900 font-bold tracking-wide">{member.name}</h4>
-                  <span className="text-[10px] uppercase tracking-widest font-bold text-gold-600 block mt-1.5 mb-4">
+                {/* Background decorative gradient glow on hover */}
+                <div className="absolute -top-24 -left-24 w-48 h-48 rounded-full bg-gold-400/5 blur-[40px] pointer-events-none group-hover:bg-gold-500/10 transition-colors duration-500" />
+                <div className="absolute -bottom-24 -right-24 w-48 h-48 rounded-full bg-gold-400/5 blur-[40px] pointer-events-none group-hover:bg-gold-500/10 transition-colors duration-500" />
+
+                <div className="w-full flex flex-col items-center relative z-10">
+                  
+                  {/* Portrait frame with double gold ring & hover scale */}
+                  {member.image ? (
+                    <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-gold-400/80 mb-6 p-1 bg-white dark:bg-stone-950 shadow-[0_4px_20px_rgba(212,175,55,0.15)] group-hover:scale-105 transition-transform duration-500">
+                      <div className="relative w-full h-full rounded-full overflow-hidden">
+                        <Image
+                          src={member.image}
+                          alt={member.name}
+                          fill
+                          sizes="112px"
+                          className="object-cover"
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="w-28 h-28 rounded-full border-2 border-dashed border-gold-400/80 bg-gold-50/40 dark:bg-gold-950/15 flex items-center justify-center text-gold-600 font-serif text-3xl font-bold mb-6 select-none shadow-[0_4px_20px_rgba(212,175,55,0.15)] group-hover:scale-105 transition-transform duration-500">
+                      {member.initials || member.name.substring(0, 2).toUpperCase()}
+                    </div>
+                  )}
+
+                  <h4 className="font-serif text-xl text-stone-900 dark:text-stone-100 font-bold tracking-wide transition-colors group-hover:text-gold-600 duration-300">
+                    {member.name}
+                  </h4>
+                  
+                  <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-gold-600 block mt-2 mb-4 bg-gold-500/10 dark:bg-gold-500/5 px-3 py-1 rounded-full">
                     {member.role}
                   </span>
-                  <p className="text-xs font-light text-stone-500 leading-relaxed max-w-sm mx-auto">
+                  
+                  <p className="text-xs font-light text-stone-500 dark:text-stone-400 leading-relaxed max-w-sm mx-auto">
                     {member.desc}
                   </p>
                 </div>
 
-                <div className="pt-6 border-t border-stone-100 mt-6 flex flex-col items-center text-stone-400 w-full space-y-2">
-                  <span className="text-[10px] font-bold text-stone-500">Dreamland Private Desk</span>
-                  <a
-                    href="mailto:dreamlandassociate7@gmail.com"
-                    className="hover:text-gold-500 transition-colors flex items-center space-x-1.5 text-xs text-stone-500 font-semibold"
-                  >
-                    <Mail className="w-4 h-4 text-stone-400 hover:text-gold-500" />
-                    <span>Email Desk</span>
-                  </a>
+                {/* Footer details & social buttons */}
+                <div className="pt-6 border-t border-stone-100 dark:border-stone-850 mt-6 w-full flex flex-col items-center space-y-3.5 relative z-10">
+                  <span className="text-[9px] uppercase tracking-widest font-bold text-stone-400 dark:text-stone-500">
+                    Dreamland Private Desk
+                  </span>
+                  
+                  <div className="flex items-center justify-center gap-3 w-full">
+                    <a
+                      href={`mailto:${member.email || 'dreamlandassociate7@gmail.com'}`}
+                      className="flex-1 bg-stone-50 hover:bg-stone-100 dark:bg-stone-950 dark:hover:bg-stone-900 border border-stone-200/50 dark:border-stone-800/80 py-2 px-3 rounded-lg text-stone-600 dark:text-stone-400 hover:text-gold-500 dark:hover:text-gold-500 text-[10px] font-semibold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-1.5"
+                    >
+                      <Mail className="w-3.5 h-3.5" />
+                      <span>Email</span>
+                    </a>
+                    
+                    <a
+                      href={`https://wa.me/91${member.phone || '9258884941'}?text=Hello%20${encodeURIComponent(member.name)}%2C%20I%20am%20inquiring%20regarding%20property%20listings%20with%20Dreamland%20Associates.`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 bg-emerald-500 hover:bg-emerald-600 border border-transparent py-2 px-3 rounded-lg text-white text-[10px] font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-1.5 shadow-sm hover:shadow-md"
+                    >
+                      <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.73-1.45L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.45 5.407-.003 9.806-4.414 9.809-9.83.001-2.624-1.01-5.092-2.85-6.937C16.378 1.993 13.91 1.017 11.281 1.017c-5.418 0-9.821 4.415-9.824 9.836 0 1.52.41 3.01 1.189 4.316L1.586 20.68l5.061-1.526zM17.65 14.86c-.348-.174-2.062-1.018-2.38-1.134-.318-.116-.55-.174-.78.174-.23.348-.898 1.134-1.101 1.366-.203.232-.406.261-.754.087-1.464-.73-2.58-1.272-3.582-3.003-.263-.453.263-.42.753-.873.08-.073.16-.16.23-.23.072-.07.12-.116.18-.174.06-.058.087-.116.13-.174.044-.058.02-.116-.01-.174-.03-.058-.78-1.879-1.07-2.576-.28-.675-.562-.582-.78-.582-.2-.008-.43-.008-.66-.008-.23 0-.61.087-.93.435-.32.348-1.22 1.192-1.22 2.91 0 1.72 1.248 3.377 1.422 3.608.174.232 2.457 3.75 5.952 5.26.83.36 1.48.57 1.98.73.84.27 1.61.23 2.21.14.67-.1 2.06-.84 2.35-1.65.29-.81.29-1.51.2-1.65-.09-.14-.32-.23-.67-.4z" />
+                      </svg>
+                      <span>WhatsApp</span>
+                    </a>
+                  </div>
                 </div>
               </div>
             ))}
@@ -470,25 +706,25 @@ export default function Home() {
       </section>
 
       {/* Customer Reviews Section (Magic UI Marquee) */}
-      <section className="py-24 bg-white overflow-hidden border-t border-stone-200/40" id="reviews-section">
+      <section className="py-24 bg-white dark:bg-transparent overflow-hidden border-t border-stone-200/40 dark:border-stone-850/40 transition-colors duration-300 relative z-10" id="reviews-section">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 text-center mb-16">
           <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-gold-500 mb-3 block">
             Testimonials
           </span>
-          <h2 className="font-serif text-3xl md:text-4xl text-stone-900 font-normal tracking-wide">
+          <h2 className="font-serif text-3xl md:text-4xl text-stone-900 dark:text-white font-normal tracking-wide">
             What Our Clients Say
           </h2>
-          <p className="text-sm font-light text-stone-500 leading-relaxed mt-4 max-w-xl mx-auto">
+          <p className="text-sm font-light text-stone-500 dark:text-stone-400 leading-relaxed mt-4 max-w-xl mx-auto">
             Read certified transaction reviews from buyers who purchased gated plots in Dehradun with our private office.
           </p>
         </div>
 
         {/* Horizontal Marquee Container */}
-        <div className="relative w-full overflow-hidden py-4 bg-stone-50/50 border-y border-stone-150/30 flex">
+        <div className="relative w-full overflow-hidden py-4 bg-stone-50/50 dark:bg-stone-900/30 border-y border-stone-150/30 dark:border-stone-850/30 flex">
           {/* Left Gradient Fade */}
-          <div className="absolute inset-y-0 left-0 w-20 md:w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+          <div className="absolute inset-y-0 left-0 w-20 md:w-32 bg-gradient-to-r from-white dark:from-stone-950 to-transparent z-10 pointer-events-none" />
           {/* Right Gradient Fade */}
-          <div className="absolute inset-y-0 right-0 w-20 md:w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+          <div className="absolute inset-y-0 right-0 w-20 md:w-32 bg-gradient-to-l from-white dark:from-stone-950 to-transparent z-10 pointer-events-none" />
 
           {/* Marquee Track */}
           <div className="animate-marquee-horizontal flex space-x-6">
@@ -534,7 +770,7 @@ export default function Home() {
                 ].map((review, rIdx) => (
                   <div
                     key={`${loopIdx}-${rIdx}`}
-                    className="w-[280px] sm:w-[350px] bg-white border border-stone-200/60 p-6 rounded-lg shadow-sm flex flex-col justify-between shrink-0 hover:shadow-md transition-shadow duration-300"
+                    className="w-[280px] sm:w-[350px] bg-white dark:bg-stone-900 border border-stone-200/60 dark:border-stone-800 p-6 rounded-lg shadow-sm flex flex-col justify-between shrink-0 hover:shadow-md transition-shadow duration-300"
                   >
                     <div>
                       {/* Rating Stars */}
@@ -543,12 +779,12 @@ export default function Home() {
                           <span key={sIdx} className="text-amber-500 text-sm">★</span>
                         ))}
                       </div>
-                      <p className="text-xs font-light text-stone-600 leading-relaxed italic">
+                      <p className="text-xs font-light text-stone-600 dark:text-stone-300 leading-relaxed italic">
                         "{review.text}"
                       </p>
                     </div>
-                    <div className="pt-4 border-t border-stone-100 mt-4 flex items-center justify-between">
-                      <span className="text-[10px] font-bold text-stone-800">{review.name}</span>
+                    <div className="pt-4 border-t border-stone-100 dark:border-stone-800 mt-4 flex items-center justify-between">
+                      <span className="text-[10px] font-bold text-stone-800 dark:text-stone-200">{review.name}</span>
                       <span className="text-[9px] uppercase tracking-wider font-semibold text-gold-600">
                         {review.role}
                       </span>
@@ -561,17 +797,35 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Gallery Section */}
+      <GallerySection id="gallery-section" />
+
       {/* FAQ Section */}
-      <section className="py-24 bg-stone-50 border-t border-stone-200/40" id="faq-section">
-        <div className="max-w-4xl mx-auto px-6 lg:px-12">
+      <section className="py-24 border-t border-stone-200/40 dark:border-stone-850/40 relative overflow-hidden bg-stone-50 dark:bg-stone-950 transition-colors duration-300 z-10" id="faq-section">
+        
+        {/* Real Estate Background Elevation Sketch Image */}
+        <div className="absolute inset-0 z-0 opacity-[0.09] dark:opacity-[0.035] pointer-events-none select-none dark:invert dark:brightness-125 transition-opacity duration-300">
+          <Image
+            src="/images/faq_bg.png"
+            alt="Real Estate Elevation Background"
+            fill
+            className="object-cover object-center"
+            priority
+          />
+        </div>
+
+        {/* Soft gradient edge overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-stone-50/90 dark:from-stone-950/90 via-transparent to-stone-50/90 dark:to-stone-950/90 z-1 pointer-events-none" />
+
+        <div className="max-w-4xl mx-auto px-6 lg:px-12 relative z-10">
           <div className="text-center mb-16">
             <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-gold-500 mb-3 block">
               Inquiries
             </span>
-            <h2 className="font-serif text-3xl md:text-4xl text-stone-900 font-normal tracking-wide">
+            <h2 className="font-serif text-3xl md:text-4xl text-stone-900 dark:text-white font-normal tracking-wide">
               Frequently Asked Questions
             </h2>
-            <p className="text-sm font-light text-stone-500 leading-relaxed mt-4">
+            <p className="text-sm font-light text-stone-500 dark:text-stone-400 leading-relaxed mt-4">
               Get direct answers to common queries regarding registry, mutations, bank loans, and colony infrastructures.
             </p>
           </div>
@@ -604,11 +858,11 @@ export default function Home() {
               return (
                 <div
                   key={fIdx}
-                  className="bg-white border border-stone-200/60 rounded-md overflow-hidden transition-all duration-300"
+                  className="bg-white/70 dark:bg-stone-900/80 backdrop-blur-md border border-stone-200/60 dark:border-stone-850/80 rounded-md overflow-hidden transition-all duration-300"
                 >
                   <button
                     onClick={() => setOpenFaq(isOpen ? null : fIdx)}
-                    className="w-full flex items-center justify-between p-5 text-left font-serif text-sm sm:text-base text-stone-850 hover:text-gold-600 transition-colors font-medium cursor-pointer"
+                    className="w-full flex items-center justify-between p-5 text-left font-serif text-sm sm:text-base text-stone-850 dark:text-stone-200 hover:text-gold-600 dark:hover:text-gold-450 transition-colors font-medium cursor-pointer"
                   >
                     <span>{faq.q}</span>
                     <span className={`text-xs text-stone-400 transition-transform duration-300 ${isOpen ? 'rotate-180 text-gold-500' : ''}`}>
@@ -616,11 +870,10 @@ export default function Home() {
                     </span>
                   </button>
                   <div
-                    className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                      isOpen ? 'max-h-40 border-t border-stone-100 p-5' : 'max-h-0 opacity-0 pointer-events-none'
-                    }`}
+                    className={`transition-all duration-300 ease-in-out overflow-hidden ${isOpen ? 'max-h-40 border-t border-stone-100 dark:border-stone-800 p-5' : 'max-h-0 opacity-0 pointer-events-none'
+                      }`}
                   >
-                    <p className="text-xs sm:text-sm font-light text-stone-500 leading-relaxed">
+                    <p className="text-xs sm:text-sm font-light text-stone-500 dark:text-stone-400 leading-relaxed">
                       {faq.a}
                     </p>
                   </div>
@@ -642,6 +895,12 @@ export default function Home() {
         <PropertyModal
           property={selectedProperty}
           onClose={() => setSelectedProperty(null)}
+        />
+      )}
+
+      {isSellModalOpen && (
+        <SellPropertyModal
+          onClose={() => setIsSellModalOpen(false)}
         />
       )}
 
