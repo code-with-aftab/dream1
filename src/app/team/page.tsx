@@ -186,6 +186,17 @@ export default function TeamPage() {
           50% { clip-path: inset(95% 0 0 0); }
           75% { clip-path: inset(0 0 0 95%); }
         }
+
+        .fan-card {
+          transform: none !important;
+          transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        @media (min-width: 768px) {
+          .fan-card {
+            transform: perspective(1000px) rotateY(var(--card-angle)) translateZ(var(--card-z)) !important;
+            transform-style: preserve-3d;
+          }
+        }
       `}</style>
 
       {/* Navigation */}
@@ -237,9 +248,9 @@ export default function TeamPage() {
           ))}
         </div>
 
-        {/* 3D Perspective Fan Layout Container */}
-        <div className="relative py-12 px-2 overflow-x-auto scrollbar-hide flex items-center justify-start md:justify-center">
-          <div className="flex md:grid md:grid-cols-4 lg:grid-cols-5 gap-6 md:gap-8 justify-center min-w-max md:min-w-0 md:w-full pb-8">
+        {/* Grid Container for Team Representatives */}
+        <div className="relative py-12 px-4 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 justify-center w-full pb-8">
             {filteredTeam.map((member, idx) => {
               const stats = getMemberStats(member.name);
               const abbr = getDesignationAbbr(member.role);
@@ -253,10 +264,10 @@ export default function TeamPage() {
                   key={member.id || idx}
                   onMouseEnter={playHoverSound}
                   onClick={() => handleCardClick(member)}
-                  className="group relative w-64 md:w-auto aspect-[3/4.2] bg-[#0d1016]/40 backdrop-blur-md border border-white/5 rounded-2xl overflow-hidden cursor-pointer shadow-2xl transition-all duration-500 flex flex-col justify-end p-6 select-none hover:-translate-y-1.5 hover:shadow-[0_0_35px_rgba(59,130,246,0.18)]"
+                  className="group fan-card relative w-full aspect-[3/4.2] bg-[#0d1016]/40 backdrop-blur-md border border-white/5 rounded-2xl overflow-hidden cursor-pointer shadow-2xl transition-all duration-500 flex flex-col justify-end p-6 select-none hover:-translate-y-1.5 hover:shadow-[0_10px_30px_rgba(136,115,97,0.2)]"
                   style={{
-                    transform: `perspective(1000px) rotateY(${angle}deg) translateZ(${transZ}px)`,
-                    transformStyle: 'preserve-3d',
+                    ['--card-angle' as any]: `${angle}deg`,
+                    ['--card-z' as any]: `${transZ}px`
                   }}
                 >
                   

@@ -261,8 +261,8 @@ export default function Navbar({ onScrollToSection = () => {} }: NavbarProps) {
           ${mounted ? 'opacity-100' : 'opacity-0'}
           ${
             scrolled
-              ? 'bg-white/90 dark:bg-stone-950/90 border-b border-stone-200/80 dark:border-stone-850/80 py-3 shadow-[0_4px_20px_rgba(0,0,0,0.03)]'
-              : 'bg-white/70 dark:bg-stone-950/70 border-b border-transparent py-4 lg:py-5 shadow-none'
+              ? 'bg-white dark:bg-stone-950 border-b border-stone-200/80 dark:border-stone-850/80 py-3 shadow-[0_4px_20px_rgba(0,0,0,0.03)]'
+              : 'bg-white dark:bg-stone-950 border-b border-stone-200/50 dark:border-stone-850/50 py-4 lg:py-5 shadow-sm'
           }
         `}
       >
