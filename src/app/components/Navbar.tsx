@@ -378,149 +378,132 @@ export default function Navbar({ onScrollToSection = () => {} }: NavbarProps) {
                 onClick={() => handleNavLinkClick('contact-section')}
                 className="btn-shimmer text-[9px] xl:text-[11px] font-sans font-semibold uppercase tracking-[0.14em] px-5 xl:px-7 h-9 xl:h-10 rounded-full cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg bg-stone-900 hover:bg-gold-600 text-white border-0 dark:bg-white dark:text-stone-950 dark:hover:bg-gold-600 dark:hover:text-white"
               >
-                Consult Desk
+                Get in Touch
               </Button>
             </div>
           </div>
 
-          {/* ── Mobile Burger with shadcn Sheet ── */}
+          {/* ── Mobile Burger with Custom Dropdown Pop-up ── */}
           <div className="lg:hidden flex items-center space-x-3">
             <button
               onClick={toggleTheme}
-              className="p-2 text-stone-600 hover:text-gold-500 transition-all rounded-full hover:bg-gold-50 dark:text-stone-400 dark:hover:bg-stone-900 cursor-pointer"
+              className="p-2 text-stone-600 hover:text-gold-500 transition-all rounded-full hover:bg-gold-50 dark:text-stone-400 dark:hover:bg-stone-900 cursor-pointer bg-transparent border-none outline-none"
               aria-label="Toggle Theme"
             >
               {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
             
-            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-              <SheetTrigger
-                className="transition-all duration-200 cursor-pointer text-stone-800 hover:text-gold-500 hover:scale-110 p-1 dark:text-stone-250 bg-transparent border-none focus:outline-none"
-                aria-label="Open Menu"
-              >
-                <Menu className="w-6 h-6" />
-              </SheetTrigger>
-              <SheetContent>
-                {/* Top section */}
-                <div className="flex flex-col">
-                  {/* Header */}
-                  <div className="flex items-center justify-between px-8 pt-8 pb-6 border-b border-stone-100 dark:border-stone-850">
-                    <div className="relative w-28 h-10 shrink-0">
-                      <Image
-                        src="/logo.png"
-                        alt="Dreamland Associates Logo"
-                        fill
-                        className="object-contain dark:invert dark:opacity-90"
-                        priority
-                      />
-                    </div>
-                    <SheetClose
-                      className="text-stone-400 hover:text-stone-700 hover:rotate-90 transition-all duration-300 p-1 dark:text-stone-500 dark:hover:text-stone-300 cursor-pointer bg-transparent border-none focus:outline-none"
-                      aria-label="Close Menu"
-                    >
-                      <X className="w-5 h-5" />
-                    </SheetClose>
-                  </div>
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="transition-all duration-200 cursor-pointer text-stone-800 dark:text-stone-200 hover:text-gold-500 hover:scale-110 p-2 bg-transparent border-none outline-none focus:outline-none"
+              aria-label="Toggle Menu"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
+        </div>
 
-                  {/* Nav Items */}
-                  <div className="flex flex-col px-8 pt-8 space-y-1">
-                    {navItems.map((item, i) => {
-                      if (item.hasDropdown) {
-                        return (
-                          <div key={item.label} className="flex flex-col border-b border-stone-50 dark:border-stone-900/60">
-                            <button
-                              onClick={() => setMobileInventoryOpen(!mobileInventoryOpen)}
-                              className="mobile-link-stagger text-left group flex items-center justify-between py-3 cursor-pointer"
-                              style={{
-                                animationDelay: mobileMenuOpen ? `${80 + i * 60}ms` : '0ms',
-                              }}
-                            >
-                              <div className="flex items-center gap-3">
-                                <span className="w-1.5 h-1.5 rounded-full bg-gold-300 group-hover:bg-gold-500 group-hover:scale-150 transition-all duration-300 shrink-0" />
-                                <span className="text-sm font-sans font-semibold uppercase tracking-[0.14em] text-stone-600 dark:text-stone-300 group-hover:text-gold-600 dark:group-hover:text-gold-450 group-hover:translate-x-1 transition-all duration-300">
-                                  {item.label}
-                                </span>
-                              </div>
-                              <ChevronDown className={`w-4 h-4 text-stone-400 transition-transform duration-300 ${mobileInventoryOpen ? 'rotate-180' : ''}`} />
-                            </button>
-                            
-                            {mobileInventoryOpen && (
-                              <div className="pl-6 flex flex-col space-y-1.5 pb-3 pt-1 bg-stone-50/50 dark:bg-stone-900/30 rounded-lg mt-0.5 border border-stone-100/50 dark:border-stone-850/30">
-                                {['Plots', 'Houses', 'Flats', 'Resales'].map((sub) => (
-                                  <Link
-                                    key={sub}
-                                    href={`/inventory?cat=${sub}`}
-                                    onClick={() => setMobileMenuOpen(false)}
-                                    className="block py-2 text-xs font-sans font-bold uppercase tracking-wider text-stone-500 hover:text-gold-600 dark:text-stone-400 dark:hover:text-gold-450"
-                                  >
-                                    {sub}
-                                  </Link>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        );
-                      }
-                      return (
-                        <button
-                          key={item.label}
-                          onClick={() => {
-                            handleNavLinkClick(item.sectionId || '');
-                            setMobileMenuOpen(false);
-                          }}
-                          className="mobile-link-stagger text-left group flex items-center gap-3 py-3 border-b border-stone-50 dark:border-stone-900/60 cursor-pointer"
-                          style={{
-                            animationDelay: mobileMenuOpen ? `${80 + i * 60}ms` : '0ms',
-                          }}
-                        >
-                          {/* Animated dot */}
-                          <span className="w-1.5 h-1.5 rounded-full bg-gold-300 group-hover:bg-gold-500 group-hover:scale-150 transition-all duration-300 shrink-0" />
-                          <span className="text-sm font-sans font-semibold uppercase tracking-[0.14em] text-stone-600 dark:text-stone-300 group-hover:text-gold-600 dark:group-hover:text-gold-450 group-hover:translate-x-1 transition-all duration-300">
+        {/* Mobile Dropdown Pop-up Menu */}
+        <div 
+          className={`
+            absolute top-full left-0 w-full bg-white dark:bg-stone-900 border-b border-stone-200/80 dark:border-stone-850/80 shadow-lg lg:hidden transition-all duration-300 origin-top transform 
+            ${mobileMenuOpen ? 'opacity-100 scale-y-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-y-95 -translate-y-2 pointer-events-none'}
+          `}
+        >
+          <div className="px-6 py-6 flex flex-col space-y-4 max-h-[70vh] overflow-y-auto">
+            {/* Nav Items */}
+            <div className="flex flex-col space-y-1">
+              {navItems.map((item) => {
+                if (item.hasDropdown) {
+                  return (
+                    <div key={item.label} className="flex flex-col border-b border-stone-100 dark:border-stone-800/40">
+                      <button
+                        type="button"
+                        onClick={() => setMobileInventoryOpen(!mobileInventoryOpen)}
+                        className="text-left group flex items-center justify-between py-3 cursor-pointer bg-transparent border-none outline-none"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-gold-300 group-hover:bg-gold-500 group-hover:scale-125 transition-all duration-350 shrink-0" />
+                          <span className="text-xs font-sans font-bold uppercase tracking-wider text-stone-700 dark:text-stone-300">
                             {item.label}
                           </span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Bottom section */}
-                <div className="px-8 pb-10 space-y-4">
-                  <div className="flex items-center justify-center gap-3 py-3 border-t border-b border-stone-100 dark:border-stone-850">
-                    <span className="text-xs text-stone-400 font-sans font-semibold dark:text-stone-500">
-                      Follow us on Instagram
+                        </div>
+                        <ChevronDown className={`w-4 h-4 text-stone-400 transition-transform duration-300 ${mobileInventoryOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      
+                      {mobileInventoryOpen && (
+                        <div className="pl-6 flex flex-col space-y-2 pb-3 pt-1.5 bg-stone-50 dark:bg-stone-950/40 rounded-lg mt-0.5 border border-stone-100/50 dark:border-stone-850/50">
+                          {['Plots', 'Houses', 'Flats', 'Resales'].map((sub) => (
+                            <Link
+                              key={sub}
+                              href={`/inventory?cat=${sub}`}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="block py-1.5 text-[10px] font-sans font-bold uppercase tracking-wider text-stone-500 hover:text-gold-600 dark:text-stone-400 dark:hover:text-gold-450"
+                            >
+                              {sub}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+                return (
+                  <button
+                    key={item.label}
+                    type="button"
+                    onClick={() => {
+                      handleNavLinkClick(item.sectionId || '');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="text-left group flex items-center gap-2.5 py-3 border-b border-stone-100 dark:border-stone-800/40 cursor-pointer bg-transparent border-none outline-none"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-gold-300 group-hover:bg-gold-500 group-hover:scale-125 transition-all duration-350 shrink-0" />
+                    <span className="text-xs font-sans font-bold uppercase tracking-wider text-stone-700 dark:text-stone-300">
+                      {item.label}
                     </span>
-                    <a
-                      href="https://instagram.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-1.5 text-stone-500 hover:text-gold-500 hover:bg-gold-50 rounded-full transition-all duration-300 dark:text-stone-400 dark:hover:text-gold-450 dark:hover:bg-stone-900"
-                    >
-                      <InstagramIcon className="w-4 h-4" />
-                    </a>
-                  </div>
-                   <Button
-                    onClick={() => {
-                      window.dispatchEvent(new CustomEvent('open-sell-modal'));
-                      setMobileMenuOpen(false);
-                    }}
-                    className="w-full py-3.5 text-xs font-sans font-semibold uppercase tracking-[0.14em] text-gold-500 hover:bg-gold-500 hover:text-stone-955 border border-gold-500 rounded-full transition-all duration-300 bg-transparent dark:hover:text-stone-955 cursor-pointer flex items-center justify-center"
-                  >
-                    Sell Your Property
-                  </Button>
+                  </button>
+                );
+              })}
+            </div>
 
-                  <Button
-                    onClick={() => {
-                      handleNavLinkClick('contact-section');
-                      setMobileMenuOpen(false);
-                    }}
-                    className="btn-shimmer w-full py-4 text-xs font-sans font-semibold uppercase tracking-[0.14em] text-white bg-stone-900 hover:bg-gold-600 rounded-full shadow-md transition-all duration-300 border-0 dark:bg-white dark:text-stone-955 dark:hover:bg-gold-600 dark:hover:text-white"
-                  >
-                    Get in Touch
-                  </Button>
-                </div>
-              </SheetContent>
-            </Sheet>
+            {/* Quick action buttons */}
+            <div className="pt-2 flex flex-col gap-3">
+              <Button
+                onClick={() => {
+                  window.dispatchEvent(new CustomEvent('open-sell-modal'));
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full py-2.5 h-10 text-[10px] font-sans font-bold uppercase tracking-wider text-gold-500 hover:bg-gold-500 hover:text-stone-955 border border-gold-500 rounded-full transition-all duration-300 bg-transparent cursor-pointer flex items-center justify-center"
+              >
+                Sell Your Property
+              </Button>
+
+              <Button
+                onClick={() => {
+                  handleNavLinkClick('contact-section');
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full py-2.5 h-10 text-[10px] font-sans font-bold uppercase tracking-wider text-white bg-stone-900 hover:bg-gold-600 rounded-full shadow-md transition-all duration-300 border-0 dark:bg-white dark:text-stone-955 cursor-pointer flex items-center justify-center"
+              >
+                Get in Touch
+              </Button>
+            </div>
+
+            {/* Social handles */}
+            <div className="flex items-center justify-center gap-2.5 pt-4 border-t border-stone-100 dark:border-stone-800/60">
+              <span className="text-[10px] text-stone-400 font-sans font-semibold">
+                Follow us on Instagram
+              </span>
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-1.5 text-stone-500 hover:text-gold-500 hover:bg-gold-50 rounded-full transition-all duration-300 dark:text-stone-400 dark:hover:text-gold-450 dark:hover:bg-stone-900"
+              >
+                <InstagramIcon className="w-3.5 h-3.5" />
+              </a>
+            </div>
           </div>
         </div>
       </nav>
