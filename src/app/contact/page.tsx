@@ -120,8 +120,7 @@ export default function ContactPage() {
                 </div>
                 <h4 className="font-bold text-[10px] uppercase tracking-wider text-stone-900 dark:text-white">Call Hotline</h4>
                 <p className="text-xs text-stone-500 dark:text-stone-400 mt-2 font-mono leading-relaxed">
-                  +91 9927502248<br />
-                  +91 8057932926
+                  +91 9258884941
                 </p>
               </div>
 
@@ -230,7 +229,7 @@ export default function ContactPage() {
                       name="phone"
                       value={form.phone}
                       onChange={handleInputChange}
-                      placeholder="e.g. 9927502248"
+                      placeholder="e.g. 9258884941"
                       className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-850 rounded-sm py-2.5 px-3 text-xs focus:outline-none focus:border-gold-500 text-stone-800 dark:text-white"
                       required
                     />

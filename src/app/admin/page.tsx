@@ -3275,7 +3275,7 @@ export default function AdminPage() {
                     name="phone"
                     value={teamFormData.phone}
                     onChange={handleTeamFormChange}
-                    placeholder="e.g. 9927502248"
+                    placeholder="e.g. 9258884941"
                     className="w-full bg-stone-50 border border-stone-200 rounded-sm py-2 px-3 focus:outline-none focus:border-gold-500 font-mono"
                     required
                   />

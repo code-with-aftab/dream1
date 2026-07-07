@@ -289,7 +289,7 @@ export default function BlogPage() {
             <div className="px-6 py-4 bg-stone-50 dark:bg-stone-950/20 border-t border-stone-100 dark:border-stone-800 flex flex-col sm:flex-row gap-3 justify-between items-center">
               <span className="text-[10px] text-stone-400 italic">Interested in this topic? Connect with advisors.</span>
               <a
-                href="https://wa.me/919927502248"
+                href="https://wa.me/919258884941"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-gold-500 hover:bg-gold-600 text-stone-955 px-5 py-2.5 rounded-sm font-bold uppercase tracking-wider text-[10px] transition-all flex items-center space-x-1.5 cursor-pointer"

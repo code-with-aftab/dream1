@@ -192,7 +192,7 @@ export default function GallerySection({ id = 'gallery-section' }: GallerySectio
               Image {lightboxIndex + 1} of {filteredItems.length}
             </span>
             <a
-              href={`https://wa.me/919927502248?text=Hello,%20I%20am%20interested%20in%20inquiring%20about%20your%20site:%20${encodeURIComponent(filteredItems[lightboxIndex].title)}`}
+              href={`https://wa.me/919258884941?text=Hello,%20I%20am%20interested%20in%20inquiring%20about%20your%20site:%20${encodeURIComponent(filteredItems[lightboxIndex].title)}`}
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}

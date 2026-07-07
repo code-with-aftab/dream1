@@ -219,7 +219,7 @@ export default function AboutPage() {
                   </div>
                   <div className="text-xs leading-normal">
                     <p className="font-semibold text-white uppercase tracking-wider text-[10px] mb-1">Direct Desk Phone</p>
-                    <p className="text-stone-400 font-mono">+91 9927502248, +91 8057932926</p>
+                    <p className="text-stone-400 font-mono">+91 9258884941</p>
                   </div>
                 </div>
 

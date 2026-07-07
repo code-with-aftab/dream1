@@ -452,7 +452,7 @@ export default function TeamPage() {
                   <span>Email Inbox</span>
                 </a>
                 <a
-                  href={`https://wa.me/919927502248?text=Hello,%20I%20am%20inquiring%20with%20your%20representative%20${encodeURIComponent(selectedMember.name)}%20regarding%20property%20listings.`}
+                  href={`https://wa.me/919258884941?text=Hello,%20I%20am%20inquiring%20with%20your%20representative%20${encodeURIComponent(selectedMember.name)}%20regarding%20property%20listings.`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full sm:w-auto bg-gold-500 hover:bg-gold-600 text-stone-955 py-3 px-6 rounded-lg text-center font-bold uppercase tracking-wider text-[9px] transition-all flex items-center justify-center space-x-1.5 cursor-pointer shadow-md"

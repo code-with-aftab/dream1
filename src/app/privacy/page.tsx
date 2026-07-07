@@ -90,7 +90,7 @@ export default function PrivacyPage() {
               <h2>5. Contact Our Privacy Officer</h2>
             </div>
             <p>
-              If you have any questions about this Privacy Policy, your registered data files, or want to request deletion of your inquiry registry from our database, please contact our Dehradun desk at +91 9927502248.
+              If you have any questions about this Privacy Policy, your registered data files, or want to request deletion of your inquiry registry from our database, please contact our Dehradun desk at +91 9258884941.
             </p>
           </section>
 

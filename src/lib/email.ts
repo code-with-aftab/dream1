@@ -76,12 +76,12 @@ export async function sendAutoresponderEmail(options: EmailOptions) {
           </div>
           
           <p class="text" style="font-size: 12px; color: #8a8982; border-top: 1px solid #e8e7e1; pt: 15px;">
-            If you wish to reach our acquisition coordinators directly, feel free to call us at +91 9927502248 or +91 8057932926.
+            If you wish to reach our acquisition coordinators directly, feel free to call us at +91 9258884941.
           </p>
         </div>
         <div class="footer">
           <p>© 2026 Dreamsland Associates. Gorakhpur, Shimla Bypass Road, Dehradun, Uttarakhand.</p>
-          <p><a href="https://dreamsland.in">dreamsland.in</a> | <a href="https://wa.me/919927502248">WhatsApp Chat</a></p>
+          <p><a href="https://dreamsland.in">dreamsland.in</a> | <a href="https://wa.me/919258884941">WhatsApp Chat</a></p>
         </div>
       </div>
     </body>

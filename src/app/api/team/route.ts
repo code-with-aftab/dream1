@@ -8,7 +8,7 @@ const INITIAL_TEAM = [
     role: 'Director',
     initials: 'NK',
     desc: 'Director of Dreamland Associates, steering residential and investment township acquisitions in Uttarakhand.',
-    phone: '9927502248',
+    phone: '9258884941',
     email: 'dreamlandassociate7@gmail.com',
     image: ''
   },

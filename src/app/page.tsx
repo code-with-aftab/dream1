@@ -76,7 +76,7 @@ export default function Home() {
         role: 'Director',
         initials: 'NK',
         desc: 'Oversees strategic portfolio growth, builder alliances, and coordinates direct investments along premium Dehradun bypass corridors.',
-        phone: '9927502248',
+        phone: '9258884941',
         email: 'dreamlandassociate7@gmail.com',
         image: ''
       },

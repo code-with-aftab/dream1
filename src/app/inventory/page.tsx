@@ -380,7 +380,7 @@ function InventoryContent() {
                   {/* Quick CTAs */}
                   <div className="pt-4 border-t border-stone-100 dark:border-stone-800 flex flex-col sm:flex-row gap-3">
                     <a
-                      href="tel:+919927502248"
+                      href="tel:+919258884941"
                       className="flex-1 bg-stone-900 dark:bg-stone-950 hover:bg-gold-500 text-white hover:text-stone-955 py-3 rounded text-center font-bold uppercase tracking-wider text-[9px] transition-colors flex items-center justify-center space-x-1.5 cursor-pointer"
                     >
                       <Phone className="w-3.5 h-3.5" />
@@ -394,7 +394,7 @@ function InventoryContent() {
                       <span>Email Inquiry</span>
                     </a>
                     <a
-                      href={`https://wa.me/919927502248?text=Hello,%20I%20am%20interested%20in%20your%20inventory%20listing:%20${encodeURIComponent(selectedProperty.title)}%20(${encodeURIComponent(selectedProperty.location)})%20priced%20at%20${encodeURIComponent(formatPrice(selectedProperty.price))}.%20Please%20share%20more%20details.`}
+                      href={`https://wa.me/919258884941?text=Hello,%20I%20am%20interested%20in%20your%20inventory%20listing:%20${encodeURIComponent(selectedProperty.title)}%20(${encodeURIComponent(selectedProperty.location)})%20priced%20at%20${encodeURIComponent(formatPrice(selectedProperty.price))}.%20Please%20share%20more%20details.`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex-1 bg-gold-500 hover:bg-gold-600 text-stone-955 py-3 rounded text-center font-bold uppercase tracking-wider text-[9px] transition-colors flex items-center justify-center space-x-1.5 cursor-pointer"

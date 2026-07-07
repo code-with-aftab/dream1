@@ -163,7 +163,7 @@ export default function SellPropertyModal({ onClose }: SellPropertyModalProps) {
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    placeholder="e.g. 9927502248"
+                    placeholder="e.g. 9258884941"
                     className="w-full bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-850 rounded-sm py-2 px-3 text-xs focus:outline-none focus:border-gold-500"
                     required
                   />
