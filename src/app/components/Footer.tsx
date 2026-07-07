@@ -104,7 +104,7 @@ export default function Footer() {
                 src="/logo.png"
                 alt="Dreamland Associates Logo"
                 fill
-                className="object-contain transition-opacity duration-300 hover:opacity-100"
+                className="object-contain brightness-0 invert opacity-95 transition-opacity duration-300 hover:opacity-100"
                 priority
               />
             </div>
