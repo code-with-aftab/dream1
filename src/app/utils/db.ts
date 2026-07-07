@@ -8,7 +8,7 @@ export interface ContactInquiry {
   requirements: string;
   timestamp: string;
   status: 'New' | 'Contacted' | 'Archived';
-  inquiryType?: 'Consult' | 'Sell';
+  inquiryType?: 'Consult' | 'Sell' | 'Query';
   propTitle?: string;
   propType?: string;
   propLocation?: string;

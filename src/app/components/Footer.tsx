@@ -42,7 +42,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative bg-[#251912] text-white pt-14 pb-10 transition-colors duration-300">
+    <footer className="relative bg-[#614831] text-white pt-8 pb-6 transition-colors duration-300">
       
       {/* ── Layered Building Skyline Silhouette with Custom Illuminated Windows ── */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0] transform -translate-y-[99%] pointer-events-none select-none">
@@ -51,10 +51,10 @@ export default function Footer() {
           <path d="M0,120 L0,80 L40,80 L40,120 L80,120 L80,60 L130,60 L130,120 L180,120 L180,70 L220,50 L260,70 L260,120 L320,120 L320,40 L380,40 L380,120 L440,120 L440,75 L490,75 L490,120 L550,120 L550,55 L610,35 L670,55 L670,120 L730,120 L730,45 L790,45 L790,120 L850,120 L850,65 L900,65 L900,120 L960,120 L960,30 L1020,30 L1020,120 L1080,120 L1080,75 L1130,55 L1180,75 L1180,120 L1200,120 Z" className="fill-gold-500/10 dark:fill-gold-400/5" />
           
           {/* Middle layer: Intermediate buildings with depth */}
-          <path d="M0,120 L0,90 L60,90 L60,120 L110,120 L110,75 L160,75 L160,120 L210,120 L210,85 L250,65 L290,85 L290,120 L350,120 L350,55 L400,55 L400,120 L470,120 L470,80 L520,80 L520,120 L580,120 L580,65 L630,45 L680,65 L680,120 L750,120 L750,50 L810,50 L810,120 L880,120 L880,75 L930,75 L930,120 L990,120 L990,40 L1050,40 L1050,120 L1100,120 L1100,85 L1150,65 L1200,85 L1200,120 Z" className="fill-[#170f0a]/65" />
+          <path d="M0,120 L0,90 L60,90 L60,120 L110,120 L110,75 L160,75 L160,120 L210,120 L210,85 L250,65 L290,85 L290,120 L350,120 L350,55 L400,55 L400,120 L470,120 L470,80 L520,80 L520,120 L580,120 L580,65 L630,45 L680,65 L680,120 L750,120 L750,50 L810,50 L810,120 L880,120 L880,75 L930,75 L930,120 L990,120 L990,40 L1050,40 L1050,120 L1100,120 L1100,85 L1150,65 L1200,85 L1200,120 Z" className="fill-[#302418]/65" />
           
           {/* Front layer: Solid front buildings with custom illuminated window grids */}
-          <path d="M0,120 L0,100 L80,100 L80,120 L140,120 L140,85 L190,85 L190,120 L240,120 L280,75 L320,120 L380,120 L380,65 L430,65 L430,120 L500,120 L500,90 L550,90 L550,120 L600,120 L640,55 L680,120 L780,120 L780,60 L830,60 L830,120 L900,120 L900,85 L950,85 L950,120 L1010,120 L1010,50 L1070,50 L1070,120 L1120,120 L1160,75 L1200,120 Z" className="fill-[#251912] transition-colors duration-300" />
+          <path d="M0,120 L0,100 L80,100 L80,120 L140,120 L140,85 L190,85 L190,120 L240,120 L280,75 L320,120 L380,120 L380,65 L430,65 L430,120 L500,120 L500,90 L550,90 L550,120 L600,120 L640,55 L680,120 L780,120 L780,60 L830,60 L830,120 L900,120 L900,85 L950,85 L950,120 L1010,120 L1010,50 L1070,50 L1070,120 L1120,120 L1160,75 L1200,120 Z" className="fill-[#614831] transition-colors duration-300" />
           
           {/* Glowing Windows Grid (Visible in both light & dark mode) */}
           <g className="opacity-90 animate-pulse duration-1000">
@@ -94,7 +94,7 @@ export default function Footer() {
         </svg>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-6 border-t border-white/10">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-4">
         {/* Main Grid: 4 Columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 text-left">
              {/* Column 1: Logo & Brief Description */}
@@ -104,7 +104,7 @@ export default function Footer() {
                 src="/logo.png"
                 alt="Dreamland Associates Logo"
                 fill
-                className="object-contain brightness-0 invert opacity-95 transition-opacity duration-300 hover:opacity-100"
+                className="object-contain transition-opacity duration-300 hover:opacity-100"
                 priority
               />
             </div>
@@ -192,10 +192,7 @@ export default function Footer() {
                   <Phone className="w-3.5 h-3.5 text-gold-300 shrink-0" />
                   <a href="tel:9258884941" className="hover:text-gold-200 transition-colors">+91 9258884941</a>
                 </li>
-                <li className="flex items-center space-x-2">
-                  <Phone className="w-3.5 h-3.5 text-gold-300 shrink-0" />
-                  <a href="tel:8147349242" className="hover:text-gold-200 transition-colors">+91 8147349242</a>
-                </li>
+
                 <li className="flex items-center space-x-2">
                   <Mail className="w-3.5 h-3.5 text-gold-300 shrink-0" />
                   <a href="mailto:dreamlandassociate7@gmail.com" className="hover:text-gold-200 transition-colors">
@@ -205,7 +202,7 @@ export default function Footer() {
               </ul>
             </div>
 
-            <div className="pt-2 border-t border-stone-900/60 w-full">
+            <div className="pt-2 w-full">
               <span className="text-[10px] uppercase font-bold tracking-wider text-gold-400 block mb-3">
                 Chat With Us
               </span>
@@ -241,18 +238,55 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Divider */}
-        <hr className="border-[#251e19] my-10" />
-
-        {/* Row 2: Social media text-based list */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-6 text-xs text-white font-bold border-b border-[#251e19]">
+        {/* Row 2: Social media links with custom inline SVGs */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 pt-6 text-xs text-white font-bold">
           <div className="flex items-center space-x-3">
             <span className="text-white uppercase font-bold text-[10px] tracking-widest mr-2">Social</span>
-            {['Instagram', 'Facebook', 'LinkedIn', 'YouTube'].map((social) => (
-              <a key={social} href="#" className="hover:text-gold-200 transition-colors">
-                {social}
-              </a>
-            ))}
+            {[
+              { 
+                name: 'Instagram', 
+                href: 'https://instagram.com/dreamland_associates_',
+                svg: (
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z" />
+                )
+              },
+              { 
+                name: 'Facebook', 
+                href: '#',
+                svg: (
+                  <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z" />
+                )
+              },
+              { 
+                name: 'LinkedIn', 
+                href: '#',
+                svg: (
+                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                )
+              },
+              { 
+                name: 'YouTube', 
+                href: '#',
+                svg: (
+                  <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.53 3.545 12 3.545 12 3.545s-7.53 0-9.388.508a3.003 3.003 0 0 0-2.11 2.11C0 8.017 0 12 0 12s0 3.983.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.858.507 9.388.507 9.388.507s7.53 0 9.388-.507a3.003 3.003 0 0 0 2.11-2.11C24 15.983 24 12 24 12s0-3.983-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                )
+              }
+            ].map((social) => {
+              return (
+                <a
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-full border border-white/10 hover:border-gold-300 bg-white/5 hover:bg-white/10 text-white hover:text-gold-200 transition-all duration-300 cursor-pointer flex items-center justify-center"
+                  title={social.name}
+                >
+                  <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                    {social.svg}
+                  </svg>
+                </a>
+              );
+            })}
           </div>
           
           <div className="text-[10px] uppercase tracking-wider text-white font-bold">
@@ -261,7 +295,7 @@ export default function Footer() {
         </div>
 
         {/* Row 3: Bank Partner integration logos (Tanishq payment style) */}
-        <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 py-6 border-b border-[#251e19] text-[10px] uppercase font-bold tracking-widest text-white select-none">
+        <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 py-4 text-[10px] uppercase font-bold tracking-widest text-white select-none">
           <span className="text-[8px] text-white/90 font-bold tracking-wide mr-2">Certified Loan Partners:</span>
           <span>SBI Home Loan</span>
           <span>HDFC Bank</span>
@@ -270,8 +304,8 @@ export default function Footer() {
           <span>PNB Housing</span>
         </div>
 
-        {/* Bottom copyright and legal disclaimer */}
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-6 pt-8 text-xs font-bold text-white leading-relaxed">
+        {/* Bottom copyright */}
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-6 pt-4 text-xs font-bold text-white leading-relaxed">
           <p>© {new Date().getFullYear()} Dream Land Associates. Gated Plots in Dehradun. All rights reserved.</p>
           <div className="flex space-x-6 shrink-0">
             <Link href="/privacy" className="hover:text-gold-200 transition-colors">Privacy Policy</Link>
@@ -285,11 +319,6 @@ export default function Footer() {
             </button>
           </div>
         </div>
-
-        {/* Legal Disclaimer block */}
-        <p className="text-[9px] text-white/90 font-bold leading-relaxed text-left mt-8 pt-4 border-t border-[#251e19]/60">
-          Disclaimer: Dreamland Associates is an independent property curating and consulting desk. All colony layout maps, plot dimensions, mutation (Dakhil Kharij) clearance processes, and loan approval parameters represent standard developer offerings and are subject to official verification checks at the time of private buyer-seller registry.
-        </p>
       </div>
     </footer>
   );

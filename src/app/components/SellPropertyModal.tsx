@@ -397,7 +397,7 @@ export default function SellPropertyModal({ onClose }: SellPropertyModalProps) {
               <img
                 src="/logo.png"
                 alt="Dreamland Associates Logo"
-                className="object-contain h-10 dark:invert dark:opacity-90 mx-auto"
+                className="object-contain h-10 mx-auto"
               />
             </div>
             <CheckCircle2 className="w-10 h-10 text-emerald-500 animate-bounce" />

@@ -141,7 +141,7 @@ export default function ContactForm({ id = 'contact-section', onSuccess }: Conta
                       src="/logo.png"
                       alt="Dreamland Associates Logo"
                       fill
-                      className="object-contain dark:invert"
+                      className="object-contain"
                     />
                   </div>
                   <div className="w-12 h-12 rounded-full bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40 flex items-center justify-center text-emerald-600 dark:text-emerald-500 mb-4 animate-bounce">

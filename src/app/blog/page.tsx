@@ -41,20 +41,20 @@ export default function BlogPage() {
       <Navbar />
 
       {/* Hero Banner Section */}
-      <section className="relative pt-32 pb-20 bg-[#0d1527] text-white overflow-hidden">
+      <section className="relative pt-32 pb-20 bg-[#957258] text-white overflow-hidden">
         {/* Decorative Grid Overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:32px_32px]" />
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold-600/10 rounded-full blur-[120px] pointer-events-none" />
         
         <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10 text-center">
-          <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-gold-500 mb-4 block animate-pulse">
+          <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-amber-100/90 mb-4 block animate-pulse">
             Knowledge Hub
           </span>
-          <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-light tracking-wide leading-tight max-w-4xl mx-auto">
-            Dreamsland <span className="text-gold-500 font-normal">Real Estate Desk</span>
+          <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-light tracking-wide leading-tight max-w-4xl mx-auto text-white">
+            Dreamsland <span className="text-amber-100 font-normal">Real Estate Desk</span>
           </h1>
-          <p className="text-sm sm:text-base font-light text-stone-400 max-w-xl mx-auto mt-6 leading-relaxed">
-            Get expert insights, legal guidelines, and investment forecasts regarding gated residential plots in Dehradun.
+          <p className="text-sm sm:text-base font-light text-stone-100/90 max-w-2xl mx-auto mt-6 leading-relaxed">
+            Read expert real estate advisory blogs, Dehradun land investment guides, registry mutation news, and gated plot development tips on the Dreamland Associates Blog.
           </p>
         </div>
       </section>

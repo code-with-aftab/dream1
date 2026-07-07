@@ -317,7 +317,7 @@ export default function TeamPage() {
           onClick={() => setSelectedMember(null)}
         >
           <div 
-            className="bg-[#101318]/90 backdrop-blur-md border border-white/10 rounded-2xl max-w-2xl w-full shadow-[0_0_50px_rgba(59,130,246,0.2)] overflow-hidden flex flex-col md:flex-row animate-in zoom-in duration-300"
+            className="bg-[#101318]/90 backdrop-blur-md border border-white/10 rounded-2xl max-w-2xl w-full shadow-[0_0_50px_rgba(149,114,88,0.2)] overflow-hidden flex flex-col md:flex-row animate-in zoom-in duration-300"
             onClick={(e) => e.stopPropagation()}
           >
             

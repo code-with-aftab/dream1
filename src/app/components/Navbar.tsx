@@ -275,7 +275,7 @@ export default function Navbar({ onScrollToSection = () => {} }: NavbarProps) {
                 src="/logo.png"
                 alt="Dreamland Associates Logo"
                 fill
-                className="object-contain dark:invert dark:opacity-90"
+                className="object-contain"
                 priority
               />
             </div>

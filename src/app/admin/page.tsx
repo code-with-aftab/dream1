@@ -868,7 +868,7 @@ export default function AdminPage() {
         <button
           onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
           className="absolute -right-3.5 top-9 w-7 h-7 rounded-full flex items-center justify-center cursor-pointer z-40 transition-all duration-300 hover:scale-110 shadow-lg shadow-blue-500/25"
-          style={{background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)'}}
+          style={{background: 'linear-gradient(135deg, #957258 0%, #887361 100%)'}}
           aria-label={sidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
         >
           {sidebarCollapsed ? <ChevronRight className="w-3.5 h-3.5 text-white" /> : <ChevronLeft className="w-3.5 h-3.5 text-white" />}
@@ -910,7 +910,7 @@ export default function AdminPage() {
                       ? 'text-white shadow-md shadow-blue-500/20'
                       : 'text-slate-600 hover:text-blue-600 hover:bg-blue-50/80'
                   }`}
-                  style={isActive ? {background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)'} : undefined}
+                  style={isActive ? {background: 'linear-gradient(135deg, #957258 0%, #887361 100%)'} : undefined}
                   title={sidebarCollapsed ? item.label : undefined}
                 >
                   {/* Active indicator bar */}
@@ -964,7 +964,7 @@ export default function AdminPage() {
           {sidebarCollapsed ? (
             <div className="flex items-center justify-center p-1 relative" title="Secure Admin Active">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold font-mono text-xs shrink-0 select-none shadow-md"
-                style={{background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)'}}>
+                style={{background: 'linear-gradient(135deg, #957258 0%, #887361 100%)'}}>
                 AD
               </div>
               <span className="absolute bottom-0 right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-white shadow-sm" />
@@ -972,7 +972,7 @@ export default function AdminPage() {
           ) : (
             <div className="flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-100">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold font-mono text-xs shrink-0 select-none shadow-md"
-                style={{background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)'}}>
+                style={{background: 'linear-gradient(135deg, #957258 0%, #887361 100%)'}}>
                 AD
               </div>
               <div className="min-w-0 flex-1">
@@ -1041,7 +1041,7 @@ export default function AdminPage() {
                               ? 'text-white shadow-md shadow-blue-500/20'
                               : 'text-slate-600 hover:text-blue-600 hover:bg-blue-50/80'
                           }`}
-                          style={isActive ? {background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)'} : undefined}
+                          style={isActive ? {background: 'linear-gradient(135deg, #957258 0%, #887361 100%)'} : undefined}
                         >
                           {isActive && (
                             <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-6 rounded-r-full bg-white shadow-sm" />
@@ -1088,7 +1088,7 @@ export default function AdminPage() {
                   {/* Mobile Admin Profile */}
                   <div className="flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-100">
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold font-mono text-xs shrink-0 select-none shadow-md"
-                      style={{background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)'}}>
+                      style={{background: 'linear-gradient(135deg, #957258 0%, #887361 100%)'}}>
                       AD
                     </div>
                     <div className="min-w-0 flex-1">
@@ -1251,7 +1251,7 @@ export default function AdminPage() {
                       });
                       return Object.entries(types).map(([name, value]) => ({ name, value }));
                     })();
-                    const COLORS = ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#06b6d4'];
+                    const COLORS = ['#957258', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#06b6d4'];
                     return typeData.length > 0 ? (
                       <ResponsiveContainer width="100%" height="100%">
                         <PieChart>
@@ -1458,8 +1458,8 @@ export default function AdminPage() {
                       <AreaChart data={priceData}>
                         <defs>
                           <linearGradient id="priceGradient" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
-                            <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                            <stop offset="5%" stopColor="#957258" stopOpacity={0.3} />
+                            <stop offset="95%" stopColor="#957258" stopOpacity={0} />
                           </linearGradient>
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
@@ -1469,7 +1469,7 @@ export default function AdminPage() {
                           contentStyle={{background: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', fontSize: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)'}}
                           formatter={(value: number) => [`₹${value}L`, 'Price']}
                         />
-                        <Area type="monotone" dataKey="price" stroke="#3b82f6" strokeWidth={2.5} fill="url(#priceGradient)" dot={{r: 4, fill: '#3b82f6', stroke: '#fff', strokeWidth: 2}} />
+                        <Area type="monotone" dataKey="price" stroke="#957258" strokeWidth={2.5} fill="url(#priceGradient)" dot={{r: 4, fill: '#957258', stroke: '#fff', strokeWidth: 2}} />
                       </AreaChart>
                     </ResponsiveContainer>
                   ) : (
@@ -1656,6 +1656,10 @@ export default function AdminPage() {
                                 {inq.inquiryType === 'Sell' ? (
                                   <span className="bg-amber-500/10 text-amber-700 border border-amber-500/30 text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-sm">
                                     Sell Request
+                                  </span>
+                                ) : inq.inquiryType === 'Query' ? (
+                                  <span className="bg-emerald-500/10 text-emerald-700 border border-emerald-500/30 text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-sm">
+                                    Quick Query
                                   </span>
                                 ) : (
                                   <span className="bg-blue-500/10 text-blue-700 border border-blue-500/30 text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-sm">

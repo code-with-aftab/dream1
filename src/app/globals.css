@@ -31,14 +31,26 @@
   --color-charcoal-800: #1c1917; /* Base luxury charcoal */
   --color-charcoal-900: #0f0d0c;
 
-  --color-navy-950: #080f26; /* Dark navy blue background */
-  --color-navy-900: #0e1834; /* Dark navy blue cards */
-  --color-navy-850: #1c2d5a; /* Dark navy borders */
+  --color-navy-950: #16100c; /* Dark warm brown background */
+  --color-navy-900: #221812; /* Dark warm brown cards */
+  --color-navy-850: #36271e; /* Dark warm brown borders */
 
   --color-stone-950: #121214; /* Map dark background override */
   --color-stone-900: #1a1a1e; /* Map dark card background override */
   --color-stone-850: #2a2a2e; /* Map dark border override */
   --color-stone-800: #333338; /* Map dark highlight override */
+
+  --color-blue-50: #fbf9f8;
+  --color-blue-100: #f5ede9;
+  --color-blue-200: #ebded6;
+  --color-blue-300: #dcc2b3;
+  --color-blue-400: #c8a28a;
+  --color-blue-500: #957258;
+  --color-blue-600: #86624a;
+  --color-blue-700: #70503c;
+  --color-blue-800: #5d4232;
+  --color-blue-900: #4d372b;
+  --color-blue-950: #2a1d16;
 }
 
 body {
@@ -227,8 +239,8 @@ body {
 }
 
 .dark .magic-card {
-  background: #0e1834;
-  border-color: rgba(28, 45, 90, 0.4);
+  background: #221812;
+  border-color: rgba(54, 39, 30, 0.4);
 }
 
 .magic-card::before {

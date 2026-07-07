@@ -25,19 +25,19 @@ export default function AboutPage() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-24 bg-[#0d1527] text-white overflow-hidden">
+      <section className="relative pt-32 pb-24 bg-[#957258] text-white overflow-hidden">
         {/* Decorative Grid Overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:32px_32px]" />
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold-600/10 rounded-full blur-[120px] pointer-events-none" />
         
         <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10 text-center">
-          <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-gold-500 mb-4 block animate-pulse">
+          <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-amber-100/90 mb-4 block animate-pulse">
             Corporate Profile
           </span>
-          <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-light tracking-wide leading-tight max-w-4xl mx-auto">
-            The Legacy of <span className="text-gold-500 font-normal">Dreamsland Associates</span>
+          <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-light tracking-wide leading-tight max-w-4xl mx-auto text-white">
+            The Legacy of <span className="text-amber-100 font-normal">Dreamsland Associates</span>
           </h1>
-          <p className="text-sm sm:text-base font-light text-stone-400 max-w-2xl mx-auto mt-6 leading-relaxed">
+          <p className="text-sm sm:text-base font-light text-stone-100/90 max-w-2xl mx-auto mt-6 leading-relaxed">
             Pioneering premium residential land developments, transparent title verifications, and gated enclaves along Dehradun’s fastest-growing corridors.
           </p>
         </div>

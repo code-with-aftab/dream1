@@ -41,7 +41,7 @@ const HIGHLIGHTS = [
 ];
 
 export default function Hero({ onExploreClick, banners = [] }: HeroProps) {
-  const [buzonEmail, setBuzonEmail] = useState('');
+  const [buzonContact, setBuzonContact] = useState('');
   const [buzonSubmitted, setBuzonSubmitted] = useState(false);
   const [learnMoreOpen, setLearnMoreOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -56,10 +56,30 @@ export default function Hero({ onExploreClick, banners = [] }: HeroProps) {
     return () => clearInterval(timer);
   }, [imagesList.length]);
 
-  const handleBuzonConnect = (e: React.FormEvent) => {
+  const handleBuzonConnect = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (buzonEmail) {
-      setBuzonSubmitted(true);
+    if (buzonContact) {
+      try {
+        const res = await fetch('/api/inquiries', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: 'Quick Callback Request',
+            email: 'dreamlandassociate7@gmail.com',
+            phone: buzonContact,
+            requirements: 'Client requested a quick callback / query from the landing page hero section.',
+            inquiryType: 'Query'
+          })
+        });
+        if (res.ok) {
+          setBuzonSubmitted(true);
+        } else {
+          alert('Something went wrong. Please try again.');
+        }
+      } catch (err) {
+        console.error('Submit query error:', err);
+        alert('Something went wrong. Please try again.');
+      }
     }
   };
 
@@ -120,17 +140,17 @@ export default function Hero({ onExploreClick, banners = [] }: HeroProps) {
               <div className="flex items-center space-x-2 text-gold-400 py-1.5">
                 <CheckCircle2 className="w-4 h-4 shrink-0 text-gold-400" />
                 <span className="text-xs uppercase tracking-[0.14em] font-semibold font-sans">
-                  Brochure request received
+                  Query request received
                 </span>
               </div>
             ) : (
               <form onSubmit={handleBuzonConnect} className="flex items-center border-b border-white/20 hover:border-gold-500/50 focus-within:border-gold-500 py-2 transition-all duration-300 w-full">
                 <input
-                  type="email"
+                  type="text"
                   required
-                  placeholder="Request private catalog / brochure..."
-                  value={buzonEmail}
-                  onChange={(e) => setBuzonEmail(e.target.value)}
+                  placeholder="Request a query (Enter contact number)..."
+                  value={buzonContact}
+                  onChange={(e) => setBuzonContact(e.target.value)}
                   className="bg-transparent border-none outline-none text-xs text-white placeholder-stone-500 w-full pr-4 font-sans font-light"
                 />
                 <button type="submit" className="text-gold-400 hover:text-white text-[10px] uppercase font-sans font-semibold tracking-[0.2em] transition-colors cursor-pointer shrink-0">

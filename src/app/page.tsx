@@ -194,7 +194,7 @@ export default function Home() {
 
   // Filter listings based on active filters
   const filteredProperties = useMemo(() => {
-    return properties.filter((property) => {
+    const filtered = properties.filter((property) => {
       // Filter by type
       if (filters.type && property.type !== filters.type) {
         return false;
@@ -221,6 +221,13 @@ export default function Home() {
         return false;
       }
       return true;
+    });
+
+    // Sort: Ongoing projects first, then Completed/others
+    return [...filtered].sort((a, b) => {
+      if (a.status === 'Ongoing' && b.status !== 'Ongoing') return -1;
+      if (a.status !== 'Ongoing' && b.status === 'Ongoing') return 1;
+      return 0;
     });
   }, [filters, statusFilter, properties]);
 
@@ -256,7 +263,7 @@ export default function Home() {
         <div className="absolute top-[12%] right-[-10%] w-[500px] h-[500px] rounded-full bg-gradient-to-br from-gold-500/10 to-blue-500/10 blur-[130px] opacity-0 dark:opacity-40 transition-opacity duration-1000 animate-float-1" />
         
         {/* Blob 2: Middle Left */}
-        <div className="absolute top-[35%] left-[-15%] w-[600px] h-[600px] rounded-full bg-gradient-to-tr from-indigo-600/10 to-gold-600/10 blur-[150px] opacity-0 dark:opacity-30 transition-opacity duration-1000 animate-float-2" />
+        <div className="absolute top-[35%] left-[-15%] w-[600px] h-[600px] rounded-full bg-gradient-to-tr from-blue-600/10 to-gold-600/10 blur-[150px] opacity-0 dark:opacity-30 transition-opacity duration-1000 animate-float-2" />
         
         {/* Blob 3: Bottom Right */}
         <div className="absolute bottom-[20%] right-[-10%] w-[550px] h-[550px] rounded-full bg-gradient-to-bl from-gold-600/10 to-blue-600/10 blur-[130px] opacity-0 dark:opacity-35 transition-opacity duration-1000 animate-float-1" />
