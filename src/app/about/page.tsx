@@ -247,7 +247,7 @@ export default function AboutPage() {
 
             <div className="pt-6 relative z-10">
               <a
-                href="https://maps.google.com/?q=Gorakhpur,+Shimla+Bypass+Road,+Dehradun,+Uttarakhand+248007"
+                href="https://www.google.com/maps/place/Dreamland+Associates/@30.3139923,77.9701055,18.92z/data=!4m12!1m5!3m4!2zMzDCsDE4JzUwLjUiTiA3N8KwNTgnMTMuNCJF!8m2!3d30.3140174!4d77.9703857!3m5!1s0x39092b1e3f0f4d83:0x8bd049eab38f6274!8m2!3d30.3142089!4d77.9711475!16s%2Fg%2F11lnfbc04v?hl=en&entry=ttu&g_ep=EgoyMDI2MDcwNS4wIKXMDSoASAFQAw%3D%3D"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full bg-gold-500 hover:bg-gold-600 text-stone-955 py-3 rounded-sm shadow-md font-bold uppercase tracking-widest text-[10px] transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
@@ -262,7 +262,7 @@ export default function AboutPage() {
             <div className="relative flex-1 min-h-[350px] w-full rounded-md overflow-hidden border border-stone-150 dark:border-stone-800">
               <iframe
                 title="Dreamsland Associates HQ Map Coordinate Location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3446.5492476569106!2d77.96205737536965!3d30.25010620880315!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39092bd9d42f7411%3A0xe96c4d7ec4839598!2sGorakhpur%2C%20Dehradun%2C%20Uttarakhand%20248002!5e0!3m2!1sen!2sin!4v1719245123456!5m2!1sen!2sin"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3443.5188738363717!2d77.9701055!3d30.3139923!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39092b1e3f0f4d83%3A0x8bd049eab38f6274!2sDreamland+Associates!5e0!3m2!1sen!2sin!4v1719245123456!5m2!1sen!2sin"
                 className="absolute inset-0 w-full h-full border-0"
                 allowFullScreen
                 loading="lazy"

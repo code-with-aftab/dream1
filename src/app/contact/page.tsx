@@ -296,7 +296,7 @@ export default function ContactPage() {
           <div className="relative w-full h-[400px] rounded overflow-hidden border border-stone-150 dark:border-stone-800">
             <iframe
               title="Dreamsland Associates Office Location"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3446.5492476569106!2d77.96205737536965!3d30.25010620880315!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39092bd9d42f7411%3A0xe96c4d7ec4839598!2sGorakhpur%2C%20Dehradun%2C%20Uttarakhand%20248002!5e0!3m2!1sen!2sin!4v1719245123456!5m2!1sen!2sin"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3443.5188738363717!2d77.9701055!3d30.3139923!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39092b1e3f0f4d83%3A0x8bd049eab38f6274!2sDreamland+Associates!5e0!3m2!1sen!2sin!4v1719245123456!5m2!1sen!2sin"
               className="absolute inset-0 w-full h-full border-0"
               allowFullScreen
               loading="lazy"

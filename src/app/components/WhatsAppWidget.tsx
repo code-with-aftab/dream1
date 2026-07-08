@@ -253,7 +253,7 @@ export default function WhatsAppWidget() {
                           <div className="flex items-center justify-between mt-2 pt-2 border-t border-stone-100 dark:border-stone-850">
                             <span className="text-[12px] font-bold text-gold-600">{formatPrice(prop.price)}</span>
                             <a
-                              href={`https://wa.me/${phoneNumber}?text=Hello%20Dreamland%252C%20I%20am%20interested%20in%20inquiring%20about%20listing%3A%20${encodeURIComponent(prop.title)}%20(${encodeURIComponent(prop.location)}).`}
+                              href={`https://wa.me/${phoneNumber}?text=${encodeURIComponent(`Hello Dreamland, I am interested in inquiring about listing: ${prop.title} (${prop.location}).`)}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[9px] uppercase tracking-wider px-2.5 py-1 rounded shadow-sm transition-all"

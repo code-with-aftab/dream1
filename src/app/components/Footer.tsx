@@ -42,7 +42,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative bg-[#614831] text-white pt-8 pb-6 transition-colors duration-300">
+    <footer className="relative bg-gradient-to-b from-[#957258] via-[#7d5f47] to-[#5d4432] text-white pt-8 pb-6 transition-colors duration-300">
       
       {/* ── Layered Building Skyline Silhouette with Custom Illuminated Windows ── */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0] transform -translate-y-[99%] pointer-events-none select-none">
@@ -51,45 +51,45 @@ export default function Footer() {
           <path d="M0,120 L0,80 L40,80 L40,120 L80,120 L80,60 L130,60 L130,120 L180,120 L180,70 L220,50 L260,70 L260,120 L320,120 L320,40 L380,40 L380,120 L440,120 L440,75 L490,75 L490,120 L550,120 L550,55 L610,35 L670,55 L670,120 L730,120 L730,45 L790,45 L790,120 L850,120 L850,65 L900,65 L900,120 L960,120 L960,30 L1020,30 L1020,120 L1080,120 L1080,75 L1130,55 L1180,75 L1180,120 L1200,120 Z" className="fill-gold-500/10 dark:fill-gold-400/5" />
           
           {/* Middle layer: Intermediate buildings with depth */}
-          <path d="M0,120 L0,90 L60,90 L60,120 L110,120 L110,75 L160,75 L160,120 L210,120 L210,85 L250,65 L290,85 L290,120 L350,120 L350,55 L400,55 L400,120 L470,120 L470,80 L520,80 L520,120 L580,120 L580,65 L630,45 L680,65 L680,120 L750,120 L750,50 L810,50 L810,120 L880,120 L880,75 L930,75 L930,120 L990,120 L990,40 L1050,40 L1050,120 L1100,120 L1100,85 L1150,65 L1200,85 L1200,120 Z" className="fill-[#302418]/65" />
+          <path d="M0,120 L0,90 L60,90 L60,120 L110,120 L110,75 L160,75 L160,120 L210,120 L210,85 L250,65 L290,85 L290,120 L350,120 L350,55 L400,55 L400,120 L470,120 L470,80 L520,80 L520,120 L580,120 L580,65 L630,45 L680,65 L680,120 L750,120 L750,50 L810,50 L810,120 L880,120 L880,75 L930,75 L930,120 L990,120 L990,40 L1050,40 L1050,120 L1100,120 L1100,85 L1150,65 L1200,85 L1200,120 Z" className="fill-[#4b392c]/65" />
           
           {/* Front layer: Solid front buildings with custom illuminated window grids */}
-          <path d="M0,120 L0,100 L80,100 L80,120 L140,120 L140,85 L190,85 L190,120 L240,120 L280,75 L320,120 L380,120 L380,65 L430,65 L430,120 L500,120 L500,90 L550,90 L550,120 L600,120 L640,55 L680,120 L780,120 L780,60 L830,60 L830,120 L900,120 L900,85 L950,85 L950,120 L1010,120 L1010,50 L1070,50 L1070,120 L1120,120 L1160,75 L1200,120 Z" className="fill-[#614831] transition-colors duration-300" />
+          <path d="M0,120 L0,100 L80,100 L80,120 L140,120 L140,85 L190,85 L190,120 L240,120 L280,75 L320,120 L380,120 L380,65 L430,65 L430,120 L500,120 L500,90 L550,90 L550,120 L600,120 L640,55 L680,120 L780,120 L780,60 L830,60 L830,120 L900,120 L900,85 L950,85 L950,120 L1010,120 L1010,50 L1070,50 L1070,120 L1120,120 L1160,75 L1200,120 Z" className="fill-[#957258] transition-colors duration-300" />
           
           {/* Glowing Windows Grid (Visible in both light & dark mode) */}
-          <g className="opacity-90 animate-pulse duration-1000">
+          <g className="opacity-95 animate-pulse duration-1000">
             {/* Windows in Tower X: 380-430 */}
-            <rect x="392" y="75" width="4" height="5" className="fill-gold-300 dark:fill-gold-400" />
-            <rect x="402" y="75" width="4" height="5" className="fill-gold-300 dark:fill-gold-400" />
-            <rect x="414" y="75" width="4" height="5" className="fill-gold-300 dark:fill-gold-400" />
-            <rect x="392" y="86" width="4" height="5" className="fill-gold-300 dark:fill-gold-400" />
-            <rect x="402" y="86" width="4" height="5" className="fill-gold-300 dark:fill-gold-400" />
-            <rect x="414" y="86" width="4" height="5" className="fill-gold-300 dark:fill-gold-400" />
-            <rect x="392" y="97" width="4" height="5" className="fill-gold-300 dark:fill-gold-400" />
-            <rect x="402" y="97" width="4" height="5" className="fill-gold-300 dark:fill-gold-400" />
-            <rect x="414" y="97" width="4" height="5" className="fill-gold-300 dark:fill-gold-400" />
+            <rect x="392" y="75" width="4" height="5" className="fill-[#ffe082]" />
+            <rect x="402" y="75" width="4" height="5" className="fill-[#ffe082]" />
+            <rect x="414" y="75" width="4" height="5" className="fill-[#ffe082]" />
+            <rect x="392" y="86" width="4" height="5" className="fill-[#ffe082]" />
+            <rect x="402" y="86" width="4" height="5" className="fill-[#ffe082]" />
+            <rect x="414" y="86" width="4" height="5" className="fill-[#ffe082]" />
+            <rect x="392" y="97" width="4" height="5" className="fill-[#ffe082]" />
+            <rect x="402" y="97" width="4" height="5" className="fill-[#ffe082]" />
+            <rect x="414" y="97" width="4" height="5" className="fill-[#ffe082]" />
 
             {/* Circular window in Gable Roof Building 3 (X: 240-320) */}
-            <circle cx="280" cy="92" r="3.5" className="fill-gold-300 dark:fill-gold-400" />
+            <circle cx="280" cy="92" r="3.5" className="fill-[#ffe082]" />
 
             {/* Windows in Tower X: 780-830 */}
-            <rect x="792" y="70" width="5" height="6" className="fill-gold-300 dark:fill-gold-400" />
-            <rect x="812" y="70" width="5" height="6" className="fill-gold-300 dark:fill-gold-400" />
-            <rect x="792" y="82" width="5" height="6" className="fill-gold-300 dark:fill-gold-400" />
-            <rect x="812" y="82" width="5" height="6" className="fill-gold-300 dark:fill-gold-400" />
-            <rect x="792" y="94" width="5" height="6" className="fill-gold-300 dark:fill-gold-400" />
-            <rect x="812" y="94" width="5" height="6" className="fill-gold-300 dark:fill-gold-400" />
+            <rect x="792" y="70" width="5" height="6" className="fill-[#ffe082]" />
+            <rect x="812" y="70" width="5" height="6" className="fill-[#ffe082]" />
+            <rect x="792" y="82" width="5" height="6" className="fill-[#ffe082]" />
+            <rect x="812" y="82" width="5" height="6" className="fill-[#ffe082]" />
+            <rect x="792" y="94" width="5" height="6" className="fill-[#ffe082]" />
+            <rect x="812" y="94" width="5" height="6" className="fill-[#ffe082]" />
 
             {/* Circular window in Gable Roof Building 6 (X: 600-680) */}
-            <circle cx="640" cy="80" r="4.5" className="fill-gold-300 dark:fill-gold-400" />
+            <circle cx="640" cy="80" r="4.5" className="fill-[#ffe082]" />
 
             {/* Windows in Tower X: 1010-1070 */}
-            <rect x="1024" y="65" width="4" height="6" className="fill-gold-300 dark:fill-gold-400" />
-            <rect x="1042" y="65" width="4" height="6" className="fill-gold-300 dark:fill-gold-400" />
-            <rect x="1024" y="77" width="4" height="6" className="fill-gold-300 dark:fill-gold-400" />
-            <rect x="1042" y="77" width="4" height="6" className="fill-gold-300 dark:fill-gold-400" />
-            <rect x="1024" y="89" width="4" height="6" className="fill-gold-300 dark:fill-gold-400" />
-            <rect x="1042" y="89" width="4" height="6" className="fill-gold-300 dark:fill-gold-400" />
+            <rect x="1024" y="65" width="4" height="6" className="fill-[#ffe082]" />
+            <rect x="1042" y="65" width="4" height="6" className="fill-[#ffe082]" />
+            <rect x="1024" y="77" width="4" height="6" className="fill-[#ffe082]" />
+            <rect x="1042" y="77" width="4" height="6" className="fill-[#ffe082]" />
+            <rect x="1024" y="89" width="4" height="6" className="fill-[#ffe082]" />
+            <rect x="1042" y="89" width="4" height="6" className="fill-[#ffe082]" />
           </g>
         </svg>
       </div>
@@ -108,17 +108,17 @@ export default function Footer() {
                 priority
               />
             </div>
-            <p className="text-[11px] leading-relaxed text-stone-400 font-light max-w-xs">
+            <p className="font-serif text-[16px] leading-relaxed text-white/85 italic font-light max-w-xs">
               Dreamland Associates is a premier private office advisory specializing in gated residential enclaves, freehold plots, and elite estate acquisitions in Dehradun, Uttarakhand.
             </p>
           </div>
 
           {/* Column 2: Useful Links */}
           <div>
-            <h4 className="text-[10px] uppercase font-bold tracking-[0.25em] text-white mb-6 border-l-2 border-gold-400 pl-3">
+            <h4 className="font-serif text-lg font-semibold tracking-wider text-white mb-6 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-8 after:h-[1px] after:bg-white/40">
               Useful Links
             </h4>
-            <ul className="space-y-3.5 text-xs font-bold text-white">
+            <ul className="space-y-3.5">
               {[
                 { name: 'Home Desk', id: 'hero-section' },
                 { name: 'Our Services', id: 'services-section' },
@@ -139,13 +139,10 @@ export default function Footer() {
                         handleNavClick(link.id);
                       }
                     }}
-                    className="hover:text-gold-200 transition-all duration-300 text-left cursor-pointer flex items-center space-x-2.5 group/link"
+                    className="hover:text-white transition-all duration-300 text-left cursor-pointer flex items-center group/link transform hover:translate-x-1"
                   >
-                    {/* Building outline bullet shape */}
-                    <span className="w-2.5 h-2.5 border border-white/40 group-hover/link:border-gold-300 rounded-[1px] relative flex items-center justify-center shrink-0 transition-colors">
-                      <span className="absolute -top-1 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[4px] border-b-white/40 group-hover/link:border-b-gold-300 transition-colors" />
-                    </span>
-                    <span className="text-white group-hover/link:text-gold-200 transition-colors">{link.name}</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-white/30 group-hover/link:bg-gold-300 group-hover/link:shadow-[0_0_8px_rgba(255,215,0,0.6)] mr-2.5 shrink-0 transition-all duration-300" />
+                    <span className="text-[11px] sm:text-xs uppercase tracking-[0.15em] font-semibold text-white/80 group-hover/link:text-white transition-colors">{link.name}</span>
                   </button>
                 </li>
               ))}
@@ -154,10 +151,10 @@ export default function Footer() {
 
           {/* Column 3: Information (Legal & Support Checklist) */}
           <div>
-            <h4 className="text-[10px] uppercase font-bold tracking-[0.25em] text-white mb-6 border-l-2 border-gold-400 pl-3">
+            <h4 className="font-serif text-lg font-semibold tracking-wider text-white mb-6 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-8 after:h-[1px] after:bg-white/40">
               Information
             </h4>
-            <ul className="space-y-3.5 text-xs font-bold text-white">
+            <ul className="space-y-3.5">
               {[
                 { name: 'Title Verification Checklist', id: 'faq-section' },
                 { name: 'Registry Support', id: 'faq-section' },
@@ -168,13 +165,10 @@ export default function Footer() {
                 <li key={info.name} className="flex items-center">
                   <button
                     onClick={() => handleNavClick(info.id)}
-                    className="hover:text-gold-200 transition-all duration-300 text-left cursor-pointer flex items-center space-x-2.5 group/link"
+                    className="hover:text-white transition-all duration-300 text-left cursor-pointer flex items-center group/link transform hover:translate-x-1"
                   >
-                    {/* Building outline bullet shape */}
-                    <span className="w-2.5 h-2.5 border border-white/40 group-hover/link:border-gold-300 rounded-[1px] relative flex items-center justify-center shrink-0 transition-colors">
-                      <span className="absolute -top-1 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[4px] border-b-white/40 group-hover/link:border-b-gold-300 transition-colors" />
-                    </span>
-                    <span className="text-white group-hover/link:text-gold-200 transition-colors">{info.name}</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-white/30 group-hover/link:bg-gold-300 group-hover/link:shadow-[0_0_8px_rgba(255,215,0,0.6)] mr-2.5 shrink-0 transition-all duration-300" />
+                    <span className="text-[11px] sm:text-xs uppercase tracking-[0.15em] font-semibold text-white/80 group-hover/link:text-white transition-colors">{info.name}</span>
                   </button>
                 </li>
               ))}
@@ -184,18 +178,18 @@ export default function Footer() {
           {/* Column 4: Contact Us */}
           <div className="space-y-6">
             <div>
-              <h4 className="text-[10px] uppercase font-bold tracking-[0.25em] text-white mb-6 border-l-2 border-gold-400 pl-3">
+              <h4 className="font-serif text-lg font-semibold tracking-wider text-white mb-6 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-8 after:h-[1px] after:bg-white/40">
                 Contact Us
               </h4>
-              <ul className="space-y-3 text-xs font-bold text-white">
-                <li className="flex items-center space-x-2">
-                  <Phone className="w-3.5 h-3.5 text-gold-300 shrink-0" />
-                  <a href="tel:9258884941" className="hover:text-gold-200 transition-colors">+91 9258884941</a>
+              <ul className="space-y-3.5">
+                <li className="flex items-center space-x-2.5 group/item">
+                  <Phone className="w-3.5 h-3.5 text-white/50 group-hover/item:text-white transition-colors shrink-0" />
+                  <a href="tel:9258884941" className="text-[11px] sm:text-xs uppercase tracking-[0.15em] font-semibold text-white/80 hover:text-white hover:underline transition-colors">+91 9258884941</a>
                 </li>
 
-                <li className="flex items-center space-x-2">
-                  <Mail className="w-3.5 h-3.5 text-gold-300 shrink-0" />
-                  <a href="mailto:dreamlandassociate7@gmail.com" className="hover:text-gold-200 transition-colors">
+                <li className="flex items-center space-x-2.5 group/item">
+                  <Mail className="w-3.5 h-3.5 text-white/50 group-hover/item:text-white transition-colors shrink-0" />
+                  <a href="mailto:dreamlandassociate7@gmail.com" className="text-[11px] sm:text-xs uppercase tracking-[0.10em] font-semibold text-white/80 hover:text-white hover:underline transition-colors break-all">
                     dreamlandassociate7@gmail.com
                   </a>
                 </li>
@@ -203,7 +197,7 @@ export default function Footer() {
             </div>
 
             <div className="pt-2 w-full">
-              <span className="text-[10px] uppercase font-bold tracking-wider text-gold-400 block mb-3">
+              <span className="font-serif text-base font-semibold text-white/90 block mb-3 relative pb-1 after:absolute after:bottom-0 after:left-0 after:w-6 after:h-[1px] after:bg-white/40">
                 Chat With Us
               </span>
               <div className="flex items-center space-x-3">
@@ -212,7 +206,7 @@ export default function Footer() {
                   href="https://wa.me/919258884941"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-full border border-stone-850 hover:border-gold-500 bg-stone-900/30 text-stone-500 hover:text-gold-500 transition-all duration-300 cursor-pointer"
+                  className="p-2.5 rounded-full border border-white/10 hover:border-white/40 bg-white/5 text-white/75 hover:text-white hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(255,255,255,0.1)] transition-all duration-300 cursor-pointer"
                   title="Chat on WhatsApp"
                 >
                   <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
@@ -221,14 +215,14 @@ export default function Footer() {
                 </a>
                 <a
                   href="mailto:dreamlandassociate7@gmail.com"
-                  className="p-2 rounded-full border border-stone-850 hover:border-gold-500 bg-stone-900/30 text-stone-500 hover:text-gold-500 transition-all duration-300 cursor-pointer"
+                  className="p-2.5 rounded-full border border-white/10 hover:border-white/40 bg-white/5 text-white/75 hover:text-white hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(255,255,255,0.1)] transition-all duration-300 cursor-pointer"
                   title="Email Us"
                 >
                   <Mail className="w-3.5 h-3.5" />
                 </a>
                 <a
                   href="tel:9258884941"
-                  className="p-2 rounded-full border border-stone-850 hover:border-gold-500 bg-stone-900/30 text-stone-500 hover:text-gold-500 transition-all duration-300 cursor-pointer"
+                  className="p-2.5 rounded-full border border-white/10 hover:border-white/40 bg-white/5 text-white/75 hover:text-white hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(255,255,255,0.1)] transition-all duration-300 cursor-pointer"
                   title="Call Us"
                 >
                   <Phone className="w-3.5 h-3.5" />
@@ -239,9 +233,9 @@ export default function Footer() {
         </div>
 
         {/* Row 2: Social media links with custom inline SVGs */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 pt-6 text-xs text-white font-bold">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 pt-6 border-t border-white/10 mt-8">
           <div className="flex items-center space-x-3">
-            <span className="text-white uppercase font-bold text-[10px] tracking-widest mr-2">Social</span>
+            <span className="font-serif text-base font-medium text-white/90 mr-2">Social</span>
             {[
               { 
                 name: 'Instagram', 
@@ -278,7 +272,7 @@ export default function Footer() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-full border border-white/10 hover:border-gold-300 bg-white/5 hover:bg-white/10 text-white hover:text-gold-200 transition-all duration-300 cursor-pointer flex items-center justify-center"
+                  className="p-2.5 rounded-full border border-white/10 hover:border-white/40 bg-white/5 text-white/70 hover:text-white hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(255,255,255,0.1)] transition-all duration-300 cursor-pointer flex items-center justify-center"
                   title={social.name}
                 >
                   <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
@@ -289,30 +283,32 @@ export default function Footer() {
             })}
           </div>
           
-          <div className="text-[10px] uppercase tracking-wider text-white font-bold">
+          <div className="text-[10px] uppercase tracking-[0.2em] text-white/50 font-light font-sans">
             MEMBER OF UTTARAKHAND BUILDERS ASSOCIATION
           </div>
         </div>
 
         {/* Row 3: Bank Partner integration logos (Tanishq payment style) */}
-        <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 py-4 text-[10px] uppercase font-bold tracking-widest text-white select-none">
-          <span className="text-[8px] text-white/90 font-bold tracking-wide mr-2">Certified Loan Partners:</span>
-          <span>SBI Home Loan</span>
-          <span>HDFC Bank</span>
-          <span>ICICI Bank</span>
-          <span>Axis Bank</span>
-          <span>PNB Housing</span>
+        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 py-6 text-[10px] uppercase font-semibold tracking-[0.15em] text-white/80 select-none font-sans border-t border-white/10 mt-6">
+          <span className="font-serif text-sm italic text-white/90 tracking-normal normal-case mr-2">Certified Loan Partners:</span>
+          {['SBI Home Loan', 'HDFC Bank', 'ICICI Bank', 'Axis Bank', 'PNB Housing'].map((partner) => (
+            <span key={partner} className="px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-white/80 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all duration-300 shadow-sm cursor-default">
+              {partner}
+            </span>
+          ))}
         </div>
 
         {/* Bottom copyright */}
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-6 pt-4 text-xs font-bold text-white leading-relaxed">
-          <p>© {new Date().getFullYear()} Dream Land Associates. Gated Plots in Dehradun. All rights reserved.</p>
-          <div className="flex space-x-6 shrink-0">
-            <Link href="/privacy" className="hover:text-gold-200 transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-gold-200 transition-colors">Terms of Service</Link>
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-6 pt-6 border-t border-white/10 mt-6 text-[10px] uppercase tracking-[0.15em] font-light text-white/50 leading-relaxed font-sans">
+          <p>© {new Date().getFullYear()} Dream Land Associates. All rights reserved. • Managed by <a href="https://www.unzora.com" target="_blank" rel="noopener noreferrer" className="hover:text-white underline decoration-white/20 hover:decoration-white transition-colors font-normal">Unzora</a></p>
+          <div className="flex space-x-6 shrink-0 font-normal">
+            <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <span className="text-white/10">|</span>
+            <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+            <span className="text-white/10">|</span>
             <button
               onClick={() => handleNavClick('hero-section')}
-              className="hover:text-gold-200 transition-colors flex items-center space-x-1 cursor-pointer"
+              className="hover:text-white transition-colors flex items-center space-x-1 cursor-pointer"
             >
               <span>Back to Top</span>
               <ArrowUp className="w-3.5 h-3.5" />

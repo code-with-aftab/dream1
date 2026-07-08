@@ -684,7 +684,7 @@ export default function Home() {
                     </a>
                     
                     <a
-                      href={`https://wa.me/91${member.phone || '9258884941'}?text=Hello%20${encodeURIComponent(member.name)}%2C%20I%20am%20inquiring%20regarding%20property%20listings%20with%20Dreamland%20Associates.`}
+                      href={`https://wa.me/91${member.phone || '9258884941'}?text=${encodeURIComponent(`Hello ${member.name}, I am inquiring regarding property listings with Dreamland Associates.`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex-1 bg-emerald-500 hover:bg-emerald-600 border border-transparent py-2 px-3 rounded-lg text-white text-[10px] font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-1.5 shadow-sm hover:shadow-md"

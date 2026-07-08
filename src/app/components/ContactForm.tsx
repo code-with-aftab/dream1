@@ -115,8 +115,8 @@ export default function ContactForm({ id = 'contact-section', onSuccess }: Conta
                     </div>
                     <div className="text-left">
                       <h5 className="text-[10px] uppercase tracking-wider font-bold text-stone-400">Advisory Hours</h5>
-                      <p className="text-xs font-medium text-stone-850 mt-1">
-                        Monday - Friday: 09:00 - 18:00 EST<br />Saturday: By Appointment Only
+                      <p className="text-xs font-medium text-stone-850 dark:text-stone-300 mt-1">
+                        10:00 AM – 7:00 PM<br />(7 Days Open)
                       </p>
                     </div>
                   </div>

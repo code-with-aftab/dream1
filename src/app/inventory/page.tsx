@@ -180,7 +180,7 @@ function InventoryContent() {
                   </div>
                   
                   {/* Price Tag Overlay */}
-                  <div className="absolute bottom-4 right-4 bg-gold-500 text-stone-955 px-3 py-1 text-[10px] font-black uppercase tracking-wider rounded-sm shadow-md">
+                  <div className="absolute bottom-4 right-4 bg-[#957258] text-white border border-white/25 px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded shadow-[0_0_15px_rgba(149,114,88,0.35)] transition-all duration-300 group-hover:bg-[#a68369]">
                     {formatPrice(prop.price)}
                   </div>
                 </div>
@@ -394,7 +394,7 @@ function InventoryContent() {
                       <span>Email Inquiry</span>
                     </a>
                     <a
-                      href={`https://wa.me/919258884941?text=Hello,%20I%20am%20interested%20in%20your%20inventory%20listing:%20${encodeURIComponent(selectedProperty.title)}%20(${encodeURIComponent(selectedProperty.location)})%20priced%20at%20${encodeURIComponent(formatPrice(selectedProperty.price))}.%20Please%20share%20more%20details.`}
+                      href={`https://wa.me/919258884941?text=${encodeURIComponent(`Hello, I am interested in your inventory listing: ${selectedProperty.title} (${selectedProperty.location}) priced at ${formatPrice(selectedProperty.price)}. Please share more details.`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex-1 bg-gold-500 hover:bg-gold-600 text-stone-955 py-3 rounded text-center font-bold uppercase tracking-wider text-[9px] transition-colors flex items-center justify-center space-x-1.5 cursor-pointer"

@@ -58,8 +58,9 @@ export default function PropertyCard({ property, onSelect }: PropertyCardProps) 
           </h3>
           
           {/* Price */}
-          <p className="text-xs sm:text-sm font-semibold text-gold-600 mb-2 sm:mb-4">
-            {formatPrice(property.price)}
+          <p className="text-xs sm:text-sm font-bold text-[#957258] dark:text-[#a68369] mb-2 sm:mb-4 flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#957258] dark:bg-[#a68369] animate-pulse" />
+            <span>{formatPrice(property.price)}</span>
           </p>
 
           {/* Short description preview - hidden on mobile for grid spacing */}

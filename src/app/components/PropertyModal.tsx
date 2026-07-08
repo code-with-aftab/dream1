@@ -88,8 +88,9 @@ export default function PropertyModal({ property, onClose }: PropertyModalProps)
             </p>
 
             {/* Price */}
-            <p className="text-2xl font-bold text-gold-500 mb-6">
-              {formatPrice(property.price)}
+            <p className="text-2xl font-bold text-[#957258] dark:text-[#a68369] mb-6 flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#957258] dark:bg-[#a68369] animate-pulse" />
+              <span>{formatPrice(property.price)}</span>
             </p>
 
             {/* Key Specs Row */}
