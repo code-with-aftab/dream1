@@ -58,10 +58,12 @@ export default function PropertyCard({ property, onSelect }: PropertyCardProps) 
           </h3>
           
           {/* Price */}
-          <p className="text-xs sm:text-sm font-bold text-[#957258] dark:text-[#a68369] mb-2 sm:mb-4 flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#957258] dark:bg-[#a68369] animate-pulse" />
-            <span>{formatPrice(property.price)}</span>
-          </p>
+          <div className="mb-2 sm:mb-4">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-gold-500/10 dark:bg-gold-500/5 border border-gold-500/30 text-gold-600 dark:text-gold-450 text-sm sm:text-base font-serif italic font-bold tracking-wide shadow-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-gold-600 dark:bg-gold-450 animate-pulse" />
+              {formatPrice(property.price)}
+            </span>
+          </div>
 
           {/* Short description preview - hidden on mobile for grid spacing */}
           <p className="hidden sm:block text-xs font-light text-stone-500 dark:text-stone-400 line-clamp-2 mb-6">
@@ -86,7 +88,9 @@ export default function PropertyCard({ property, onSelect }: PropertyCardProps) 
           </div>
 
           <div className="flex items-center space-x-1 sm:space-x-1.5" title="Rate per Gaj">
-            <span className="text-[8px] sm:text-[10px] font-bold text-gold-600 shrink-0">₹{property.rate.toLocaleString()}/Gaj</span>
+            <span className="text-[10px] sm:text-xs font-serif italic font-bold text-gold-600 dark:text-gold-500 shrink-0 bg-gold-500/10 dark:bg-gold-500/5 border border-gold-500/20 dark:border-gold-800/40 px-2 py-0.5 rounded">
+              ₹{property.rate.toLocaleString()}/Gaj
+            </span>
           </div>
         </div>
       </div>

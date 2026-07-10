@@ -61,7 +61,7 @@ export default function GallerySection({ id = 'gallery-section' }: GallerySectio
             Visual Catalog
           </span>
           <h2 className="font-serif text-3xl md:text-4xl text-stone-900 dark:text-white font-normal tracking-wide">
-            Dreamsland Site Gallery
+            Visual <span className="italic text-gold-500 font-light">Gallery</span>
           </h2>
           <p className="text-xs sm:text-sm font-light text-stone-500 dark:text-stone-400 mt-4 leading-relaxed">
             Take a virtual tour of our gated layouts, site elevations, and completed projects along Shimla Bypass Road.

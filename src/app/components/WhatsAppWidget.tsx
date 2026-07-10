@@ -251,7 +251,7 @@ export default function WhatsAppWidget() {
                             </div>
                           </div>
                           <div className="flex items-center justify-between mt-2 pt-2 border-t border-stone-100 dark:border-stone-850">
-                            <span className="text-[12px] font-bold text-gold-600">{formatPrice(prop.price)}</span>
+                            <span className="text-[12px] font-bold font-serif italic text-gold-650 dark:text-gold-450">{formatPrice(prop.price)}</span>
                             <a
                               href={`https://wa.me/${phoneNumber}?text=${encodeURIComponent(`Hello Dreamland, I am interested in inquiring about listing: ${prop.title} (${prop.location}).`)}`}
                               target="_blank"

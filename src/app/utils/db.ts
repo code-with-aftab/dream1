@@ -1,4 +1,4 @@
-import { Property, PROPERTIES } from '../data';
+import { Property, PROPERTIES, Collection } from '../data';
 
 export interface ContactInquiry {
   id: string;
@@ -303,4 +303,91 @@ export async function deleteHeroBanner(id: string): Promise<HeroBanner[]> {
     return [];
   }
 }
+
+export interface Review {
+  id: string;
+  name: string;
+  role: string;
+  text: string;
+  rating: number;
+}
+
+export async function getReviews(): Promise<Review[]> {
+  try {
+    const res = await fetch('/api/reviews');
+    if (!res.ok) throw new Error('Failed to fetch reviews');
+    return await res.json();
+  } catch (e) {
+    console.error('getReviews error:', e);
+    return [];
+  }
+}
+
+export async function saveReview(review: Review): Promise<Review[]> {
+  try {
+    const res = await fetch('/api/reviews', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(review),
+    });
+    if (!res.ok) throw new Error('Failed to save review');
+    return await res.json();
+  } catch (e) {
+    console.error('saveReview error:', e);
+    return [];
+  }
+}
+
+export async function deleteReview(id: string): Promise<Review[]> {
+  try {
+    const res = await fetch(`/api/reviews?id=${id}`, {
+      method: 'DELETE',
+    });
+    if (!res.ok) throw new Error('Failed to delete review');
+    return await res.json();
+  } catch (e) {
+    console.error('deleteReview error:', e);
+    return [];
+  }
+}
+
+export async function getCollections(): Promise<Collection[]> {
+  try {
+    const res = await fetch('/api/collections');
+    if (!res.ok) throw new Error('Failed to fetch collections');
+    return await res.json();
+  } catch (e) {
+    console.error('getCollections error:', e);
+    return [];
+  }
+}
+
+export async function saveCollection(collection: Collection): Promise<Collection[]> {
+  try {
+    const res = await fetch('/api/collections', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(collection),
+    });
+    if (!res.ok) throw new Error('Failed to save collection');
+    return await res.json();
+  } catch (e) {
+    console.error('saveCollection error:', e);
+    return [];
+  }
+}
+
+export async function deleteCollection(id: string): Promise<Collection[]> {
+  try {
+    const res = await fetch(`/api/collections?id=${id}`, {
+      method: 'DELETE',
+    });
+    if (!res.ok) throw new Error('Failed to delete collection');
+    return await res.json();
+  } catch (e) {
+    console.error('deleteCollection error:', e);
+    return [];
+  }
+}
+
 

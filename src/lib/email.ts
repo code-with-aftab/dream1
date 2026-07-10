@@ -148,3 +148,74 @@ export async function sendAutoresponderEmail(options: EmailOptions) {
     return false;
   }
 }
+
+export async function sendSupportEmail(message: string): Promise<boolean> {
+  const host = process.env.SMTP_HOST || 'smtp.gmail.com';
+  const port = parseInt(process.env.SMTP_PORT || '587', 10);
+  const user = process.env.SMTP_USER || 'dreamlandassociate7@gmail.com';
+  const pass = process.env.SMTP_PASS;
+
+  if (!pass) {
+    console.warn('SMTP_PASS is not set in env variables. Skipping support email.');
+    return false;
+  }
+
+  const transporter = nodemailer.createTransport({
+    host,
+    port,
+    secure: port === 465,
+    auth: {
+      user,
+      pass,
+    },
+  });
+
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f6; margin: 0; padding: 20px; }
+        .card { max-width: 600px; margin: 0 auto; background: #ffffff; padding: 30px; border: 1px solid #e0dfdb; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .header { border-bottom: 2px solid #957258; padding-bottom: 10px; margin-bottom: 20px; }
+        h2 { color: #957258; font-family: Georgia, serif; font-size: 22px; margin: 0 0 5px 0; font-weight: normal; }
+        .brand { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #887361; }
+        .content { font-size: 15px; color: #2c2b2a; line-height: 1.6; white-space: pre-wrap; background: #fdfcf9; border: 1px solid #f0eee8; padding: 20px; border-radius: 6px; }
+        .meta { margin-top: 25px; border-top: 1px solid #f0eee8; padding-top: 15px; font-size: 12px; color: #8a8880; }
+      </style>
+    </head>
+    <body>
+      <div class="card">
+        <div class="header">
+          <h2>Unzora Chat Support Request</h2>
+          <div class="brand">Dreamland Associates Admin Desk</div>
+        </div>
+        <p style="font-size: 14px; color: #555552; margin-top: 0; margin-bottom: 20px;">
+          An administrator has sent a message through the Unzora Support Chat in the admin panel:
+        </p>
+        <div class="content">${message}</div>
+        <div class="meta">
+          Sent on: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}<br/>
+          From: Dreamland Admin Dashboard
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: `"Unzora Support Desk" <${user}>`,
+      to: 'infomohdaftab@gmail.com',
+      subject: `[UNZORA SUPPORT] New Admin Chat Message`,
+      html,
+    });
+    console.log(`Support message email sent to infomohdaftab@gmail.com`);
+    return true;
+  } catch (err) {
+    console.error('Support email sending error:', err);
+    return false;
+  }
+}
+

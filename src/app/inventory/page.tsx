@@ -122,10 +122,10 @@ function InventoryContent() {
             <span>Back to Home</span>
           </Link>
           <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-gold-500 mb-3 block">
-            Dreamsland Inventory Portfolio
+            Dreamland Inventory Portfolio
           </span>
           <h1 className="font-serif text-4xl sm:text-5xl text-stone-900 dark:text-white font-normal tracking-wide">
-            Real Estate Collections
+            Real Estate <span className="italic text-gold-500 font-light">Collections</span>
           </h1>
           <p className="text-sm font-light text-stone-500 dark:text-stone-400 leading-relaxed mt-4 max-w-3xl">
             Explore verified premium plots, modern luxury houses, elegant flat suites, and high-yield resale listings across Dehradun. 
@@ -180,7 +180,7 @@ function InventoryContent() {
                   </div>
                   
                   {/* Price Tag Overlay */}
-                  <div className="absolute bottom-4 right-4 bg-[#957258] text-white border border-white/25 px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded shadow-[0_0_15px_rgba(149,114,88,0.35)] transition-all duration-300 group-hover:bg-[#a68369]">
+                  <div className="absolute bottom-4 right-4 bg-stone-950/90 text-gold-450 border border-gold-500/35 px-3.5 py-1.5 text-xs font-serif italic font-bold uppercase tracking-wider rounded shadow-[0_0_15px_rgba(202,138,4,0.25)] transition-all duration-300 group-hover:bg-stone-900 group-hover:border-gold-500">
                     {formatPrice(prop.price)}
                   </div>
                 </div>
@@ -291,7 +291,7 @@ function InventoryContent() {
                     </div>
 
                     {/* Price tag */}
-                    <div className="absolute bottom-4 right-4 bg-gold-500 text-stone-955 px-3 py-1 text-[11px] font-black uppercase tracking-wider rounded shadow-md">
+                    <div className="absolute bottom-4 right-4 bg-gold-500 text-stone-950 px-3.5 py-1.5 text-xs font-serif italic font-bold uppercase tracking-wider rounded shadow-md">
                       {formatPrice(selectedProperty.price)}
                     </div>
                   </div>
@@ -333,7 +333,7 @@ function InventoryContent() {
                     {selectedProperty.rate > 0 && (
                       <div className="space-y-1">
                         <span className="text-[8px] uppercase tracking-wider text-stone-400 font-bold">Rate / Gaj</span>
-                        <p className="text-xs text-stone-800 dark:text-stone-200 font-semibold">₹{selectedProperty.rate.toLocaleString('en-IN')}</p>
+                        <p className="text-xs font-bold font-serif italic text-gold-650 dark:text-gold-450">₹{selectedProperty.rate.toLocaleString('en-IN')}</p>
                       </div>
                     )}
                     {selectedProperty.roadWidth && (
@@ -387,7 +387,7 @@ function InventoryContent() {
                       <span>Call Advisor Hotline</span>
                     </a>
                     <a
-                      href={`mailto:dreamlandassociate7@gmail.com?subject=Inquiry:%20${encodeURIComponent(selectedProperty.title)}&body=Hello%20Dreamsland%20Team,%20I%20am%20interested%20in%20your%2520listing:%20${encodeURIComponent(selectedProperty.title)}%20located%20at%20${encodeURIComponent(selectedProperty.location)}.%20Please%20provide%20more%20details.`}
+                      href={`mailto:dreamlandassociate7@gmail.com?subject=Inquiry:%20${encodeURIComponent(selectedProperty.title)}&body=Hello%20Dreamland%20Team,%20I%20am%20interested%20in%20your%2520listing:%20${encodeURIComponent(selectedProperty.title)}%20located%20at%20${encodeURIComponent(selectedProperty.location)}.%20Please%20provide%20more%20details.`}
                       className="flex-1 bg-stone-100 dark:bg-stone-800 hover:bg-gold-500 text-stone-600 dark:text-stone-300 hover:text-stone-955 py-3 rounded text-center font-bold uppercase tracking-wider text-[9px] transition-colors flex items-center justify-center space-x-1.5 cursor-pointer"
                     >
                       <Mail className="w-3.5 h-3.5" />
@@ -426,7 +426,7 @@ export default function InventoryPage() {
     <Suspense fallback={
       <div className="min-h-screen bg-stone-50 dark:bg-stone-950 flex items-center justify-center">
         <div className="text-stone-400 animate-pulse text-xs uppercase font-bold tracking-widest">
-          Loading Dreamsland Collections...
+          Loading Dreamland Collections...
         </div>
       </div>
     }>

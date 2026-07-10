@@ -9,8 +9,8 @@ import PropertyModal from './components/PropertyModal';
 import Collections from './components/Collections';
 import ContactForm from './components/ContactForm';
 import SellPropertyModal from './components/SellPropertyModal';
-import { PROPERTIES, Property } from './data';
-import { getProperties, getTeamMembers, TeamMember, getHeroBanners, HeroBanner } from './utils/db';
+import { PROPERTIES, Property, Collection } from './data';
+import { getProperties, getTeamMembers, TeamMember, getHeroBanners, HeroBanner, getReviews, Review, getCollections } from './utils/db';
 import GallerySection from './components/GallerySection';
 import Image from 'next/image';
 import { Mail, Shield, Award, MapPin, Home as HomeIcon, Key, Building2, TrendingUp, Coins, Wrench, ArrowRight } from 'lucide-react';
@@ -19,16 +19,65 @@ import WhatsAppWidget from './components/WhatsAppWidget';
 import Footer from './components/Footer';
 import Link from 'next/link';
 
+const FALLBACK_REVIEWS: Review[] = [
+  {
+    id: 'review-1',
+    name: 'Rajesh Sharma',
+    role: 'Lachiwalla Greens Buyer',
+    text: 'Found my dream plot in Lachiwalla Greens. Registry was smooth and mutation support was outstanding. Highly recommend Sumit ji and team!',
+    rating: 5,
+  },
+  {
+    id: 'review-2',
+    name: 'Preeti Rawat',
+    role: 'Bhadraj Colony Buyer',
+    text: 'Acquired a forest plot in Bhadraj Colony. The 360-degree mountain views are breathtaking. Extremely reliable services.',
+    rating: 5,
+  },
+  {
+    id: 'review-3',
+    name: 'Vikram Singh',
+    role: 'Dev Enclave Buyer',
+    text: 'Excellent registry process at Dev Enclave. Clear titles and great bank loan assistance up to 90%.',
+    rating: 5,
+  },
+  {
+    id: 'review-4',
+    name: 'Anil Dobhal',
+    role: 'Balaji Enclave Buyer',
+    text: 'Bought an ongoing plot in Balaji Enclave. The RCC road work and boundary walls are highly professional.',
+    rating: 5,
+  },
+  {
+    id: 'review-5',
+    name: 'Sandeep Negi',
+    role: 'Paonta Highway Buyer',
+    text: 'Smooth booking experience for Paonta Highway Enclave. Great investment potential on Doon-Chandigarh corridor.',
+    rating: 5,
+  },
+  {
+    id: 'review-6',
+    name: 'Meenakshi Thapa',
+    role: 'Acquisitions Client',
+    text: 'Great guidance by Devika and the sales team. The documentation and mutation tracking were completely transparent.',
+    rating: 5,
+  },
+];
+
 export default function Home() {
   const [properties, setProperties] = useState<Property[]>(PROPERTIES);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [heroBanners, setHeroBanners] = useState<HeroBanner[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [collections, setCollections] = useState<Collection[]>([]);
   const [isSellModalOpen, setIsSellModalOpen] = useState(false);
 
   useEffect(() => {
     getProperties().then(setProperties);
     getTeamMembers().then(setTeamMembers);
     getHeroBanners().then(setHeroBanners);
+    getReviews().then(setReviews);
+    getCollections().then(setCollections);
   }, []);
 
   useEffect(() => {
@@ -61,16 +110,6 @@ export default function Home() {
   const directors = useMemo(() => {
     const defaultBoard = [
       {
-        id: 'fallback-sumit',
-        name: 'Mr. Sumit Rajput',
-        role: 'CEO & Founder',
-        initials: 'SR',
-        desc: 'Visionary founder of Dreamland Associates. Directs development programs, zoning clearance checks, and private client brokerage advisory desks.',
-        phone: '8057932926',
-        email: 'dreamlandassociate7@gmail.com',
-        image: ''
-      },
-      {
         id: 'fallback-nitin',
         name: 'Mr. Nitin Katoch',
         role: 'Director',
@@ -78,7 +117,17 @@ export default function Home() {
         desc: 'Oversees strategic portfolio growth, builder alliances, and coordinates direct investments along premium Dehradun bypass corridors.',
         phone: '9258884941',
         email: 'dreamlandassociate7@gmail.com',
-        image: ''
+        image: 'https://res.cloudinary.com/yfyo2yq0/image/upload/v1783335560/dreamsland_listings/dopkiatcuttojnib1m4j.png'
+      },
+      {
+        id: 'fallback-sumit',
+        name: 'Mr. Sumit Rajput',
+        role: 'CEO & Founder',
+        initials: 'SR',
+        desc: 'Visionary founder of Dreamland Associates. Directs development programs, zoning clearance checks, and private client brokerage advisory desks.',
+        phone: '8057932926',
+        email: 'dreamlandassociate7@gmail.com',
+        image: 'https://res.cloudinary.com/yfyo2yq0/image/upload/v1783498512/dreamsland_listings/alwogvfegdu0verbhtqf.png'
       },
       {
         id: 'fallback-suhail',
@@ -88,7 +137,7 @@ export default function Home() {
         desc: 'Steers day-to-day desk operations, buyer title registries, bank loan integrations, and local land administration coordinates.',
         phone: '7906953585',
         email: 'dreamlandassociate7@gmail.com',
-        image: ''
+        image: 'https://res.cloudinary.com/yfyo2yq0/image/upload/v1783498603/dreamsland_listings/vi1cg8d8mdieuxldfl8n.jpg'
       }
     ];
 
@@ -96,23 +145,21 @@ export default function Home() {
 
     const boardFromDb = teamMembers.filter(m => {
       const roleLower = m.role.toLowerCase();
-      return roleLower.includes('ceo') || roleLower.includes('director') || roleLower.includes('founder');
+      return roleLower.includes('ceo') || roleLower.includes('director') || roleLower.includes('founder') || roleLower.includes('md') || roleLower.includes('managing');
     });
 
     if (boardFromDb.length === 0) return defaultBoard;
 
+    const getRoleWeight = (role: string): number => {
+      const r = role.toLowerCase();
+      if (r.includes('director') && !r.includes('managing') && !r.includes('md')) return 1;
+      if (r.includes('ceo') || r.includes('founder')) return 2;
+      if (r.includes('managing') || r === 'md' || r.includes('m.d.')) return 3;
+      return 4;
+    };
+
     return boardFromDb.sort((a, b) => {
-      const aCEO = a.role.toLowerCase().includes('ceo') || a.role.toLowerCase().includes('founder');
-      const bCEO = b.role.toLowerCase().includes('ceo') || b.role.toLowerCase().includes('founder');
-      if (aCEO && !bCEO) return -1;
-      if (!aCEO && bCEO) return 1;
-      
-      const aMD = a.role.toLowerCase().includes('managing');
-      const bMD = b.role.toLowerCase().includes('managing');
-      if (aMD && !bMD) return 1;
-      if (!aMD && bMD) return -1;
-      
-      return 0;
+      return getRoleWeight(a.role) - getRoleWeight(b.role);
     }).slice(0, 3);
   }, [teamMembers]);
 
@@ -252,6 +299,8 @@ export default function Home() {
     setStatusFilter('All');
   };
 
+  const displayReviews = reviews.length > 0 ? reviews : FALLBACK_REVIEWS;
+
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-stone-950 text-stone-800 dark:text-stone-200 transition-colors duration-300 relative overflow-hidden">
       <title>Dreamland Associates | Discover Legally Clear Gated Plots in Dehradun</title>
@@ -272,7 +321,12 @@ export default function Home() {
       <Navbar onScrollToSection={handleScrollToSection} />
 
       {/* Hero Section */}
-      <Hero onExploreClick={() => handleScrollToSection('properties-section')} banners={heroBanners} />
+      <Hero 
+        onExploreClick={() => handleScrollToSection('properties-section')} 
+        banners={heroBanners} 
+        properties={properties}
+        onSelectProperty={setSelectedProperty}
+      />
 
       {/* Search Bar Overlay */}
       <SearchBar
@@ -291,7 +345,7 @@ export default function Home() {
               Our Portfolio
             </span>
             <h2 className="font-serif text-3xl md:text-4xl text-stone-900 dark:text-white font-normal tracking-wide">
-              Featured Listings
+              Featured <span className="italic text-gold-500 font-light">Listings</span>
             </h2>
           </div>
 
@@ -331,8 +385,19 @@ export default function Home() {
         {/* Listings Marquee Ticker */}
         {filteredProperties.length > 0 ? (
           (() => {
-            const row1 = filteredProperties.filter((_, idx) => idx % 2 === 0);
-            const row2 = filteredProperties.filter((_, idx) => idx % 2 !== 0);
+            const ongoingProps = filteredProperties.filter(p => p.status === 'Ongoing');
+            const completedProps = filteredProperties.filter(p => p.status !== 'Ongoing');
+
+            let row1 = [];
+            let row2 = [];
+
+            if (ongoingProps.length > 0) {
+              row1 = ongoingProps;
+              row2 = completedProps.length > 0 ? completedProps : ongoingProps;
+            } else {
+              row1 = completedProps.filter((_, idx) => idx % 2 === 0);
+              row2 = completedProps.filter((_, idx) => idx % 2 !== 0);
+            }
             const finalRow2 = row2.length > 0 ? row2 : row1;
 
             return (
@@ -421,7 +486,7 @@ export default function Home() {
       </section>
 
       {/* Curated Collections Section */}
-      <Collections onSelectCollection={handleSelectCollection} properties={properties} />
+      <Collections onSelectCollection={handleSelectCollection} properties={properties} collections={collections} />
 
       {/* Services Section */}
       <section className="py-24 border-t border-stone-200/40 dark:border-stone-850/40 relative overflow-hidden bg-stone-50 dark:bg-stone-950 transition-colors duration-300 z-10" id="services-section">
@@ -540,8 +605,8 @@ export default function Home() {
             <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-gold-500 mb-3 block">
               Our Legacy
             </span>
-            <h2 className="font-serif text-4xl text-stone-900 dark:text-white font-normal tracking-wide mb-6">
-              A home is more than a place. It is a legacy.
+            <h2 className="font-serif text-4xl text-stone-900 dark:text-white font-normal tracking-wide mb-6 leading-tight">
+              A home is more than a place. It is a <span className="italic text-gold-500 font-light">legacy</span>.
             </h2>
             <p className="text-xs font-light text-stone-500 dark:text-stone-400 leading-relaxed mb-6">
               At Dream Land Associates, we handle the curation and transaction of prime residential assets worldwide. With private client advisors in major global hubs, we connect elite properties with global citizens.
@@ -615,7 +680,7 @@ export default function Home() {
               Company Board
             </span>
             <h2 className="font-serif text-3xl md:text-4xl text-stone-900 dark:text-white font-normal tracking-wide">
-              Founders & Board Directors
+              Founders & <span className="italic text-gold-500 font-light">Board Directors</span>
             </h2>
             <p className="text-sm font-light text-stone-500 dark:text-stone-400 leading-relaxed mt-4">
               Our founding directors steer the vision, acquisitions, and operations of Dreamland Associates, assuring absolute legal security and premium development standards.
@@ -719,7 +784,7 @@ export default function Home() {
             Testimonials
           </span>
           <h2 className="font-serif text-3xl md:text-4xl text-stone-900 dark:text-white font-normal tracking-wide">
-            What Our Clients Say
+            What Our <span className="italic text-gold-500 font-light">Clients Say</span>
           </h2>
           <p className="text-sm font-light text-stone-500 dark:text-stone-400 leading-relaxed mt-4 max-w-xl mx-auto">
             Read certified transaction reviews from buyers who purchased gated plots in Dehradun with our private office.
@@ -737,52 +802,15 @@ export default function Home() {
           <div className="animate-marquee-horizontal flex space-x-6">
             {[...Array(3)].map((_, loopIdx) => (
               <div key={loopIdx} className="flex space-x-6">
-                {[
-                  {
-                    name: 'Rajesh Sharma',
-                    role: 'Lachiwalla Greens Buyer',
-                    text: 'Found my dream plot in Lachiwalla Greens. Registry was smooth and mutation support was outstanding. Highly recommend Sumit ji and team!',
-                    rating: 5,
-                  },
-                  {
-                    name: 'Preeti Rawat',
-                    role: 'Bhadraj Colony Buyer',
-                    text: 'Acquired a forest plot in Bhadraj Colony. The 360-degree mountain views are breathtaking. Extremely reliable services.',
-                    rating: 5,
-                  },
-                  {
-                    name: 'Vikram Singh',
-                    role: 'Dev Enclave Buyer',
-                    text: 'Excellent registry process at Dev Enclave. Clear titles and great bank loan assistance up to 90%.',
-                    rating: 5,
-                  },
-                  {
-                    name: 'Anil Dobhal',
-                    role: 'Balaji Enclave Buyer',
-                    text: 'Bought an ongoing plot in Balaji Enclave. The RCC road work and boundary walls are highly professional.',
-                    rating: 5,
-                  },
-                  {
-                    name: 'Sandeep Negi',
-                    role: 'Paonta Highway Buyer',
-                    text: 'Smooth booking experience for Paonta Highway Enclave. Great investment potential on Doon-Chandigarh corridor.',
-                    rating: 5,
-                  },
-                  {
-                    name: 'Meenakshi Thapa',
-                    role: 'Acquisitions Client',
-                    text: 'Great guidance by Devika and the sales team. The documentation and mutation tracking were completely transparent.',
-                    rating: 5,
-                  },
-                ].map((review, rIdx) => (
+                {displayReviews.map((review, rIdx) => (
                   <div
-                    key={`${loopIdx}-${rIdx}`}
+                    key={`${loopIdx}-${review.id || rIdx}`}
                     className="w-[280px] sm:w-[350px] bg-white dark:bg-stone-900 border border-stone-200/60 dark:border-stone-800 p-6 rounded-lg shadow-sm flex flex-col justify-between shrink-0 hover:shadow-md transition-shadow duration-300"
                   >
                     <div>
                       {/* Rating Stars */}
                       <div className="flex items-center space-x-1 mb-4">
-                        {[...Array(review.rating)].map((_, sIdx) => (
+                        {[...Array(review.rating || 5)].map((_, sIdx) => (
                           <span key={sIdx} className="text-amber-500 text-sm">★</span>
                         ))}
                       </div>
@@ -830,7 +858,7 @@ export default function Home() {
               Inquiries
             </span>
             <h2 className="font-serif text-3xl md:text-4xl text-stone-900 dark:text-white font-normal tracking-wide">
-              Frequently Asked Questions
+              Frequently Asked <span className="italic text-gold-500 font-light">Questions</span>
             </h2>
             <p className="text-sm font-light text-stone-500 dark:text-stone-400 leading-relaxed mt-4">
               Get direct answers to common queries regarding registry, mutations, bank loans, and colony infrastructures.

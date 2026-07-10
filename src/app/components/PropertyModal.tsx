@@ -88,10 +88,12 @@ export default function PropertyModal({ property, onClose }: PropertyModalProps)
             </p>
 
             {/* Price */}
-            <p className="text-2xl font-bold text-[#957258] dark:text-[#a68369] mb-6 flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#957258] dark:bg-[#a68369] animate-pulse" />
-              <span>{formatPrice(property.price)}</span>
-            </p>
+            <div className="mb-6">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded bg-gold-500/10 dark:bg-gold-500/5 border border-gold-500/30 text-gold-600 dark:text-gold-450 text-xl sm:text-2xl font-serif italic font-bold tracking-wide shadow-sm">
+                <span className="w-2.5 h-2.5 rounded-full bg-gold-600 dark:bg-gold-450 animate-pulse" />
+                {formatPrice(property.price)}
+              </span>
+            </div>
 
             {/* Key Specs Row */}
             <div className="grid grid-cols-4 gap-2 py-4 border-y border-stone-100 mb-6 text-center">
@@ -101,7 +103,7 @@ export default function PropertyModal({ property, onClose }: PropertyModalProps)
               </div>
               <div className="flex flex-col">
                 <span className="text-[9px] uppercase tracking-wider font-bold text-stone-400">Rate / Gaj</span>
-                <span className="text-xs font-semibold text-stone-800 mt-1">₹{property.rate.toLocaleString()}</span>
+                <span className="text-xs font-bold font-serif italic text-gold-600 dark:text-gold-500 mt-1">₹{property.rate.toLocaleString()}</span>
               </div>
               <div className="flex flex-col">
                 <span className="text-[9px] uppercase tracking-wider font-bold text-stone-400">Road Width</span>

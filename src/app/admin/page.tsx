@@ -4,13 +4,14 @@ import { useState, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Send, MessageCircle, Activity } from 'lucide-react';
 import { 
   Lock, Shield, ArrowLeft, Plus, Edit2, Trash2, 
   CheckCircle, MessageSquare, Building2, Check, 
   ExternalLink, LogOut, FileText, Calendar, 
   X, AlertCircle, Sparkles, MapPin, Eye, EyeOff, ClipboardList, Users, Menu,
   ChevronLeft, ChevronRight, Sun, Moon, TrendingUp, BookOpen, Camera, LayoutDashboard, BarChart3,
-  Image as ImageIcon
+  Image as ImageIcon, Star, Compass
 } from 'lucide-react';
 import { Sheet, SheetTrigger, SheetContent, SheetClose } from '@/components/ui/sheet';
 import { 
@@ -19,9 +20,11 @@ import {
   ContactInquiry, getTeamMembers, saveTeamMember, deleteTeamMember, TeamMember,
   getBlogs, saveBlog, deleteBlog, BlogPost,
   getGalleryItems, saveGalleryItem, deleteGalleryItem, GalleryItem,
-  getHeroBanners, saveHeroBanner, deleteHeroBanner, HeroBanner
+  getHeroBanners, saveHeroBanner, deleteHeroBanner, HeroBanner,
+  getReviews, saveReview, deleteReview, Review,
+  getCollections, saveCollection, deleteCollection
 } from '../utils/db';
-import { Property } from '../data';
+import { Property, Collection } from '../data';
 import Image from 'next/image';
 
 const IMAGES = [
@@ -45,8 +48,14 @@ export default function AdminPage() {
   const [passcode, setPasscode] = useState('');
   const [showPasscode, setShowPasscode] = useState(false);
   const [loginError, setLoginError] = useState('');
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'properties' | 'inquiries' | 'sell' | 'team' | 'blogs' | 'gallery' | 'todos' | 'hero'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'properties' | 'inquiries' | 'sell' | 'team' | 'blogs' | 'gallery' | 'todos' | 'hero' | 'reviews' | 'collections'>('dashboard');
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [supportOpen, setSupportOpen] = useState(false);
+  const [supportMessage, setSupportMessage] = useState('');
+  const [supportChat, setSupportChat] = useState<{ sender: 'unzora' | 'admin', text: string, time: string }[]>([
+    { sender: 'unzora', text: 'Hi! Welcome to Unzora Chat Support. How can we help you with your Dreamland console today?', time: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) }
+  ]);
+  const [sendingSupport, setSendingSupport] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -70,6 +79,8 @@ export default function AdminPage() {
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
   const [gallery, setGallery] = useState<GalleryItem[]>([]);
   const [heroBanners, setHeroBanners] = useState<HeroBanner[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [collections, setCollections] = useState<Collection[]>([]);
   
   // Search & Filter states
   const [propSearch, setPropSearch] = useState('');
@@ -79,6 +90,8 @@ export default function AdminPage() {
   const [blogSearch, setBlogSearch] = useState('');
   const [gallerySearch, setGallerySearch] = useState('');
   const [heroSearch, setHeroSearch] = useState('');
+  const [reviewSearch, setReviewSearch] = useState('');
+  const [colSearch, setColSearch] = useState('');
 
   // Modals & Forms
   const [isBlogModalOpen, setIsBlogModalOpen] = useState(false);
@@ -106,6 +119,25 @@ export default function AdminPage() {
     title: '',
     category: 'Layouts',
     image: ''
+  });
+
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [reviewFormData, setReviewFormData] = useState<Partial<Review>>({
+    id: '',
+    name: '',
+    role: '',
+    text: '',
+    rating: 5
+  });
+
+  const [isColModalOpen, setIsColModalOpen] = useState(false);
+  const [colFormData, setColFormData] = useState<Partial<Collection>>({
+    id: '',
+    title: '',
+    image: '',
+    description: '',
+    count: 0,
+    tag: ''
   });
 
   // Modals
@@ -228,6 +260,8 @@ export default function AdminPage() {
     getBlogs().then(setBlogs);
     getGalleryItems().then(setGallery);
     getHeroBanners().then(setHeroBanners);
+    getReviews().then(setReviews);
+    getCollections().then(setCollections);
   }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -754,6 +788,186 @@ export default function AdminPage() {
     }
   };
 
+  const handleSaveReviewForm = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!reviewFormData.name || !reviewFormData.role || !reviewFormData.text) {
+      alert('Please fill out all required fields.');
+      return;
+    }
+
+    const reviewToSave: Review = {
+      id: reviewFormData.id || `review-${Date.now()}`,
+      name: reviewFormData.name,
+      role: reviewFormData.role,
+      text: reviewFormData.text,
+      rating: Number(reviewFormData.rating) || 5
+    };
+
+    const updated = await saveReview(reviewToSave);
+    setReviews(updated);
+    setIsReviewModalOpen(false);
+  };
+
+  const handleDeleteReview = async (id: string) => {
+    if (confirm('Are you sure you want to delete this review?')) {
+      const updated = await deleteReview(id);
+      setReviews(updated);
+    }
+  };
+
+  const handleSaveCollectionForm = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!colFormData.title || !colFormData.image || !colFormData.description || !colFormData.tag) {
+      alert('Please fill out all required fields.');
+      return;
+    }
+
+    const colToSave: Collection = {
+      id: colFormData.id || `col-${Date.now()}`,
+      title: colFormData.title,
+      image: colFormData.image,
+      description: colFormData.description,
+      count: Number(colFormData.count) || 0,
+      tag: colFormData.tag
+    };
+
+    const updated = await saveCollection(colToSave);
+    setCollections(updated);
+    setIsColModalOpen(false);
+  };
+
+  const handleDeleteCollection = async (id: string) => {
+    if (confirm('Are you sure you want to delete this collection?')) {
+      const updated = await deleteCollection(id);
+      setCollections(updated);
+    }
+  };
+
+  const handleColImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const uData = new FormData();
+      uData.append('file', file);
+      
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: uData,
+      });
+
+      if (!res.ok) throw new Error('Upload failed');
+      const data = await res.json();
+      
+      setColFormData(prev => ({ ...prev, image: data.url }));
+      alert('Collection image uploaded successfully!');
+    } catch (err: any) {
+      console.error('Collection image upload failed:', err);
+      alert('Failed to upload image. Please try again.');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleSendSupportMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!supportMessage.trim()) return;
+
+    const userMsg = supportMessage.trim();
+    setSupportMessage('');
+    setSendingSupport(true);
+
+    const currentTime = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+    
+    // 1. Add user message locally
+    setSupportChat(prev => [...prev, { sender: 'admin', text: userMsg, time: currentTime }]);
+
+    try {
+      const res = await fetch('/api/support', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMsg }),
+      });
+
+      if (!res.ok) throw new Error('Failed to send support email');
+
+      // 2. Add success support agent response
+      setTimeout(() => {
+        setSupportChat(prev => [...prev, { 
+          sender: 'unzora', 
+          text: 'Thank you! Your message has been forwarded directly to infomohdaftab@gmail.com. Our support team will respond to your queries shortly.', 
+          time: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) 
+        }]);
+      }, 1000);
+      
+    } catch (err) {
+      console.error(err);
+      // Add error response
+      setTimeout(() => {
+        setSupportChat(prev => [...prev, { 
+          sender: 'unzora', 
+          text: 'We encountered an error sending your message. Please check your SMTP settings or network connection and try again.', 
+          time: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) 
+        }]);
+      }, 1000);
+    } finally {
+      setSendingSupport(false);
+    }
+  };
+
+  const handleCheckWebsiteHealth = async () => {
+    if (sendingSupport) return;
+    setSendingSupport(true);
+
+    const currentTime = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+    
+    // 1. Add check query locally
+    setSupportChat(prev => [...prev, { sender: 'admin', text: '🔍 Check Website Health', time: currentTime }]);
+
+    try {
+      const res = await fetch('/api/health');
+      const data = await res.json();
+      
+      const healthReport = data.status === 'Healthy'
+        ? `🖥️ Website Health Report:
+-------------------------
+• Status: Healthy (200 OK)
+• Database: Connected (MongoDB)
+• Response Time: ${data.latency}
+• Active Listings: ${data.properties} plots
+• Client Inquiries: ${data.inquiries} requests
+• Testimonials: ${data.reviews} reviews
+• Curated Collections: ${data.collections} items`
+        : `⚠️ Website Health Alert:
+-------------------------
+• Status: Degraded
+• Database: Disconnected
+• Latency: N/A
+• Error: ${data.error || 'Unknown issue'}`;
+
+      setTimeout(() => {
+        setSupportChat(prev => [...prev, { 
+          sender: 'unzora', 
+          text: healthReport, 
+          time: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) 
+        }]);
+      }, 1000);
+      
+    } catch (err) {
+      console.error(err);
+      setTimeout(() => {
+        setSupportChat(prev => [...prev, { 
+          sender: 'unzora', 
+          text: '⚠️ Support Desk was unable to contact the health checker API. Please check if the server is running.', 
+          time: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) 
+        }]);
+      }, 1000);
+    } finally {
+      setSendingSupport(false);
+    }
+  };
+
   // Statistics Metrics
   const stats = useMemo(() => {
     const totalProps = properties.length;
@@ -766,90 +980,109 @@ export default function AdminPage() {
     const totalSellRequests = inquiries.filter(i => i.inquiryType === 'Sell').length;
     const newSellRequests = inquiries.filter(i => i.inquiryType === 'Sell' && i.status === 'New').length;
 
+    const totalReviews = reviews.length;
+    const totalCollections = collections.length;
+
     return { 
       totalProps, completed, ongoing, 
       totalConsults, newConsults, 
-      totalSellRequests, newSellRequests 
+      totalSellRequests, newSellRequests,
+      totalReviews,
+      totalCollections
     };
-  }, [properties, inquiries]);
+  }, [properties, inquiries, reviews, collections]);
 
   if (!isLoggedIn) {
     return (
-      <div className="min-h-screen bg-stone-950 flex flex-col justify-center items-center px-4 relative overflow-hidden font-sans">
-        {/* Abstract Background Accents */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold-600/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gold-800/10 rounded-full blur-[120px]" />
-
-        <div className="w-full max-w-md bg-stone-900/40 border border-stone-850 backdrop-blur-xl rounded-xl p-8 relative z-10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+      <div className="min-h-screen bg-[#f4f2ee] flex items-center justify-center font-sans">
+        <div className="max-w-6xl w-full mx-auto px-6 flex flex-col lg:flex-row items-center justify-center lg:gap-16 xl:gap-24 py-12">
           
-          {/* Logo / Header */}
-          <div className="text-center mb-8">
-            <div className="relative w-40 h-12 mx-auto mb-6">
+          {/* Left Side: Brand & Description (Facebook Style) */}
+          <div className="w-full lg:w-[480px] text-center lg:text-left mb-10 lg:mb-0 space-y-4">
+            <div className="relative w-48 h-16 mx-auto lg:mx-0">
               <Image
                 src="/logo.png"
                 alt="Dreamland Associates Logo"
                 fill
-                className="object-contain filter invert opacity-90"
+                className="object-contain"
                 priority
               />
             </div>
-            <h2 className="font-serif text-2xl text-stone-100 font-light tracking-wider">
-              ADMIN DESK ACCESS
-            </h2>
-            <p className="text-xs text-stone-500 mt-2 tracking-widest uppercase">
-              Secure Private Workspace
+            <h1 className="font-serif text-3xl sm:text-4xl text-stone-900 tracking-wide font-normal leading-tight">
+              Dreamland <span className="italic text-gold-500 font-light">Associates</span>
+            </h1>
+            <p className="text-[14px] sm:text-[16px] text-stone-600 font-light leading-relaxed max-w-md mx-auto lg:mx-0 pt-2">
+              Manage legally verified gated residential plots, client consultations, mutation registries, and private advisory portfolios inside Dehradun's premier real estate console.
             </p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div>
-              <label className="block text-[10px] uppercase font-bold tracking-widest text-stone-400 mb-2">
-                Private Passcode
-              </label>
-              <div className="relative">
-                <input
-                  type={showPasscode ? 'text' : 'password'}
-                  value={passcode}
-                  onChange={(e) => setPasscode(e.target.value)}
-                  placeholder="Enter passcode"
-                  className="w-full bg-stone-950/80 border border-stone-800 focus:border-gold-500 rounded-sm py-3 px-4 text-sm text-stone-200 placeholder-stone-600 focus:outline-none transition-colors pr-10"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPasscode(!showPasscode)}
-                  className="absolute right-3 top-3 text-stone-600 hover:text-stone-400 transition-colors"
-                >
-                  {showPasscode ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-              {loginError && (
-                <div className="flex items-center space-x-2 mt-2 text-red-400 text-xs">
-                  <AlertCircle className="w-3.5 h-3.5" />
-                  <span>{loginError}</span>
+          {/* Right Side: Login Card */}
+          <div className="w-full max-w-[396px] flex flex-col items-center">
+            <div className="w-full bg-white border border-stone-200/80 rounded-xl p-8 shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
+              <form onSubmit={handleLogin} className="space-y-4">
+                
+                <div className="space-y-1.5">
+                  <label className="block text-[10px] uppercase font-bold tracking-wider text-stone-500 mb-1">
+                    Administrator Passcode
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showPasscode ? 'text' : 'password'}
+                      value={passcode}
+                      onChange={(e) => setPasscode(e.target.value)}
+                      placeholder="Enter passcode"
+                      className="w-full bg-stone-50 border border-stone-200 focus:border-gold-500 focus:bg-white rounded-lg py-3.5 px-4 text-sm text-stone-850 placeholder-stone-400 focus:outline-none transition-all pr-11"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPasscode(!showPasscode)}
+                      className="absolute right-3.5 top-3.5 text-stone-450 hover:text-stone-700 transition-colors bg-transparent border-none outline-none cursor-pointer"
+                    >
+                      {showPasscode ? <EyeOff className="w-4.5 h-4.5" /> : <Eye className="w-4.5 h-4.5" />}
+                    </button>
+                  </div>
                 </div>
-              )}
+
+                {loginError && (
+                  <div className="flex items-center space-x-2 text-red-500 text-xs py-1 animate-pulse">
+                    <AlertCircle className="w-4 h-4 shrink-0" />
+                    <span>{loginError}</span>
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  className="w-full bg-[#957258] hover:bg-[#887361] text-white text-xs uppercase font-bold tracking-widest py-3.5 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-center space-x-2 cursor-pointer mt-4"
+                >
+                  <Lock className="w-3.5 h-3.5" />
+                  <span>Log In</span>
+                </button>
+              </form>
+
+              <div className="relative flex py-4 items-center">
+                <div className="flex-grow border-t border-stone-150"></div>
+                <span className="flex-shrink mx-4 text-[10px] uppercase tracking-wider text-stone-400 font-semibold">Security Level A</span>
+                <div className="flex-grow border-t border-stone-150"></div>
+              </div>
+
+              <div className="text-center">
+                <Link 
+                  href="/" 
+                  className="inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-wider text-stone-500 hover:text-[#957258] transition-colors"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  <span>Back to Public Desk</span>
+                </Link>
+              </div>
             </div>
-
-            <button
-              type="submit"
-              className="w-full bg-gold-600 hover:bg-gold-500 text-white text-xs uppercase font-bold tracking-widest py-3.5 rounded-sm shadow-md transition-all duration-300 flex items-center justify-center space-x-2 cursor-pointer hover:shadow-lg hover:shadow-gold-600/10"
-            >
-              <Lock className="w-3.5 h-3.5" />
-              <span>Unlock Console</span>
-            </button>
-          </form>
-
-          {/* Footer Back Link */}
-          <div className="mt-8 text-center border-t border-stone-850/60 pt-6">
-            <Link 
-              href="/" 
-              className="inline-flex items-center space-x-2 text-xs font-semibold text-stone-500 hover:text-gold-400 transition-colors"
-            >
-              <ArrowLeft className="w-3 h-3" />
-              <span>Back to Public Desk</span>
-            </Link>
+            
+            {/* Small Footer Disclaimer */}
+            <p className="text-[10px] text-stone-400 font-light mt-6 text-center leading-relaxed">
+              <strong>Secure Private Area.</strong> Unauthorized access attempts are monitored and recorded.
+            </p>
           </div>
+
         </div>
       </div>
     );
@@ -894,6 +1127,8 @@ export default function AdminPage() {
               { id: 'gallery', icon: Camera, label: `Gallery (${gallery.length})`, layout: 'simple' },
               { id: 'todos', icon: ClipboardList, label: 'Todo List', layout: 'simple' },
               { id: 'hero', icon: ImageIcon, label: 'Hero Banners', layout: 'simple' },
+              { id: 'reviews', icon: Star, label: `Reviews (${reviews.length})`, layout: 'simple' },
+              { id: 'collections', icon: Compass, label: `Collections (${collections.length})`, layout: 'simple' },
             ].map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -1024,6 +1259,8 @@ export default function AdminPage() {
                       { id: 'gallery', icon: Camera, label: `Gallery (${gallery.length})`, layout: 'simple' },
                       { id: 'todos', icon: ClipboardList, label: 'Todo List', layout: 'simple' },
                       { id: 'hero', icon: ImageIcon, label: 'Hero Banners', layout: 'simple' },
+                      { id: 'reviews', icon: Star, label: `Reviews (${reviews.length})`, layout: 'simple' },
+                      { id: 'collections', icon: Compass, label: `Collections (${collections.length})`, layout: 'simple' },
                     ].map((item) => {
                       const Icon = item.icon;
                       const isActive = activeTab === item.id;
@@ -1146,6 +1383,10 @@ export default function AdminPage() {
                   ? 'Admin Task Checklist'
                   : activeTab === 'hero'
                   ? 'Hero Banner Slideshow'
+                  : activeTab === 'reviews'
+                  ? 'Client Reviews & Testimonials'
+                  : activeTab === 'collections'
+                  ? 'Curated Collections'
                   : 'Manage Team'}
               </h1>
               <p className="text-xs text-stone-500 mt-1">
@@ -1165,6 +1406,10 @@ export default function AdminPage() {
                   ? 'Manage administrative actions and day-to-day operations.'
                   : activeTab === 'hero'
                   ? 'Upload and manage background slideshow banners for the main Hero section.'
+                  : activeTab === 'reviews'
+                  ? 'Review, add, or delete client testimonials shown on the website.'
+                  : activeTab === 'collections'
+                  ? 'Manage curated collection categories and location tags.'
                   : 'Manage your representative leadership desk.'}
               </p>
             </div>
@@ -1176,7 +1421,7 @@ export default function AdminPage() {
           </div>
 
           {/* Stats Metrics Grid */}
-          <section className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+          <section className="grid grid-cols-2 lg:grid-cols-7 gap-4 mb-8">
             <div className="bg-white border border-stone-200/80 rounded-lg p-5 shadow-sm">
               <div className="flex justify-between items-start text-stone-400">
                 <Building2 className="w-5 h-5 text-gold-500" />
@@ -1220,6 +1465,24 @@ export default function AdminPage() {
               </div>
               <p className="text-3xl font-light text-stone-900 mt-3">{stats.totalSellRequests}</p>
               <p className="text-[10px] text-stone-400 mt-1">{stats.newSellRequests} awaiting review</p>
+            </div>
+
+            <div className="bg-white border border-stone-200/80 rounded-lg p-5 shadow-sm">
+              <div className="flex justify-between items-start text-stone-400">
+                <Star className="w-5 h-5 text-yellow-500 animate-pulse" />
+                <span className="text-[10px] uppercase font-bold tracking-wider">Reviews</span>
+              </div>
+              <p className="text-3xl font-light text-stone-900 mt-3">{stats.totalReviews}</p>
+              <p className="text-[10px] text-stone-400 mt-1">Live client testimonials</p>
+            </div>
+
+            <div className="bg-white border border-stone-200/80 rounded-lg p-5 shadow-sm">
+              <div className="flex justify-between items-start text-stone-400">
+                <Compass className="w-5 h-5 text-indigo-500" />
+                <span className="text-[10px] uppercase font-bold tracking-wider">Collections</span>
+              </div>
+              <p className="text-3xl font-light text-stone-900 mt-3">{stats.totalCollections}</p>
+              <p className="text-[10px] text-stone-400 mt-1">Live curated collections</p>
             </div>
           </section>
 
@@ -2549,6 +2812,205 @@ export default function AdminPage() {
               </div>
             )}
           </section>
+        ) : activeTab === 'reviews' ? (
+          <section className="space-y-6 animate-in fade-in duration-300">
+            {/* Action Bar */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-between items-stretch sm:items-center bg-white border border-stone-200/80 rounded-lg p-4 shadow-sm">
+              <div className="relative flex-grow max-w-md">
+                <input
+                  type="text"
+                  placeholder="Search reviews by client name or role..."
+                  value={reviewSearch}
+                  onChange={(e) => setReviewSearch(e.target.value)}
+                  className="w-full bg-stone-50 border border-stone-200 rounded-sm py-2 px-3 text-xs text-stone-850 placeholder-stone-400 focus:outline-none focus:border-gold-500"
+                />
+                {reviewSearch && (
+                  <button 
+                    type="button"
+                    onClick={() => setReviewSearch('')}
+                    className="absolute right-3 top-2.5 text-stone-450 hover:text-stone-700 bg-transparent border-none outline-none cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setReviewFormData({ id: '', name: '', role: '', text: '', rating: 5 });
+                  setIsReviewModalOpen(true);
+                }}
+                className="bg-stone-900 hover:bg-gold-500 hover:text-stone-950 text-white font-bold uppercase tracking-wider text-[10px] py-2.5 px-4 rounded-sm flex items-center justify-center space-x-1.5 transition-all shadow-sm cursor-pointer shrink-0"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Add Review</span>
+              </button>
+            </div>
+
+            {/* Reviews List */}
+            {reviews.filter(r => r.name.toLowerCase().includes(reviewSearch.toLowerCase()) || r.role.toLowerCase().includes(reviewSearch.toLowerCase())).length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {reviews
+                  .filter(r => r.name.toLowerCase().includes(reviewSearch.toLowerCase()) || r.role.toLowerCase().includes(reviewSearch.toLowerCase()))
+                  .map((review) => (
+                    <div key={review.id} className="bg-white border border-stone-200/80 rounded-xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow relative group">
+                      <div>
+                        <div className="flex justify-between items-start mb-4">
+                          {/* Stars */}
+                          <div className="flex items-center space-x-0.5">
+                            {[...Array(5)].map((_, sIdx) => (
+                              <Star 
+                                key={sIdx} 
+                                className={`w-3.5 h-3.5 ${sIdx < (review.rating || 5) ? 'text-yellow-500 fill-yellow-500' : 'text-stone-200'}`} 
+                              />
+                            ))}
+                          </div>
+                          
+                          {/* Actions */}
+                          <div className="flex items-center space-x-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setReviewFormData(review);
+                                setIsReviewModalOpen(true);
+                              }}
+                              className="p-1 border border-stone-100 hover:border-gold-500 text-stone-400 hover:text-gold-600 rounded transition-all cursor-pointer bg-transparent"
+                              title="Edit Review"
+                            >
+                              <Edit2 className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteReview(review.id)}
+                              className="p-1 border border-stone-100 hover:border-red-500 text-stone-400 hover:text-red-600 rounded transition-all cursor-pointer bg-transparent"
+                              title="Delete Review"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+                        
+                        <p className="text-xs font-light text-stone-600 dark:text-stone-300 leading-relaxed italic mb-4">
+                          "{review.text}"
+                        </p>
+                      </div>
+
+                      <div className="pt-4 border-t border-stone-100 mt-2 flex items-center justify-between">
+                        <span className="text-[11px] font-bold text-stone-850">{review.name}</span>
+                        <span className="text-[9px] uppercase tracking-wider font-semibold text-gold-600">
+                          {review.role}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            ) : (
+              <div className="bg-white border border-stone-200 rounded-lg py-16 text-center text-stone-450 shadow-sm">
+                <Star className="w-8 h-8 mx-auto mb-2 text-stone-300" />
+                <p className="font-semibold text-stone-600 text-xs">No reviews found</p>
+                <p className="text-[10px] mt-1 text-stone-400">Add a new client testimonial to get started.</p>
+              </div>
+            )}
+          </section>
+        ) : activeTab === 'collections' ? (
+          <section className="space-y-6 animate-in fade-in duration-300">
+            {/* Action Bar */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-between items-stretch sm:items-center bg-white border border-stone-200/80 rounded-lg p-4 shadow-sm">
+              <div className="relative flex-grow max-w-md">
+                <input
+                  type="text"
+                  placeholder="Search collections by title or tag..."
+                  value={colSearch}
+                  onChange={(e) => setColSearch(e.target.value)}
+                  className="w-full bg-stone-50 border border-stone-200 rounded-sm py-2 px-3 text-xs text-stone-850 placeholder-stone-400 focus:outline-none focus:border-gold-500"
+                />
+                {colSearch && (
+                  <button 
+                    type="button"
+                    onClick={() => setColSearch('')}
+                    className="absolute right-3 top-2.5 text-stone-450 hover:text-stone-700 bg-transparent border-none outline-none cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setColFormData({ id: '', title: '', image: '', description: '', count: 0, tag: '' });
+                  setIsColModalOpen(true);
+                }}
+                className="bg-stone-900 hover:bg-gold-500 hover:text-stone-950 text-white font-bold uppercase tracking-wider text-[10px] py-2.5 px-4 rounded-sm flex items-center justify-center space-x-1.5 transition-all shadow-sm cursor-pointer shrink-0"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Add Collection</span>
+              </button>
+            </div>
+
+            {/* Collections Grid */}
+            {collections.filter(c => c.title.toLowerCase().includes(colSearch.toLowerCase()) || c.tag.toLowerCase().includes(colSearch.toLowerCase())).length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {collections
+                  .filter(c => c.title.toLowerCase().includes(colSearch.toLowerCase()) || c.tag.toLowerCase().includes(colSearch.toLowerCase()))
+                  .map((collectionItem) => (
+                    <div key={collectionItem.id} className="bg-white border border-stone-200/80 rounded-xl overflow-hidden shadow-sm flex flex-col justify-between hover:shadow-md transition-all duration-300">
+                      <div className="relative aspect-[4/3] w-full bg-stone-150">
+                        <Image
+                          src={collectionItem.image}
+                          alt={collectionItem.title}
+                          fill
+                          className="object-cover"
+                        />
+                        <div className="absolute top-3 left-3 bg-stone-900/80 text-white text-[8px] font-bold tracking-widest px-2 py-0.5 rounded border border-white/10 uppercase">
+                          {collectionItem.tag}
+                        </div>
+                      </div>
+                      
+                      <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                          <h3 className="font-serif text-lg text-stone-900 tracking-wide font-normal truncate">{collectionItem.title}</h3>
+                          <p className="text-[11px] text-stone-500 font-light mt-1.5 line-clamp-2 leading-relaxed">{collectionItem.description}</p>
+                        </div>
+                        
+                        <div className="flex items-center justify-between pt-3 border-t border-stone-100">
+                          <span className="text-[10px] font-semibold text-stone-600 bg-stone-100 px-2 py-1 rounded">
+                            {properties.filter(p => p.type === collectionItem.tag).length || collectionItem.count} Listings
+                          </span>
+                          
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setColFormData(collectionItem);
+                                setIsColModalOpen(true);
+                              }}
+                              className="p-1.5 border border-stone-200 hover:border-gold-500 text-stone-500 hover:text-gold-600 rounded transition-all cursor-pointer bg-transparent"
+                              title="Edit Collection"
+                            >
+                              <Edit2 className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteCollection(collectionItem.id)}
+                              className="p-1.5 border border-stone-200 hover:border-red-500 text-stone-550 hover:text-red-600 rounded transition-all cursor-pointer bg-transparent"
+                              title="Delete Collection"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            ) : (
+              <div className="bg-white border border-stone-200 rounded-lg py-16 text-center text-stone-450 shadow-sm">
+                <Compass className="w-8 h-8 mx-auto mb-2 text-stone-300" />
+                <p className="font-semibold text-stone-600 text-xs">No collections found</p>
+                <p className="text-[10px] mt-1 text-stone-400">Add a new curated collection to get started.</p>
+              </div>
+            )}
+          </section>
         ) : null}
       </main>
     </div>
@@ -3622,6 +4084,367 @@ export default function AdminPage() {
 
             </form>
           </div>
+        </div>
+      )}
+      
+      {/* Client Review Modal */}
+      {isReviewModalOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg max-w-lg w-full overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
+            {/* Modal Header */}
+            <div className="bg-stone-900 text-white px-6 py-4 flex justify-between items-center">
+              <h3 className="font-serif text-lg tracking-wide text-white">
+                {reviewFormData.id ? 'Edit Client Review' : 'Add New Client Review'}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setIsReviewModalOpen(false)}
+                className="text-stone-400 hover:text-white transition-colors bg-transparent border-none outline-none cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Form */}
+            <form onSubmit={handleSaveReviewForm} className="p-6 space-y-4">
+              
+              {/* Client Name Input */}
+              <div className="space-y-1.5">
+                <label className="text-[10px] uppercase font-bold tracking-wider text-stone-500 block mb-1">
+                  Client Name *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={reviewFormData.name || ''}
+                  onChange={(e) => setReviewFormData(prev => ({ ...prev, name: e.target.value }))}
+                  placeholder="e.g. Rajesh Sharma"
+                  className="w-full bg-stone-50 border border-stone-200 rounded-sm py-2 px-3 text-xs text-stone-850 focus:outline-none focus:border-gold-500"
+                />
+              </div>
+
+              {/* Client Role/Designation Input */}
+              <div className="space-y-1.5">
+                <label className="text-[10px] uppercase font-bold tracking-wider text-stone-500 block mb-1">
+                  Designation / Role *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={reviewFormData.role || ''}
+                  onChange={(e) => setReviewFormData(prev => ({ ...prev, role: e.target.value }))}
+                  placeholder="e.g. Lachiwalla Greens Buyer"
+                  className="w-full bg-stone-50 border border-stone-200 rounded-sm py-2 px-3 text-xs text-stone-850 focus:outline-none focus:border-gold-500"
+                />
+              </div>
+
+              {/* Rating Star Selection */}
+              <div className="space-y-1.5">
+                <label className="text-[10px] uppercase font-bold tracking-wider text-stone-500 block mb-1">
+                  Rating *
+                </label>
+                <div className="flex items-center space-x-1.5">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => setReviewFormData(prev => ({ ...prev, rating: star }))}
+                      className="p-1 cursor-pointer bg-transparent border-none outline-none focus:outline-none"
+                    >
+                      <Star 
+                        className={`w-6 h-6 ${star <= (reviewFormData.rating || 5) ? 'text-yellow-500 fill-yellow-500' : 'text-stone-300 hover:text-yellow-450'}`} 
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Review Text Input */}
+              <div className="space-y-1.5">
+                <label className="text-[10px] uppercase font-bold tracking-wider text-stone-500 block mb-1">
+                  Review Text *
+                </label>
+                <textarea
+                  required
+                  rows={4}
+                  value={reviewFormData.text || ''}
+                  onChange={(e) => setReviewFormData(prev => ({ ...prev, text: e.target.value }))}
+                  placeholder="Enter detailed client feedback..."
+                  className="w-full bg-stone-50 border border-stone-200 rounded-sm py-2 px-3 text-xs text-stone-850 focus:outline-none focus:border-gold-500 resize-y"
+                />
+              </div>
+
+              {/* Modal Footer */}
+              <div className="flex justify-end space-x-3 pt-4 border-t border-stone-200">
+                <button
+                  type="button"
+                  onClick={() => setIsReviewModalOpen(false)}
+                  className="px-4 py-2 border border-stone-200 rounded-sm text-stone-500 hover:bg-stone-50 uppercase tracking-wider text-[10px] font-bold transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 bg-stone-900 hover:bg-gold-600 text-white rounded-sm uppercase tracking-wider text-[10px] font-bold transition-all cursor-pointer shadow-sm"
+                >
+                  Save Review
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Curated Collection Modal */}
+      {isColModalOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg max-w-lg w-full overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
+            {/* Modal Header */}
+            <div className="bg-stone-900 text-white px-6 py-4 flex justify-between items-center">
+              <h3 className="font-serif text-lg tracking-wide text-white">
+                {colFormData.id ? 'Edit Curated Collection' : 'Add New Curated Collection'}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setIsColModalOpen(false)}
+                className="text-stone-400 hover:text-white transition-colors bg-transparent border-none outline-none cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Form */}
+            <form onSubmit={handleSaveCollectionForm} className="p-6 space-y-4">
+              
+              {/* Collection Title */}
+              <div className="space-y-1.5">
+                <label className="text-[10px] uppercase font-bold tracking-wider text-stone-500 block mb-1">
+                  Collection Title *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={colFormData.title || ''}
+                  onChange={(e) => setColFormData(prev => ({ ...prev, title: e.target.value }))}
+                  placeholder="e.g. Highway Portfolios"
+                  className="w-full bg-stone-50 border border-stone-200 rounded-sm py-2 px-3 text-xs text-stone-850 focus:outline-none focus:border-gold-500"
+                />
+              </div>
+
+              {/* Tag/Category Link */}
+              <div className="space-y-1.5">
+                <label className="text-[10px] uppercase font-bold tracking-wider text-stone-500 block mb-1">
+                  Category Tag Name *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={colFormData.tag || ''}
+                  onChange={(e) => setColFormData(prev => ({ ...prev, tag: e.target.value }))}
+                  placeholder="e.g. Highway Plot, Forest Plot, Premium Plot"
+                  className="w-full bg-stone-50 border border-stone-200 rounded-sm py-2 px-3 text-xs text-stone-850 focus:outline-none focus:border-gold-500"
+                />
+                <p className="text-[9px] text-stone-400">Must match the 'Property Category/Type' tag in inventory to calculate counts automatically.</p>
+              </div>
+
+              {/* Description */}
+              <div className="space-y-1.5">
+                <label className="text-[10px] uppercase font-bold tracking-wider text-stone-500 block mb-1">
+                  Description *
+                </label>
+                <textarea
+                  required
+                  rows={3}
+                  value={colFormData.description || ''}
+                  onChange={(e) => setColFormData(prev => ({ ...prev, description: e.target.value }))}
+                  placeholder="Enter a brief collection summary..."
+                  className="w-full bg-stone-50 border border-stone-200 rounded-sm py-2 px-3 text-xs text-stone-850 focus:outline-none focus:border-gold-500 resize-y"
+                />
+              </div>
+
+              {/* Image Input & Cloudinary Upload */}
+              <div className="space-y-1.5">
+                <label className="text-[10px] uppercase font-bold tracking-wider text-stone-500 block mb-1">
+                  Background Image *
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    required
+                    value={colFormData.image || ''}
+                    onChange={(e) => setColFormData(prev => ({ ...prev, image: e.target.value }))}
+                    placeholder="Image URL (e.g. /images/... or Cloudinary URL)"
+                    className="flex-1 bg-stone-50 border border-stone-200 rounded-sm py-2 px-3 text-xs text-stone-850 focus:outline-none focus:border-gold-500"
+                  />
+                  <label className="inline-flex items-center justify-center bg-gold-500 hover:bg-gold-600 text-[10px] font-bold uppercase tracking-wider px-3.5 py-2 rounded-sm cursor-pointer shadow-sm transition-all duration-300 select-none text-white shrink-0">
+                    <span>{uploading ? 'Uploading...' : 'Upload File'}</span>
+                    <input
+                      type="file"
+                      disabled={uploading}
+                      accept="image/*"
+                      onChange={handleColImageUpload}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+                
+                {/* Thumbnail Preview */}
+                {colFormData.image && (
+                  <div className="relative w-32 aspect-[4/3] bg-stone-50 border border-stone-200 rounded overflow-hidden mt-3 shadow-sm">
+                    <Image
+                      src={colFormData.image}
+                      alt="Collection Preview"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Manual Count (Fallback) */}
+              <div className="space-y-1.5">
+                <label className="text-[10px] uppercase font-bold tracking-wider text-stone-500 block mb-1">
+                  Manual Count (Fallback)
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  value={colFormData.count || 0}
+                  onChange={(e) => setColFormData(prev => ({ ...prev, count: Number(e.target.value) }))}
+                  placeholder="e.g. 5"
+                  className="w-full bg-stone-50 border border-stone-200 rounded-sm py-2 px-3 text-xs text-stone-850 focus:outline-none focus:border-gold-500"
+                />
+              </div>
+
+              {/* Modal Footer */}
+              <div className="flex justify-end space-x-3 pt-4 border-t border-stone-200">
+                <button
+                  type="button"
+                  onClick={() => setIsColModalOpen(false)}
+                  className="px-4 py-2 border border-stone-200 rounded-sm text-stone-500 hover:bg-stone-50 uppercase tracking-wider text-[10px] font-bold transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={uploading}
+                  className="px-5 py-2 bg-stone-900 hover:bg-gold-600 text-white rounded-sm uppercase tracking-wider text-[10px] font-bold transition-all cursor-pointer shadow-sm disabled:opacity-50"
+                >
+                  Save Collection
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ── Unzora Support Chat Floating Widget ── */}
+      {isLoggedIn && (
+        <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end">
+          
+          {/* Chat Window */}
+          {supportOpen && (
+            <div className="w-[340px] sm:w-[380px] h-[450px] bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.15)] flex flex-col overflow-hidden mb-4 animate-in slide-in-from-bottom-6 duration-300 ease-out">
+              
+              {/* Chat Header */}
+              <div className="p-4 bg-gradient-to-r from-[#957258] to-[#887361] text-white flex items-center justify-between shadow-md">
+                <div className="flex items-center space-x-3">
+                  <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
+                    <MessageCircle className="w-5 h-5 text-gold-300" />
+                  </div>
+                  <div>
+                    <h3 className="font-serif text-sm font-semibold tracking-wide">Unzora Chat Support</h3>
+                    <span className="text-[10px] text-white/70 block font-sans">Active Team Desk</span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setSupportOpen(false)}
+                  className="p-1 rounded-full hover:bg-white/10 text-white/80 hover:text-white transition-colors cursor-pointer border-none outline-none bg-transparent"
+                >
+                  <X className="w-4.5 h-4.5" />
+                </button>
+              </div>
+
+              {/* Chat Messages */}
+              <div className="flex-1 p-4 overflow-y-auto space-y-3.5 bg-stone-50 dark:bg-stone-950/40">
+                {supportChat.map((msg, i) => (
+                  <div
+                    key={i}
+                    className={`flex flex-col max-w-[80%] ${
+                      msg.sender === 'admin' ? 'ml-auto items-end' : 'mr-auto items-start'
+                    }`}
+                  >
+                    <div
+                      className={`px-3.5 py-2.5 rounded-2xl text-xs leading-relaxed ${
+                        msg.sender === 'admin'
+                          ? 'bg-[#957258] text-white rounded-tr-none'
+                          : 'bg-white dark:bg-stone-800 text-stone-800 dark:text-stone-100 border border-stone-150 dark:border-stone-850 rounded-tl-none shadow-sm'
+                      }`}
+                    >
+                      {msg.text}
+                    </div>
+                    <span className="text-[9px] text-stone-400 dark:text-stone-500 mt-1 px-1">
+                      {msg.time}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Quick Actions (Health check, etc.) */}
+              <div className="px-3 py-2 bg-stone-50 dark:bg-stone-900 border-t border-stone-150 dark:border-stone-800 flex gap-2 overflow-x-auto select-none">
+                <button
+                  type="button"
+                  onClick={handleCheckWebsiteHealth}
+                  disabled={sendingSupport}
+                  className="px-2.5 py-1 bg-white hover:bg-stone-50 dark:bg-stone-850 dark:hover:bg-stone-800 border border-stone-200 dark:border-stone-750 rounded-full text-[10px] font-bold uppercase tracking-wider text-stone-600 dark:text-stone-300 transition-colors shadow-xs flex items-center space-x-1 cursor-pointer shrink-0 disabled:opacity-50 border-none outline-none"
+                >
+                  <Activity className="w-3 h-3 text-emerald-500 shrink-0" />
+                  <span>Check Site Health</span>
+                </button>
+              </div>
+
+              {/* Chat Input Form */}
+              <form onSubmit={handleSendSupportMessage} className="p-3 bg-white dark:bg-stone-900 border-t border-stone-200 dark:border-stone-800 flex items-center space-x-2">
+                <input
+                  type="text"
+                  value={supportMessage}
+                  onChange={(e) => setSupportMessage(e.target.value)}
+                  placeholder="Type a support request..."
+                  className="flex-1 bg-stone-50 dark:bg-stone-950/60 border border-stone-200 dark:border-stone-800 focus:border-gold-500 rounded-lg py-2 px-3.5 text-xs text-stone-850 dark:text-stone-150 placeholder-stone-450 focus:outline-none transition-colors"
+                  disabled={sendingSupport}
+                />
+                <button
+                  type="submit"
+                  disabled={sendingSupport || !supportMessage.trim()}
+                  className="p-2 rounded-lg bg-[#957258] hover:bg-[#887361] text-white disabled:opacity-50 transition-colors cursor-pointer flex items-center justify-center border-none outline-none"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                </button>
+              </form>
+
+            </div>
+          )}
+
+          {/* Floating Bubble Icon */}
+          <button
+            onClick={() => setSupportOpen(!supportOpen)}
+            className="w-14 h-14 rounded-full flex items-center justify-center text-white cursor-pointer shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 relative group border-none outline-none"
+            style={{ background: 'linear-gradient(135deg, #957258 0%, #887361 100%)' }}
+            title="Contact Unzora Support"
+          >
+            {supportOpen ? (
+              <X className="w-6 h-6 transition-transform duration-300 rotate-90" />
+            ) : (
+              <>
+                <MessageCircle className="w-6 h-6 transition-transform duration-300" />
+                {/* Ping notification dot */}
+                <span className="absolute top-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-stone-900 rounded-full animate-pulse" />
+              </>
+            )}
+          </button>
+
         </div>
       )}
     </div>

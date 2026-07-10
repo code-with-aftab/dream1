@@ -142,7 +142,7 @@ export default function Footer() {
                     className="hover:text-white transition-all duration-300 text-left cursor-pointer flex items-center group/link transform hover:translate-x-1"
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-white/30 group-hover/link:bg-gold-300 group-hover/link:shadow-[0_0_8px_rgba(255,215,0,0.6)] mr-2.5 shrink-0 transition-all duration-300" />
-                    <span className="text-[11px] sm:text-xs uppercase tracking-[0.15em] font-semibold text-white/80 group-hover/link:text-white transition-colors">{link.name}</span>
+                    <span className="text-[13px] font-serif italic text-white/85 group-hover/link:text-white transition-colors">{link.name}</span>
                   </button>
                 </li>
               ))}
@@ -168,7 +168,7 @@ export default function Footer() {
                     className="hover:text-white transition-all duration-300 text-left cursor-pointer flex items-center group/link transform hover:translate-x-1"
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-white/30 group-hover/link:bg-gold-300 group-hover/link:shadow-[0_0_8px_rgba(255,215,0,0.6)] mr-2.5 shrink-0 transition-all duration-300" />
-                    <span className="text-[11px] sm:text-xs uppercase tracking-[0.15em] font-semibold text-white/80 group-hover/link:text-white transition-colors">{info.name}</span>
+                    <span className="text-[13px] font-serif italic text-white/85 group-hover/link:text-white transition-colors">{info.name}</span>
                   </button>
                 </li>
               ))}
@@ -184,12 +184,12 @@ export default function Footer() {
               <ul className="space-y-3.5">
                 <li className="flex items-center space-x-2.5 group/item">
                   <Phone className="w-3.5 h-3.5 text-white/50 group-hover/item:text-white transition-colors shrink-0" />
-                  <a href="tel:9258884941" className="text-[11px] sm:text-xs uppercase tracking-[0.15em] font-semibold text-white/80 hover:text-white hover:underline transition-colors">+91 9258884941</a>
+                  <a href="tel:9258884941" className="text-xs font-serif italic text-white/85 hover:text-white hover:underline transition-colors">+91 9258884941</a>
                 </li>
 
                 <li className="flex items-center space-x-2.5 group/item">
                   <Mail className="w-3.5 h-3.5 text-white/50 group-hover/item:text-white transition-colors shrink-0" />
-                  <a href="mailto:dreamlandassociate7@gmail.com" className="text-[11px] sm:text-xs uppercase tracking-[0.10em] font-semibold text-white/80 hover:text-white hover:underline transition-colors break-all">
+                  <a href="mailto:dreamlandassociate7@gmail.com" className="text-[11px] sm:text-xs lowercase tracking-[0.10em] font-semibold text-white/80 hover:text-white hover:underline transition-colors break-all">
                     dreamlandassociate7@gmail.com
                   </a>
                 </li>
@@ -240,6 +240,8 @@ export default function Footer() {
               { 
                 name: 'Instagram', 
                 href: 'https://instagram.com/dreamlandassociates?igsh=MTl0MnViYWx3c203ZA==',
+                bgColor: 'bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7]',
+                hoverShadow: 'hover:shadow-[0_4px_15px_rgba(238,42,123,0.45)]',
                 svg: (
                   <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z" />
                 )
@@ -247,6 +249,8 @@ export default function Footer() {
               { 
                 name: 'Facebook', 
                 href: 'https://facebook.com/share/1DsbEz5EMw',
+                bgColor: 'bg-[#1877f2]',
+                hoverShadow: 'hover:shadow-[0_4px_15px_rgba(24,119,242,0.45)]',
                 svg: (
                   <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z" />
                 )
@@ -254,6 +258,8 @@ export default function Footer() {
               { 
                 name: 'LinkedIn', 
                 href: 'https://linkedin.com/company/dreamland-associates/?viewAsMember=true',
+                bgColor: 'bg-[#0077b5]',
+                hoverShadow: 'hover:shadow-[0_4px_15px_rgba(0,119,181,0.45)]',
                 svg: (
                   <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
                 )
@@ -261,6 +267,8 @@ export default function Footer() {
               { 
                 name: 'YouTube', 
                 href: '#',
+                bgColor: 'bg-[#ff0000]',
+                hoverShadow: 'hover:shadow-[0_4px_15px_rgba(255,0,0,0.45)]',
                 svg: (
                   <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.53 3.545 12 3.545 12 3.545s-7.53 0-9.388.508a3.003 3.003 0 0 0-2.11 2.11C0 8.017 0 12 0 12s0 3.983.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.858.507 9.388.507 9.388.507s7.53 0 9.388-.507a3.003 3.003 0 0 0 2.11-2.11C24 15.983 24 12 24 12s0-3.983-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                 )
@@ -272,7 +280,7 @@ export default function Footer() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2.5 rounded-full border border-white/10 hover:border-white/40 bg-white/5 text-white/70 hover:text-white hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(255,255,255,0.1)] transition-all duration-300 cursor-pointer flex items-center justify-center"
+                  className={`p-2.5 rounded-full border border-transparent ${social.bgColor} text-white hover:-translate-y-0.5 ${social.hoverShadow} transition-all duration-300 cursor-pointer flex items-center justify-center`}
                   title={social.name}
                 >
                   <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
@@ -283,15 +291,15 @@ export default function Footer() {
             })}
           </div>
           
-          <div className="text-[10px] uppercase tracking-[0.2em] text-white/50 font-light font-sans">
-            MEMBER OF UTTARAKHAND BUILDERS ASSOCIATION
+          <div className="text-[11px] tracking-wider text-white/50 font-serif italic font-light">
+            Member of Uttarakhand Builders Association
           </div>
         </div>
 
         {/* Row 3: Bank Partner integration logos (Tanishq payment style) */}
         <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 py-6 text-[10px] uppercase font-semibold tracking-[0.15em] text-white/80 select-none font-sans border-t border-white/10 mt-6">
           <span className="font-serif text-sm italic text-white/90 tracking-normal normal-case mr-2">Certified Loan Partners:</span>
-          {['SBI Home Loan', 'HDFC Bank', 'ICICI Bank', 'Axis Bank', 'PNB Housing'].map((partner) => (
+          {['HDFC Bank', 'ICICI Bank', 'Axis Bank', 'PNB Housing'].map((partner) => (
             <span key={partner} className="px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-white/80 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all duration-300 shadow-sm cursor-default">
               {partner}
             </span>
@@ -299,7 +307,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom copyright */}
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-6 pt-6 border-t border-white/10 mt-6 text-[10px] uppercase tracking-[0.15em] font-light text-white/50 leading-relaxed font-sans">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-6 pt-6 border-t border-white/10 mt-6 text-[11px] font-light text-white/50 leading-relaxed font-sans tracking-wide">
           <p>© {new Date().getFullYear()} Dream Land Associates. All rights reserved. • Managed by <a href="https://www.unzora.com" target="_blank" rel="noopener noreferrer" className="hover:text-white underline decoration-white/20 hover:decoration-white transition-colors font-normal">Unzora</a></p>
           <div className="flex space-x-6 shrink-0 font-normal">
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>

@@ -112,7 +112,7 @@ export default function SellPropertyModal({ onClose }: SellPropertyModalProps) {
               List Your Property For Sale
             </h3>
             <p className="text-[10px] text-stone-400 uppercase tracking-widest mt-0.5">
-              Dreamsland Private Acquisition Desk
+              Dreamland Private Acquisition Desk
             </p>
           </div>
           <button
@@ -405,7 +405,7 @@ export default function SellPropertyModal({ onClose }: SellPropertyModalProps) {
               Listing Submitted Successfully!
             </h4>
             <p className="text-xs text-stone-500 dark:text-stone-400 max-w-md leading-relaxed">
-              Thank you for listing your property with Dreamsland Associates. Our Dehradun project acquisition 
+              Thank you for listing your property with Dreamland Associates. Our Dehradun project acquisition 
               representatives will review your details, verify the coordinates, and connect with you shortly.
             </p>
             <Button

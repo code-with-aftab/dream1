@@ -1,14 +1,17 @@
 'use client';
 
 import Image from 'next/image';
-import { COLLECTIONS, Property } from '../data';
+import { COLLECTIONS as STATIC_COLLECTIONS, Property, Collection } from '../data';
 
 interface CollectionsProps {
   onSelectCollection: (tag: string) => void;
   properties?: Property[];
+  collections?: Collection[];
 }
 
-export default function Collections({ onSelectCollection, properties }: CollectionsProps) {
+export default function Collections({ onSelectCollection, properties, collections }: CollectionsProps) {
+  const displayCollections = collections || [];
+  if (displayCollections.length === 0) return null;
   const handleCollectionClick = (tag: string) => {
     onSelectCollection(tag);
     
@@ -24,12 +27,12 @@ export default function Collections({ onSelectCollection, properties }: Collecti
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         {/* Section Heading */}
         <h2 className="font-serif text-3xl md:text-4xl text-stone-900 dark:text-white mb-8 font-normal tracking-wide reveal">
-          Curated Collections
+          Curated <span className="italic text-gold-500 font-light">Collections</span>
         </h2>
 
         {/* Collections Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {COLLECTIONS.map((col, idx) => (
+          {displayCollections.map((col, idx) => (
             <div
               key={col.id}
               onClick={() => handleCollectionClick(col.tag)}

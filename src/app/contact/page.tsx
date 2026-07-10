@@ -83,7 +83,7 @@ export default function ContactPage() {
             Advisory Desk
           </span>
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-light tracking-wide leading-tight max-w-4xl mx-auto text-white">
-            Contact Our <span className="text-amber-100 font-normal">Private Office</span>
+            Contact Our <span className="italic text-amber-100 font-light">Private Office</span>
           </h1>
           <p className="text-sm sm:text-base font-light text-stone-100/90 max-w-xl mx-auto mt-6 leading-relaxed">
             Get in touch with our local land coordinators, schedule site visits, or get bank loan approvals.
@@ -102,7 +102,7 @@ export default function ContactPage() {
                 Direct Channels
               </span>
               <h2 className="font-serif text-2xl md:text-3xl text-stone-900 dark:text-white font-normal tracking-wide">
-                Reach out to us through verified coordinates.
+                Reach out to us through <span className="italic text-gold-500 font-light">verified coordinates</span>.
               </h2>
               <p className="text-xs sm:text-sm font-light text-stone-500 dark:text-stone-400 leading-relaxed">
                 Whether you want to pre-book a gated plot along Shimla Bypass Road, schedule a local vehicle pick-up for layout verification, or list your property, our desk is here to assist.
@@ -193,7 +193,7 @@ export default function ContactPage() {
                     Submit Consult Request
                   </h3>
                   <p className="text-[9px] text-stone-400 uppercase tracking-wider mt-0.5">
-                    Dreamsland Private Client Desk
+                    Dreamland Private Client Desk
                   </p>
                 </div>
 

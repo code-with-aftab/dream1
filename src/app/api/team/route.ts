@@ -10,7 +10,7 @@ const INITIAL_TEAM = [
     desc: 'Director of Dreamland Associates, steering residential and investment township acquisitions in Uttarakhand.',
     phone: '9258884941',
     email: 'dreamlandassociate7@gmail.com',
-    image: ''
+    image: 'https://res.cloudinary.com/yfyo2yq0/image/upload/v1783335560/dreamsland_listings/dopkiatcuttojnib1m4j.png'
   },
   {
     id: 'team-2',
@@ -20,7 +20,7 @@ const INITIAL_TEAM = [
     desc: 'CEO and Founder, directing land acquisition, builder collaborations, and institutional investment desk.',
     phone: '8057932926',
     email: 'dreamlandassociate7@gmail.com',
-    image: ''
+    image: 'https://res.cloudinary.com/yfyo2yq0/image/upload/v1783498512/dreamsland_listings/alwogvfegdu0verbhtqf.png'
   },
   {
     id: 'team-3',
@@ -30,7 +30,7 @@ const INITIAL_TEAM = [
     desc: 'Managing Director, coordinating project planning, legal compliances, and client relationships.',
     phone: '7906953585',
     email: 'dreamlandassociate7@gmail.com',
-    image: ''
+    image: 'https://res.cloudinary.com/yfyo2yq0/image/upload/v1783498603/dreamsland_listings/vi1cg8d8mdieuxldfl8n.jpg'
   },
   {
     id: 'team-4',
@@ -40,7 +40,7 @@ const INITIAL_TEAM = [
     desc: 'Heads digital operations, media relations, brochure design, and CRM onboarding systems.',
     phone: '9319527649',
     email: 'dreamlandassociate7@gmail.com',
-    image: ''
+    image: 'https://res.cloudinary.com/yfyo2yq0/image/upload/v1783335532/dreamsland_listings/f9st2rqsrdt9b7phf67b.png'
   },
   {
     id: 'team-5',
@@ -50,7 +50,7 @@ const INITIAL_TEAM = [
     desc: 'Senior acquisition consultant specializing in client relations, price negotiations, and Shimla Bypass plots.',
     phone: '9259055789',
     email: 'dreamlandassociate7@gmail.com',
-    image: ''
+    image: 'https://res.cloudinary.com/yfyo2yq0/image/upload/v1783335238/dreamsland_listings/aodqpk9jm7nnnpm69cv3.png'
   },
   {
     id: 'team-6',
@@ -60,7 +60,7 @@ const INITIAL_TEAM = [
     desc: 'Facilitates seamless customer site viewings and local registry office coordinates for freehold plots.',
     phone: '9119703989',
     email: 'dreamlandassociate7@gmail.com',
-    image: ''
+    image: 'https://res.cloudinary.com/yfyo2yq0/image/upload/v1783407642/dreamsland_listings/rlgmtjukl5ht6y0wtzap.jpg'
   },
   {
     id: 'team-7',
@@ -70,7 +70,7 @@ const INITIAL_TEAM = [
     desc: 'Consultant facilitating plot demarcations, site visits, and buyer registry documentation support.',
     phone: '8439811504',
     email: 'dreamlandassociate7@gmail.com',
-    image: ''
+    image: 'https://res.cloudinary.com/yfyo2yq0/image/upload/v1783335308/dreamsland_listings/rqkcemlz7topwcv4kpnq.jpg'
   },
   {
     id: 'team-8',
@@ -80,7 +80,7 @@ const INITIAL_TEAM = [
     desc: 'Dedicated property advisor with a deep network in Selaqui, Premnagar, and Bhauwala residential corridors.',
     phone: '8755175939',
     email: 'dreamlandassociate7@gmail.com',
-    image: ''
+    image: 'https://res.cloudinary.com/yfyo2yq0/image/upload/v1783496891/dreamsland_listings/azhb3u55emtasfufd0tc.jpg'
   },
   {
     id: 'team-9',
@@ -90,7 +90,7 @@ const INITIAL_TEAM = [
     desc: 'Assists clients with bank loan approvals, legal title searches, and mutation status reporting.',
     phone: '7830510901',
     email: 'dreamlandassociate7@gmail.com',
-    image: ''
+    image: 'https://res.cloudinary.com/yfyo2yq0/image/upload/v1783335359/dreamsland_listings/iq16m1ebasjtdlle22f4.jpg'
   },
   {
     id: 'team-10',
@@ -100,7 +100,7 @@ const INITIAL_TEAM = [
     desc: 'Handles architectural visualization, site plans, brochures, and digital media design for our portfolio listings.',
     phone: '8954576064',
     email: 'dreamlandassociate7@gmail.com',
-    image: ''
+    image: 'https://res.cloudinary.com/yfyo2yq0/image/upload/v1783326042/dreamsland_listings/gj05ezcyuokuplgnlcju.png'
   },
   {
     id: 'team-11',
@@ -110,7 +110,7 @@ const INITIAL_TEAM = [
     desc: 'Senior advisory consultant managing premium portfolios in Lachiwala Greens and Doiwala development zones.',
     phone: '7760951556',
     email: 'dreamlandassociate7@gmail.com',
-    image: ''
+    image: 'https://res.cloudinary.com/yfyo2yq0/image/upload/v1783496076/dreamsland_listings/ir4dqlcszjs6juj0qzh2.png'
   },
   {
     id: 'team-12',
@@ -120,7 +120,7 @@ const INITIAL_TEAM = [
     desc: 'Facilitates customer inquiries, pre-launch property briefs, and coordinates buyer onboarding support.',
     phone: '9368662433',
     email: 'dreamlandassociate7@gmail.com',
-    image: ''
+    image: 'https://res.cloudinary.com/yfyo2yq0/image/upload/v1783335215/dreamsland_listings/acynf8vkgbxa7olsha0y.png'
   },
   {
     id: 'team-13',
@@ -130,7 +130,7 @@ const INITIAL_TEAM = [
     desc: 'Handles plot boundary verifications, local zoning consultations, and buyer site visits.',
     phone: '7817943638',
     email: 'dreamlandassociate7@gmail.com',
-    image: ''
+    image: 'https://res.cloudinary.com/yfyo2yq0/image/upload/v1783335488/dreamsland_listings/bikfvld35yfdfbdhtmwh.jpg'
   }
 ];
 

@@ -73,10 +73,20 @@ export default function TeamPage() {
 
   const categories = ['All', 'Leadership', 'Property Advisory', 'Legal & Compliance', 'Operations & Support'];
 
-  const filteredTeam = teamMembers.filter(member => {
-    if (activeCategory === 'All') return true;
-    return getMemberCategory(member.role) === activeCategory;
-  });
+  const getRoleWeight = (role: string): number => {
+    const r = role.toLowerCase();
+    if (r.includes('director') && !r.includes('managing') && !r.includes('md')) return 1;
+    if (r.includes('ceo') || r.includes('founder')) return 2;
+    if (r.includes('managing') || r === 'md' || r.includes('m.d.')) return 3;
+    return 4;
+  };
+
+  const filteredTeam = teamMembers
+    .filter(member => {
+      if (activeCategory === 'All') return true;
+      return getMemberCategory(member.role) === activeCategory;
+    })
+    .sort((a, b) => getRoleWeight(a.role) - getRoleWeight(b.role));
 
   useEffect(() => {
     getTeamMembers().then(setTeamMembers);
@@ -216,11 +226,11 @@ export default function TeamPage() {
           </Link>
           
           <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-gold-500 mb-3 block">
-            Dreamsland Executive Roster
+            Dreamland Executive Roster
           </span>
           
           <h1 className="font-serif text-4xl sm:text-5xl text-stone-900 dark:text-white font-normal tracking-wide">
-            Private Office Representatives
+            Private Office <span className="italic text-gold-500 font-light">Representatives</span>
           </h1>
           
           <p className="text-xs sm:text-sm font-light text-stone-500 dark:text-stone-400 leading-relaxed mt-4">

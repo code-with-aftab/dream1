@@ -35,7 +35,7 @@ export default function AboutPage() {
             Corporate Profile
           </span>
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-light tracking-wide leading-tight max-w-4xl mx-auto text-white">
-            The Legacy of <span className="text-amber-100 font-normal">Dreamsland Associates</span>
+            The Legacy of <span className="text-amber-100 font-normal">Dreamland Associates</span>
           </h1>
           <p className="text-sm sm:text-base font-light text-stone-100/90 max-w-2xl mx-auto mt-6 leading-relaxed">
             Pioneering premium residential land developments, transparent title verifications, and gated enclaves along Dehradun’s fastest-growing corridors.
@@ -52,13 +52,13 @@ export default function AboutPage() {
               Our Identity
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl text-stone-900 dark:text-white font-normal tracking-wide">
-              Securing land ownership coordinates since day one.
+              Securing land ownership coordinates since <span className="italic text-gold-500 font-light">day one</span>.
             </h2>
             <p className="text-xs sm:text-sm font-light text-stone-500 dark:text-stone-450 leading-relaxed">
               At Dreamland Associates, we operate as a premium real estate acquisition and development desk in Uttarakhand. Our primary focus is solving the critical challenge of land verification—providing completely verified, registry-ready gated residential and commercial plots.
             </p>
             <p className="text-xs sm:text-sm font-light text-stone-500 dark:text-stone-455 leading-relaxed">
-              Every project launched under the Dreamsland banner undergoes strict layout approvals and document screening. We secure clean mutation records (Dakhil Kharij), copy of Khatauni, and official boundary demarcation certificates for all gated communities before pre-bookings open.
+              Every project launched under the Dreamland banner undergoes strict layout approvals and document screening. We secure clean mutation records (Dakhil Kharij), copy of Khatauni, and official boundary demarcation certificates for all gated communities before pre-bookings open.
             </p>
 
             {/* Core Pillars Grid */}
@@ -109,7 +109,7 @@ export default function AboutPage() {
           <div className="relative aspect-[4/3] rounded-lg overflow-hidden border border-stone-200/40 dark:border-stone-850/40 bg-stone-100 dark:bg-stone-900 shadow-lg">
             <Image
               src="/images/hero_villa.png"
-              alt="Dreamsland Legacy"
+              alt="Dreamland Legacy"
               fill
               className="object-cover"
             />
@@ -129,10 +129,10 @@ export default function AboutPage() {
               Founding Pillars
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl text-stone-900 dark:text-white font-normal tracking-wide">
-              Meet Our Board Directors
+              Meet Our Board <span className="italic text-gold-500 font-light">Directors</span>
             </h2>
             <p className="text-xs sm:text-sm font-light text-stone-500 dark:text-stone-400 mt-3 leading-relaxed">
-              Under the strategic coordinates of our directors, Dreamsland Associates has grown to represent trust and verified ownership in Dehradun.
+              Under the strategic coordinates of our directors, Dreamland Associates has grown to represent trust and verified ownership in Dehradun.
             </p>
           </div>
 
@@ -191,7 +191,7 @@ export default function AboutPage() {
                   Find Us
                 </span>
                 <h3 className="font-serif text-2xl md:text-3xl text-white font-normal tracking-wide">
-                  Dreamsland Headquarters
+                  Dreamland Headquarters
                 </h3>
               </div>
 

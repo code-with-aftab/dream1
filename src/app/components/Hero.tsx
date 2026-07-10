@@ -12,6 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { Property } from '../data';
 
 const DEFAULT_HERO_IMAGES = [
   '/images/hero_villa.png',
@@ -30,6 +31,8 @@ interface HeroBannerItem {
 interface HeroProps {
   onExploreClick: () => void;
   banners?: HeroBannerItem[];
+  properties?: Property[];
+  onSelectProperty?: (property: Property) => void;
 }
 
 const HIGHLIGHTS = [
@@ -40,13 +43,33 @@ const HIGHLIGHTS = [
   { name: 'Dev Enclave', location: 'Shimla Bypass, Dehradun', rate: '₹17,000/Gaj' },
 ];
 
-export default function Hero({ onExploreClick, banners = [] }: HeroProps) {
+export default function Hero({ onExploreClick, banners = [], properties = [], onSelectProperty }: HeroProps) {
   const [buzonContact, setBuzonContact] = useState('');
   const [buzonSubmitted, setBuzonSubmitted] = useState(false);
   const [learnMoreOpen, setLearnMoreOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const imagesList = banners.length > 0 ? banners.map(b => b.image) : DEFAULT_HERO_IMAGES;
+  
+  const activeImage = imagesList[currentImageIndex];
+  const matchedProperty = properties?.find(p => 
+    p.image === activeImage || 
+    (p.secondaryImages && p.secondaryImages.includes(activeImage))
+  );
+
+  const displayName = matchedProperty ? matchedProperty.title : (HIGHLIGHTS[currentImageIndex] || HIGHLIGHTS[0]).name;
+  const displayLocation = matchedProperty ? matchedProperty.location : (HIGHLIGHTS[currentImageIndex] || HIGHLIGHTS[0]).location;
+  const displayRate = matchedProperty 
+    ? (matchedProperty.rate > 0 ? `₹${matchedProperty.rate.toLocaleString('en-IN')}/Gaj` : `₹${(matchedProperty.price / 100000).toFixed(1)} Lakh`) 
+    : (HIGHLIGHTS[currentImageIndex] || HIGHLIGHTS[0]).rate;
+
+  const handlePreviewClick = () => {
+    if (matchedProperty && onSelectProperty) {
+      onSelectProperty(matchedProperty);
+    } else {
+      onExploreClick();
+    }
+  };
 
   useEffect(() => {
     if (imagesList.length <= 1) return;
@@ -144,16 +167,16 @@ export default function Hero({ onExploreClick, banners = [] }: HeroProps) {
                 </span>
               </div>
             ) : (
-              <form onSubmit={handleBuzonConnect} className="flex items-center border-b border-white/20 hover:border-gold-500/50 focus-within:border-gold-500 py-2 transition-all duration-300 w-full">
+              <form onSubmit={handleBuzonConnect} className="flex items-center bg-stone-950/60 backdrop-blur-md border border-white/20 focus-within:border-gold-500 rounded-sm p-1.5 pl-3.5 transition-all duration-300 w-full shadow-lg">
                 <input
                   type="text"
                   required
                   placeholder="Request a query (Enter contact number)..."
                   value={buzonContact}
                   onChange={(e) => setBuzonContact(e.target.value)}
-                  className="bg-transparent border-none outline-none text-xs text-white placeholder-stone-500 w-full pr-4 font-sans font-light"
+                  className="bg-transparent border-none outline-none text-xs sm:text-sm text-white placeholder-stone-400 w-full pr-4 font-sans font-light focus:ring-0"
                 />
-                <button type="submit" className="text-gold-400 hover:text-white text-[10px] uppercase font-sans font-semibold tracking-[0.2em] transition-colors cursor-pointer shrink-0">
+                <button type="submit" className="bg-gold-500 hover:bg-gold-600 active:scale-95 text-white text-[11px] uppercase font-sans font-bold tracking-wider px-5 py-2.5 rounded-sm transition-all duration-300 cursor-pointer shrink-0 shadow-md">
                   Request
                 </button>
               </form>
@@ -186,17 +209,17 @@ export default function Hero({ onExploreClick, banners = [] }: HeroProps) {
             <div className="relative z-10">
               <span className="text-[9px] tracking-[0.25em] uppercase font-bold text-gold-400 block mb-2">Featured Project Preview</span>
               <h3 className="font-serif text-2xl text-white font-normal mb-1 transition-all duration-300">
-                {HIGHLIGHTS[currentImageIndex].name}
+                {displayName}
               </h3>
-              <p className="text-xs text-stone-400 font-light mb-4">{HIGHLIGHTS[currentImageIndex].location}</p>
+              <p className="text-xs text-stone-400 font-light mb-4">{displayLocation}</p>
               
               <div className="flex items-center justify-between border-t border-white/10 pt-4 mt-2">
                 <div>
                   <span className="text-[8px] uppercase tracking-wider text-stone-500 block">Investment starting at</span>
-                  <span className="text-base font-serif text-gold-300 font-normal">{HIGHLIGHTS[currentImageIndex].rate}</span>
+                  <span className="text-base font-serif text-gold-300 font-normal">{displayRate}</span>
                 </div>
                 <button
-                  onClick={onExploreClick}
+                  onClick={handlePreviewClick}
                   className="bg-gold-500/10 hover:bg-gold-500 text-gold-400 hover:text-white border border-gold-500/30 hover:border-gold-500 p-2 rounded-full transition-all duration-300 cursor-pointer"
                   title="View Details"
                 >
