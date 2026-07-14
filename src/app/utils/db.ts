@@ -263,6 +263,9 @@ export interface HeroBanner {
   id: string;
   image: string;
   order: number;
+  title?: string;
+  location?: string;
+  rate?: string;
 }
 
 export async function getHeroBanners(): Promise<HeroBanner[]> {

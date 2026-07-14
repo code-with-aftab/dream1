@@ -523,11 +523,6 @@ export default function Home() {
                 icon: <HomeIcon className="w-7 h-7 text-stone-900 group-hover:text-gold-650 transition-colors duration-300" />,
               },
               {
-                title: 'Property Leasing & Rentals',
-                desc: 'Assisting landlords and tenants in securing rental agreements that meet their needs.',
-                icon: <Key className="w-7 h-7 text-stone-900 group-hover:text-gold-650 transition-colors duration-300" />,
-              },
-              {
                 title: 'Commercial Real Estate',
                 desc: 'Supporting businesses in finding, buying, or leasing commercial spaces.',
                 icon: <Building2 className="w-7 h-7 text-stone-900 group-hover:text-gold-650 transition-colors duration-300" />,

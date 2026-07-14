@@ -33,7 +33,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { id, image, order } = body;
+    const { id, image, order, title, location, rate } = body;
     
     if (!image) {
       return NextResponse.json({ error: 'Image path or URL is required' }, { status: 400 });
@@ -49,7 +49,10 @@ export async function POST(request: Request) {
     const updatedImage = {
       id: newId,
       image,
-      order: newOrder
+      order: newOrder,
+      title: title || '',
+      location: location || '',
+      rate: rate || ''
     };
     
     // Use upsert to update if exists, or insert new

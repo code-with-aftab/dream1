@@ -108,14 +108,14 @@ export default function Footer() {
                 priority
               />
             </div>
-            <p className="font-serif text-[16px] leading-relaxed text-white/85 italic font-light max-w-xs">
+            <p className="font-sans text-[13px] leading-relaxed text-white/75 font-light max-w-xs">
               Dreamland Associates is a premier private office advisory specializing in gated residential enclaves, freehold plots, and elite estate acquisitions in Dehradun, Uttarakhand.
             </p>
           </div>
 
           {/* Column 2: Useful Links */}
           <div>
-            <h4 className="font-serif text-lg font-semibold tracking-wider text-white mb-6 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-8 after:h-[1px] after:bg-white/40">
+            <h4 className="font-sans text-xs uppercase tracking-[0.2em] font-bold text-gold-400 mb-6 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-8 after:h-[1.5px] after:bg-gold-500/35">
               Useful Links
             </h4>
             <ul className="space-y-3.5">
@@ -141,8 +141,8 @@ export default function Footer() {
                     }}
                     className="hover:text-white transition-all duration-300 text-left cursor-pointer flex items-center group/link transform hover:translate-x-1"
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-white/30 group-hover/link:bg-gold-300 group-hover/link:shadow-[0_0_8px_rgba(255,215,0,0.6)] mr-2.5 shrink-0 transition-all duration-300" />
-                    <span className="text-[13px] font-serif italic text-white/85 group-hover/link:text-white transition-colors">{link.name}</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-white/30 group-hover/link:bg-gold-400 group-hover/link:shadow-[0_0_8px_rgba(224,180,126,0.6)] mr-2.5 shrink-0 transition-all duration-300" />
+                    <span className="text-[13px] font-sans tracking-wide text-white/75 group-hover/link:text-gold-300 transition-colors font-light">{link.name}</span>
                   </button>
                 </li>
               ))}
@@ -151,7 +151,7 @@ export default function Footer() {
 
           {/* Column 3: Information (Legal & Support Checklist) */}
           <div>
-            <h4 className="font-serif text-lg font-semibold tracking-wider text-white mb-6 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-8 after:h-[1px] after:bg-white/40">
+            <h4 className="font-sans text-xs uppercase tracking-[0.2em] font-bold text-gold-400 mb-6 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-8 after:h-[1.5px] after:bg-gold-500/35">
               Information
             </h4>
             <ul className="space-y-3.5">
@@ -167,8 +167,8 @@ export default function Footer() {
                     onClick={() => handleNavClick(info.id)}
                     className="hover:text-white transition-all duration-300 text-left cursor-pointer flex items-center group/link transform hover:translate-x-1"
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-white/30 group-hover/link:bg-gold-300 group-hover/link:shadow-[0_0_8px_rgba(255,215,0,0.6)] mr-2.5 shrink-0 transition-all duration-300" />
-                    <span className="text-[13px] font-serif italic text-white/85 group-hover/link:text-white transition-colors">{info.name}</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-white/30 group-hover/link:bg-gold-400 group-hover/link:shadow-[0_0_8px_rgba(224,180,126,0.6)] mr-2.5 shrink-0 transition-all duration-300" />
+                    <span className="text-[13px] font-sans tracking-wide text-white/75 group-hover/link:text-gold-300 transition-colors font-light">{info.name}</span>
                   </button>
                 </li>
               ))}
@@ -178,18 +178,18 @@ export default function Footer() {
           {/* Column 4: Contact Us */}
           <div className="space-y-6">
             <div>
-              <h4 className="font-serif text-lg font-semibold tracking-wider text-white mb-6 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-8 after:h-[1px] after:bg-white/40">
+              <h4 className="font-sans text-xs uppercase tracking-[0.2em] font-bold text-gold-400 mb-6 relative pb-2 after:absolute after:bottom-0 after:left-0 after:w-8 after:h-[1.5px] after:bg-gold-500/35">
                 Contact Us
               </h4>
               <ul className="space-y-3.5">
                 <li className="flex items-center space-x-2.5 group/item">
                   <Phone className="w-3.5 h-3.5 text-white/50 group-hover/item:text-white transition-colors shrink-0" />
-                  <a href="tel:9258884941" className="text-xs font-serif italic text-white/85 hover:text-white hover:underline transition-colors">+91 9258884941</a>
+                  <a href="tel:9258884941" className="text-[13px] font-sans tracking-wide text-white/75 hover:text-gold-300 hover:underline transition-colors font-light">+91 9258884941</a>
                 </li>
 
                 <li className="flex items-center space-x-2.5 group/item">
                   <Mail className="w-3.5 h-3.5 text-white/50 group-hover/item:text-white transition-colors shrink-0" />
-                  <a href="mailto:dreamlandassociate7@gmail.com" className="text-[11px] sm:text-xs lowercase tracking-[0.10em] font-semibold text-white/80 hover:text-white hover:underline transition-colors break-all">
+                  <a href="mailto:dreamlandassociate7@gmail.com" className="text-[12px] font-sans tracking-wide text-white/75 hover:text-gold-300 hover:underline transition-colors break-all font-light">
                     dreamlandassociate7@gmail.com
                   </a>
                 </li>
@@ -197,7 +197,7 @@ export default function Footer() {
             </div>
 
             <div className="pt-2 w-full">
-              <span className="font-serif text-base font-semibold text-white/90 block mb-3 relative pb-1 after:absolute after:bottom-0 after:left-0 after:w-6 after:h-[1px] after:bg-white/40">
+              <span className="font-sans text-[11px] uppercase tracking-[0.15em] font-bold text-gold-400 block mb-3 relative pb-1 after:absolute after:bottom-0 after:left-0 after:w-6 after:h-[1.5px] after:bg-gold-500/35">
                 Chat With Us
               </span>
               <div className="flex items-center space-x-3">
@@ -235,7 +235,7 @@ export default function Footer() {
         {/* Row 2: Social media links with custom inline SVGs */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 pt-6 border-t border-white/10 mt-8">
           <div className="flex items-center space-x-3">
-            <span className="font-serif text-base font-medium text-white/90 mr-2">Social</span>
+            <span className="font-sans text-xs uppercase tracking-[0.15em] font-bold text-white/90 mr-3">Social</span>
             {[
               { 
                 name: 'Instagram', 
@@ -291,32 +291,32 @@ export default function Footer() {
             })}
           </div>
           
-          <div className="text-[11px] tracking-wider text-white/50 font-serif italic font-light">
+          <div className="text-[10px] uppercase tracking-[0.12em] text-white/40 font-sans font-medium">
             Member of Uttarakhand Builders Association
           </div>
         </div>
 
         {/* Row 3: Bank Partner integration logos (Tanishq payment style) */}
         <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 py-6 text-[10px] uppercase font-semibold tracking-[0.15em] text-white/80 select-none font-sans border-t border-white/10 mt-6">
-          <span className="font-serif text-sm italic text-white/90 tracking-normal normal-case mr-2">Certified Loan Partners:</span>
+          <span className="font-sans text-[11px] uppercase tracking-[0.15em] font-bold text-white/80 mr-2.5">Certified Loan Partners:</span>
           {['HDFC Bank', 'ICICI Bank', 'Axis Bank', 'PNB Housing'].map((partner) => (
-            <span key={partner} className="px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-white/80 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all duration-300 shadow-sm cursor-default">
+            <span key={partner} className="px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-[11px] font-sans tracking-wide text-white/70 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all duration-300 shadow-sm cursor-default font-light">
               {partner}
             </span>
           ))}
         </div>
 
         {/* Bottom copyright */}
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-6 pt-6 border-t border-white/10 mt-6 text-[11px] font-light text-white/50 leading-relaxed font-sans tracking-wide">
-          <p>© {new Date().getFullYear()} Dream Land Associates. All rights reserved. • Managed by <a href="https://www.unzora.com" target="_blank" rel="noopener noreferrer" className="hover:text-white underline decoration-white/20 hover:decoration-white transition-colors font-normal">Unzora</a></p>
-          <div className="flex space-x-6 shrink-0 font-normal">
-            <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-6 pt-6 border-t border-white/10 mt-6 text-[11px] font-light text-white/40 leading-relaxed font-sans tracking-wider">
+          <p>© {new Date().getFullYear()} Dream Land Associates. All rights reserved. • Managed by <a href="https://www.unzora.com" target="_blank" rel="noopener noreferrer" className="hover:text-white underline decoration-white/25 hover:decoration-white transition-colors font-light">Unzora</a></p>
+          <div className="flex space-x-6 shrink-0 font-light">
+            <Link href="/privacy" className="hover:text-white hover:text-gold-300 transition-colors">Privacy Policy</Link>
             <span className="text-white/10">|</span>
-            <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link href="/terms" className="hover:text-white hover:text-gold-300 transition-colors">Terms of Service</Link>
             <span className="text-white/10">|</span>
             <button
               onClick={() => handleNavClick('hero-section')}
-              className="hover:text-white transition-colors flex items-center space-x-1 cursor-pointer"
+              className="hover:text-white hover:text-gold-300 transition-colors flex items-center space-x-1 cursor-pointer"
             >
               <span>Back to Top</span>
               <ArrowUp className="w-3.5 h-3.5" />

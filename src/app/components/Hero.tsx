@@ -26,6 +26,9 @@ interface HeroBannerItem {
   id: string;
   image: string;
   order: number;
+  title?: string;
+  location?: string;
+  rate?: string;
 }
 
 interface HeroProps {
@@ -34,14 +37,6 @@ interface HeroProps {
   properties?: Property[];
   onSelectProperty?: (property: Property) => void;
 }
-
-const HIGHLIGHTS = [
-  { name: 'Forest Enclave', location: 'Bhauwala, Dehradun', rate: '₹15,500/Gaj' },
-  { name: 'Bhauwala Greens', location: 'Bhauwala Chowk, Dehradun', rate: '₹16,000/Gaj' },
-  { name: 'Lachiwalla Greens', location: 'Doiwala, Dehradun', rate: '₹19,000/Gaj' },
-  { name: 'Bhadraj Colony', location: 'Bhauwala, Dehradun', rate: '₹17,500/Gaj' },
-  { name: 'Dev Enclave', location: 'Shimla Bypass, Dehradun', rate: '₹17,000/Gaj' },
-];
 
 export default function Hero({ onExploreClick, banners = [], properties = [], onSelectProperty }: HeroProps) {
   const [buzonContact, setBuzonContact] = useState('');
@@ -52,16 +47,28 @@ export default function Hero({ onExploreClick, banners = [], properties = [], on
   const imagesList = banners.length > 0 ? banners.map(b => b.image) : DEFAULT_HERO_IMAGES;
   
   const activeImage = imagesList[currentImageIndex];
+  const activeBanner = banners.length > 0 ? banners[currentImageIndex] : null;
+
   const matchedProperty = properties?.find(p => 
     p.image === activeImage || 
     (p.secondaryImages && p.secondaryImages.includes(activeImage))
   );
 
-  const displayName = matchedProperty ? matchedProperty.title : (HIGHLIGHTS[currentImageIndex] || HIGHLIGHTS[0]).name;
-  const displayLocation = matchedProperty ? matchedProperty.location : (HIGHLIGHTS[currentImageIndex] || HIGHLIGHTS[0]).location;
-  const displayRate = matchedProperty 
-    ? (matchedProperty.rate > 0 ? `₹${matchedProperty.rate.toLocaleString('en-IN')}/Gaj` : `₹${(matchedProperty.price / 100000).toFixed(1)} Lakh`) 
-    : (HIGHLIGHTS[currentImageIndex] || HIGHLIGHTS[0]).rate;
+  const displayName = activeBanner?.title 
+    ? activeBanner.title 
+    : (matchedProperty ? matchedProperty.title : '');
+
+  const displayLocation = activeBanner?.location 
+    ? activeBanner.location 
+    : (matchedProperty ? matchedProperty.location : '');
+
+  const displayRate = activeBanner?.rate 
+    ? activeBanner.rate 
+    : (matchedProperty 
+        ? (matchedProperty.rate > 0 ? `₹${matchedProperty.rate.toLocaleString('en-IN')}/Gaj` : `₹${(matchedProperty.price / 100000).toFixed(1)} Lakh`) 
+        : '');
+
+  const hasPreviewData = !!(displayName || displayLocation || displayRate);
 
   const handlePreviewClick = () => {
     if (matchedProperty && onSelectProperty) {
@@ -203,32 +210,41 @@ export default function Hero({ onExploreClick, banners = [], properties = [], on
         </div>
 
         {/* Right Side: Active Property Preview Glassmorphic Widget */}
-        <div className="hidden lg:flex flex-col w-full max-w-xs animate-fade-in-right delay-300 select-none">
-          <div className="bg-stone-950/40 backdrop-blur-xl border border-white/10 rounded-lg p-6 shadow-[0_15px_35px_rgba(0,0,0,0.25)] relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-gold-500/10 rounded-full blur-xl pointer-events-none" />
-            <div className="relative z-10">
-              <span className="text-[9px] tracking-[0.25em] uppercase font-bold text-gold-400 block mb-2">Featured Project Preview</span>
-              <h3 className="font-serif text-2xl text-white font-normal mb-1 transition-all duration-300">
-                {displayName}
-              </h3>
-              <p className="text-xs text-stone-400 font-light mb-4">{displayLocation}</p>
-              
-              <div className="flex items-center justify-between border-t border-white/10 pt-4 mt-2">
-                <div>
-                  <span className="text-[8px] uppercase tracking-wider text-stone-500 block">Investment starting at</span>
-                  <span className="text-base font-serif text-gold-300 font-normal">{displayRate}</span>
+        {hasPreviewData && (
+          <div className="hidden lg:flex flex-col w-full max-w-xs animate-fade-in-right delay-300 select-none">
+            <div className="bg-stone-950/70 backdrop-blur-xl border-2 border-gold-500/40 hover:border-gold-400 rounded-lg p-6 shadow-[0_15px_35px_rgba(0,0,0,0.35)] shadow-gold-500/5 hover:shadow-gold-500/20 transition-all duration-500 hover:-translate-y-1 relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-tr from-gold-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gold-500/10 rounded-full blur-2xl pointer-events-none" />
+              <div className="relative z-10">
+                <div className="inline-flex items-center space-x-1.5 border border-gold-500/30 bg-gold-950/40 px-2 py-0.5 rounded-full mb-3 select-none">
+                  <span className="w-1 h-1 rounded-full bg-gold-500 animate-pulse" />
+                  <span className="text-[8px] tracking-[0.2em] uppercase font-bold text-gold-300 font-sans">
+                    Featured Project
+                  </span>
                 </div>
-                <button
-                  onClick={handlePreviewClick}
-                  className="bg-gold-500/10 hover:bg-gold-500 text-gold-400 hover:text-white border border-gold-500/30 hover:border-gold-500 p-2 rounded-full transition-all duration-300 cursor-pointer"
-                  title="View Details"
-                >
-                  <ArrowRight className="w-4 h-4" />
-                </button>
+                <h3 className="font-serif text-2xl text-white font-normal mb-1.5 leading-tight tracking-wide group-hover:text-gold-100 transition-colors">
+                  {displayName}
+                </h3>
+                <div className="w-12 h-[1.5px] bg-gradient-to-r from-gold-500 to-transparent mb-3.5" />
+                <p className="text-xs text-stone-300 font-light mb-5 font-sans tracking-wide">{displayLocation}</p>
+                
+                <div className="flex items-center justify-between border-t border-white/10 pt-4 mt-2">
+                  <div>
+                    <span className="text-[9px] uppercase tracking-widest text-stone-400 block mb-0.5">Investment starting at</span>
+                    <span className="text-lg font-serif text-gold-400 font-medium tracking-wide">{displayRate}</span>
+                  </div>
+                  <button
+                    onClick={handlePreviewClick}
+                    className="bg-gold-500 hover:bg-gold-600 hover:scale-105 active:scale-95 text-stone-950 p-2.5 rounded-full shadow-[0_0_15px_rgba(224,180,126,0.3)] hover:shadow-[0_0_20px_rgba(224,180,126,0.65)] transition-all duration-300 cursor-pointer"
+                    title="View Details"
+                  >
+                    <ArrowRight className="w-4 h-4 text-stone-950 stroke-[2.5]" />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Learn More Dialog Modal */}

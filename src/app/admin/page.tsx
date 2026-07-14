@@ -99,7 +99,10 @@ export default function AdminPage() {
   const [heroFormData, setHeroFormData] = useState<Partial<HeroBanner>>({
     id: '',
     image: '',
-    order: 0
+    order: 0,
+    title: '',
+    location: '',
+    rate: ''
   });
   const [blogFormData, setBlogFormData] = useState<Partial<BlogPost>>({
     id: '',
@@ -773,7 +776,10 @@ export default function AdminPage() {
     const bannerToSave: HeroBanner = {
       id: heroFormData.id || `hero-img-${Date.now()}`,
       image: heroFormData.image,
-      order: Number(heroFormData.order) || heroBanners.length + 1
+      order: Number(heroFormData.order) || heroBanners.length + 1,
+      title: heroFormData.title || '',
+      location: heroFormData.location || '',
+      rate: heroFormData.rate || ''
     };
 
     const updated = await saveHeroBanner(bannerToSave);
@@ -2744,7 +2750,7 @@ export default function AdminPage() {
               <button
                 type="button"
                 onClick={() => {
-                  setHeroFormData({ id: '', image: '', order: heroBanners.length + 1 });
+                  setHeroFormData({ id: '', image: '', order: heroBanners.length + 1, title: '', location: '', rate: '' });
                   setIsHeroModalOpen(true);
                 }}
                 className="bg-stone-900 hover:bg-gold-500 hover:text-stone-950 text-white font-bold uppercase tracking-wider text-[10px] py-2.5 px-4 rounded-sm flex items-center justify-center space-x-1.5 transition-all shadow-sm cursor-pointer shrink-0"
@@ -2773,9 +2779,30 @@ export default function AdminPage() {
                           ORDER {banner.order}
                         </div>
                       </div>
+                      {/* Featured Project Preview Info */}
+                      <div className="px-4 pt-3 pb-1 border-b border-stone-100/60">
+                        {(banner.title || banner.location || banner.rate) ? (
+                          <div className="bg-stone-50 rounded p-2.5 border border-stone-250/50 space-y-1">
+                            <div className="font-serif text-stone-800 text-xs font-semibold truncate" title={banner.title}>
+                              {banner.title || 'Untitled Project'}
+                            </div>
+                            <div className="text-stone-500 text-[10px] font-light truncate" title={banner.location}>
+                              {banner.location || 'No location set'}
+                            </div>
+                            <div className="text-gold-600 font-medium text-[10px]">
+                              {banner.rate || 'No starting price set'}
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="text-[10px] text-stone-400 italic bg-stone-50/50 rounded p-2 border border-dashed border-stone-200 text-center">
+                            Using default linked listing details
+                          </div>
+                        )}
+                      </div>
+
                       <div className="p-4 flex items-center justify-between gap-4">
                         <div className="min-w-0 flex-1">
-                          <span className="text-[10px] font-mono text-stone-400 block truncate" title={banner.image}>
+                          <span className="text-[9px] font-mono text-stone-400 block truncate" title={banner.image}>
                             {banner.image}
                           </span>
                         </div>
@@ -2783,7 +2810,14 @@ export default function AdminPage() {
                           <button
                             type="button"
                             onClick={() => {
-                              setHeroFormData(banner);
+                              setHeroFormData({
+                                id: banner.id,
+                                image: banner.image,
+                                order: banner.order,
+                                title: banner.title || '',
+                                location: banner.location || '',
+                                rate: banner.rate || ''
+                              });
                               setIsHeroModalOpen(true);
                             }}
                             className="p-1.5 border border-stone-200 hover:border-gold-500 text-stone-500 hover:text-gold-600 rounded transition-all cursor-pointer bg-transparent"
@@ -3992,9 +4026,9 @@ export default function AdminPage() {
       {/* Hero Banner Modal */}
       {isHeroModalOpen && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg max-w-lg w-full overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
+          <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg max-w-lg w-full max-h-[90vh] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200 flex flex-col">
             {/* Modal Header */}
-            <div className="bg-stone-900 text-white px-6 py-4 flex justify-between items-center">
+            <div className="bg-stone-900 text-white px-6 py-4 flex justify-between items-center shrink-0">
               <h3 className="font-serif text-lg tracking-wide">
                 {heroFormData.id ? 'Edit Hero Banner' : 'Add New Hero Banner'}
               </h3>
@@ -4008,7 +4042,8 @@ export default function AdminPage() {
             </div>
 
             {/* Modal Form */}
-            <form onSubmit={handleSaveHeroBannerForm} className="p-6 space-y-4">
+            <form onSubmit={handleSaveHeroBannerForm} className="flex flex-col flex-1 overflow-hidden">
+              <div className="p-6 space-y-4 overflow-y-auto flex-1">
               
               {/* Image Input & Cloudinary Upload */}
               <div>
@@ -4064,12 +4099,65 @@ export default function AdminPage() {
                 />
               </div>
 
+              {/* Featured Project Preview Section */}
+              <div className="border-t border-stone-150 pt-4 space-y-4">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-gold-600 block mb-1">
+                  Featured Project Preview (Optional)
+                </div>
+                <p className="text-[10px] text-stone-400 -mt-2 leading-relaxed">
+                  Provide custom details below to show in the Hero section preview widget. If left blank, details will fall back to default matched property details.
+                </p>
+
+                {/* Project Title Input */}
+                <div>
+                  <label className="text-[10px] uppercase font-bold tracking-wider text-stone-500 block mb-1.5">
+                    Project Title / Name
+                  </label>
+                  <input
+                    type="text"
+                    value={heroFormData.title || ''}
+                    onChange={(e) => setHeroFormData(prev => ({ ...prev, title: e.target.value }))}
+                    placeholder="e.g. Forest Enclave"
+                    className="w-full bg-stone-50 border border-stone-200 rounded-sm py-2.5 px-3 text-xs text-stone-850 focus:outline-none focus:border-gold-500"
+                  />
+                </div>
+
+                {/* Location Input */}
+                <div>
+                  <label className="text-[10px] uppercase font-bold tracking-wider text-stone-500 block mb-1.5">
+                    Location
+                  </label>
+                  <input
+                    type="text"
+                    value={heroFormData.location || ''}
+                    onChange={(e) => setHeroFormData(prev => ({ ...prev, location: e.target.value }))}
+                    placeholder="e.g. Bhauwala, Dehradun"
+                    className="w-full bg-stone-50 border border-stone-200 rounded-sm py-2.5 px-3 text-xs text-stone-850 focus:outline-none focus:border-gold-500"
+                  />
+                </div>
+
+                {/* Rate Input */}
+                <div>
+                  <label className="text-[10px] uppercase font-bold tracking-wider text-stone-500 block mb-1.5">
+                    Starting Price / Rate
+                  </label>
+                  <input
+                    type="text"
+                    value={heroFormData.rate || ''}
+                    onChange={(e) => setHeroFormData(prev => ({ ...prev, rate: e.target.value }))}
+                    placeholder="e.g. ₹15,500/Gaj or ₹85 Lakh"
+                    className="w-full bg-stone-50 border border-stone-200 rounded-sm py-2.5 px-3 text-xs text-stone-850 focus:outline-none focus:border-gold-500"
+                  />
+                </div>
+              </div>
+              </div>
+
               {/* Modal Footer */}
-              <div className="flex justify-end space-x-3 pt-4 border-t border-stone-200">
+              <div className="flex justify-end space-x-3 p-6 border-t border-stone-200 bg-stone-50 dark:bg-stone-900/50 shrink-0">
                 <button
                   type="button"
                   onClick={() => setIsHeroModalOpen(false)}
-                  className="px-4 py-2 border border-stone-200 rounded-sm text-stone-500 hover:bg-stone-50 uppercase tracking-wider text-[10px] font-bold transition-colors cursor-pointer"
+                  className="px-4 py-2 border border-stone-200 rounded-sm text-stone-500 hover:bg-stone-50 dark:hover:bg-stone-850 uppercase tracking-wider text-[10px] font-bold transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
